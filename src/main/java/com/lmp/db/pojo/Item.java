@@ -9,29 +9,130 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Item {
 
   @Id
-  public String id;
-  public List<String> category;
-  public String title;
-  public String url;
-  public String brand;
-  public long upc;
-  public long tcin;
-  public String dpci;
-  public long release_date;
-  public List<String> bullet_description;
-  public SoftBullets soft_bullets;
-  public String description;
-  public String package_dimensions;
+  private String id;
+  private List<String> category;
+  private String title;
+  private String url;
+  private String brand;
+  private long upc;
+  private long tcin;
+  private String dpci;
+  private long release_date;
+  private List<String> bullet_description;
+  private SoftBullets soft_bullets;
+  private String description;
+  private String package_dimensions;
   @JsonIgnore
-  public String available_to_purchase_date_time;
+  private String available_to_purchase_date_time;
   @JsonIgnore
-  public List<Images> images;
+  private List<Images> images;
+  public String getId() {
+    return id;
+  }
+  public void setId(String id) {
+    this.id = id;
+  }
+  public List<String> getCategory() {
+    return category;
+  }
+  public void setCategory(List<String> category) {
+    this.category = category;
+  }
+  public String getTitle() {
+    return title;
+  }
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  public String getUrl() {
+    return url;
+  }
+  public void setUrl(String url) {
+    this.url = url;
+  }
+  public String getBrand() {
+    return brand;
+  }
+  public void setBrand(String brand) {
+    this.brand = brand;
+  }
+  public long getUpc() {
+    return upc;
+  }
+  public void setUpc(long upc) {
+    this.upc = upc;
+  }
+  public long getTcin() {
+    return tcin;
+  }
+  public void setTcin(long tcin) {
+    this.tcin = tcin;
+  }
+  public String getDpci() {
+    return dpci;
+  }
+  public void setDpci(String dpci) {
+    this.dpci = dpci;
+  }
+  public long getRelease_date() {
+    return release_date;
+  }
+  public void setRelease_date(long release_date) {
+    this.release_date = release_date;
+  }
+  public List<String> getBullet_description() {
+    return bullet_description;
+  }
+  public void setBullet_description(List<String> bullet_description) {
+    this.bullet_description = bullet_description;
+  }
+  public SoftBullets getSoft_bullets() {
+    return soft_bullets;
+  }
+  public void setSoft_bullets(SoftBullets soft_bullets) {
+    this.soft_bullets = soft_bullets;
+  }
+  public String getDescription() {
+    return description;
+  }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  public String getPackage_dimensions() {
+    return package_dimensions;
+  }
+  public void setPackage_dimensions(String package_dimensions) {
+    this.package_dimensions = package_dimensions;
+  }
+  public String getAvailable_to_purchase_date_time() {
+    return available_to_purchase_date_time;
+  }
+  public void setAvailable_to_purchase_date_time(String available_to_purchase_date_time) {
+    this.available_to_purchase_date_time = available_to_purchase_date_time;
+  }
+  public List<Images> getImages() {
+    return images;
+  }
+  public void setImages(List<Images> images) {
+    this.images = images;
+  }
 }
 
 class SoftBullets {
-  public String title;
-  public List<String> bullets;
+  private String title;
+  private List<String> bullets;
   public SoftBullets() { }
   public SoftBullets(String empty) { this.title = empty;}
+  public String getTitle() {
+    return title;
+  }
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  public List<String> getBullets() {
+    return bullets;
+  }
+  public void setBullets(List<String> bullets) {
+    this.bullets = bullets;
+  }
 }
-

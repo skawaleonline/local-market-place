@@ -47,6 +47,11 @@
             <artifactId>guava</artifactId>
             <version>24.1-jre</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>7.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>

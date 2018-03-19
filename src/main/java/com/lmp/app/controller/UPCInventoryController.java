@@ -25,13 +25,13 @@ public class UPCInventoryController {
 
   @GetMapping("/upc/{code}")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<?> lookupForUpc(@PathVariable("code") long code) {
+  public ResponseEntity<?> lookupByUpc(@PathVariable("code") long code) {
     logger.debug("searching for upc code {}", code);
-    List<Item> item = itemService.findAllByUpc(code);
+    Item item = itemService.findByUpc(code);
     if (item == null) {
       logger.debug("no item found for upc {}", code);
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<List<Item>>(item, HttpStatus.OK);
+    return new ResponseEntity<Item>(item, HttpStatus.OK);
   }
 }
