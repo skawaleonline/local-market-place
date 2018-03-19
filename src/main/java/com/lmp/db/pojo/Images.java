@@ -1,4 +1,4 @@
-package com.lmp.db.setup;
+package com.lmp.db.pojo;
 
 import java.util.List;
 

@@ -1,0 +1,69 @@
+package com.lmp.app.bootup;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.lmp.config.ConfigProperties;
+import com.lmp.db.pojo.Item;
+import com.lmp.db.repository.ItemRepository;
+
+@Component
+public class AppBootUp {
+
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+  @Autowired
+  ConfigProperties prop;
+  @Autowired
+  private ItemRepository itemRepo;
+
+  public void buildItemRepo() throws IOException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    if(!prop.isDataSeedEnabled() || prop.getDataSeedFile() == null 
+        || prop.getDataSeedFile().isEmpty()) {
+      return ;
+    }
+
+    itemRepo.deleteAll();
+    for(String file : prop.getDataSeedFile()) {
+      List<Item> items = objectMapper.readValue(
+          new File(file)
+          , new TypeReference<List<Item>>(){});
+      List<String> categories = getCategoriesFromFileName(file);
+      logger.info("Seeding data file: " + file);
+      logger.info("categories for file: " + file + " categories: " + categories.toString());
+      for (Item item : items) {
+        item.category = categories;
+        itemRepo.save(item);
+      }
+      logger.info("Added " + items.size() + " items for categories: " + categories.toString());
+    }
+  }
+
+  private List<String> getCategoriesFromFileName(String fPath) {
+    List<String> categories = new ArrayList<>(); 
+    if(fPath == null || fPath.isEmpty()) {
+      return categories;
+    }
+    String tokens[] = fPath.split("/"); // get the fName;
+    String fName = tokens[tokens.length - 1].split("\\.")[0];
+    Joiner joiner = Joiner.on(" ").skipNulls();
+    // categories are separated by "_"
+    for(String str : fName.split("_")) {
+      // words with white space are seperated by "-"
+      categories.add(joiner.join(Splitter.on('-').split(str)));
+    }
+    return categories;
+  }
+}
