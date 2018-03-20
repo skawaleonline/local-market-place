@@ -40,6 +40,7 @@ public class AppBootUp {
     }
 
     itemRepo.deleteAll();
+    indexer.deleteAll();
     for(String file : prop.getDataSeedFile()) {
       List<Item> items = objectMapper.readValue(
           new File(file)
@@ -52,7 +53,7 @@ public class AppBootUp {
         itemRepo.save(item);
       }
       // index documents
-      indexer.indexItems(items);
+      indexer.addToIndex(items);
       logger.info("Added & indexed " + items.size() + " items for categories: " + categories.toString());
     }
   }

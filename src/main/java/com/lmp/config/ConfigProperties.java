@@ -12,6 +12,7 @@ public class ConfigProperties {
   private List<String> dataSeedFile;
   private boolean dataSeedEnabled;
   private String solrUrl;
+  private String solrHost;
 
   public List<String> getDataSeedFile() {
     return dataSeedFile;
@@ -35,5 +36,13 @@ public class ConfigProperties {
 
   public void setSolrUrl(String solrUrl) {
     this.solrUrl = solrUrl;
+  }
+
+  public String getSolrHost() {
+    return solrHost;
+  }
+
+  public void setSolrHost(String solrHost) {
+    this.solrHost = solrHost;
   }
 }
