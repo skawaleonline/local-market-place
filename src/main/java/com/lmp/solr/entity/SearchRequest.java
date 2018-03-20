@@ -12,6 +12,13 @@ public class SearchRequest {
   private Map<ItemField, String> filters = new HashMap<>();
   private List<ItemField> fields;
 
+  public static SearchRequest createFor(String q, int page, int count) {
+    SearchRequest sr = new SearchRequest();
+    sr.query = q;
+    sr.page = page;
+    sr.rows = count;
+    return sr;
+  }
   public String getQuery() {
     return query;
   }

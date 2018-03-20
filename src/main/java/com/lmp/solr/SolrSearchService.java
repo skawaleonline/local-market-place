@@ -23,13 +23,34 @@ public class SolrSearchService {
   private Pageable createPageRequest(SearchRequest sRequest) {
     return new PageRequest(sRequest.getPage(), sRequest.getRows());
   }
-  private Page<ItemDoc> searchContentField(SearchRequest sRequest) {
+
+  private String normalise(String query) {
+    if(query == null) {
+      return "";
+    }
+    if(query.startsWith("\"") && query.endsWith("\"")) {
+      return query.substring(1, query.length() - 1);
+    }
+    return query;
+  }
+
+  private Page<ItemDoc> searchFields(SearchRequest sRequest) {
     if(sRequest == null) {
       return null;
     }
     logger.debug("querying solr with query {}", sRequest.toString());
     Pageable pageRequest = createPageRequest(sRequest);
-    Page<ItemDoc> itemDocs = solrRepo.findByContent(sRequest.getQuery(), pageRequest);
+    Page<ItemDoc> itemDocs = null;
+    String query = normalise(sRequest.getQuery());
+    if (query.startsWith("content:")) {
+      itemDocs = solrRepo.findByContent(query.substring("content:".length()), pageRequest);
+    } else if (query.startsWith("brand:")) {
+      itemDocs = solrRepo.findByBrand(query.substring("brand:".length()), pageRequest);
+    } else if (query.startsWith("categories:")) {
+      itemDocs = solrRepo.findByCategories(query.substring("categories:".length()), pageRequest);
+    } else {
+      itemDocs = solrRepo.findByContent(sRequest.getQuery(), pageRequest);
+    }
 
     if(itemDocs == null || itemDocs.getContent() == null) {
       logger.error("null response from solr for query: {}", sRequest.toString());
@@ -44,7 +65,6 @@ public class SolrSearchService {
     if(sRequest == null || sRequest.getQuery() == null || sRequest.getQuery().isEmpty()) {
       return null;
     }
-
-    return searchContentField(sRequest);
+    return searchFields(sRequest);
   }
 }

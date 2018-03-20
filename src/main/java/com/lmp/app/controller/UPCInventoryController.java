@@ -1,7 +1,5 @@
 package com.lmp.app.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lmp.app.service.ItemService;
 import com.lmp.db.pojo.Item;
+import com.lmp.solr.entity.SearchRequest;
+import com.lmp.solr.entity.SearchResponse;
 
 @RestController
 public class UPCInventoryController {
@@ -33,5 +34,18 @@ public class UPCInventoryController {
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<Item>(item, HttpStatus.OK);
+  }
+
+  @GetMapping("/search")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> lookupByText(@RequestParam("q") String q
+      , @RequestParam("page") int page, @RequestParam("size") int size) {
+    logger.debug("searching for query: {}", q);
+    SearchResponse response = itemService.searchByText(SearchRequest.createFor(q, page, size));
+    if (response == null) {
+      logger.debug("no item found for q: {}", q);
+      return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<SearchResponse>(response, HttpStatus.OK);
   }
 }

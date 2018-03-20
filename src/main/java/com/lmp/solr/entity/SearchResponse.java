@@ -5,14 +5,18 @@ import java.util.List;
 
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.util.NamedList;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+
+import com.google.common.collect.Lists;
+import com.lmp.db.pojo.Item;
 
 public class SearchResponse {
 
   private int statusCode;
   private String errorMessage;
-  private int found;
-  private List<ItemDoc> results;
+  private long found;
+  private List<Item> results;
   private int start;
   private int rows;
 
@@ -30,12 +34,16 @@ public class SearchResponse {
   public static SearchResponse solrErrorResponse(QueryResponse queryResponse) {
     SearchResponse response = new SearchResponse();
     response.statusCode = queryResponse.getStatus();
-    if(queryResponse.getResponse() != null) {
-      List<ItemDoc> itemDocs = new ArrayList<>();
-      NamedList<Object> docs = queryResponse.getResponse();
-      
-    }
-    
+    return response;
+  }
+
+  public static SearchResponse build(Page<ItemDoc> result, Iterable<Item> items) {
+    SearchResponse response = new SearchResponse();
+    response.statusCode = HttpStatus.OK.value();
+    response.found = result.getTotalElements();
+    response.start = result.getPageable().getPageNumber();
+    response.rows = result.getPageable().getPageSize();
+    response.results = Lists.newArrayList(items);
     return response;
   }
 
@@ -48,16 +56,16 @@ public class SearchResponse {
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
   }
-  public int getFound() {
+  public long getFound() {
     return found;
   }
-  public void setFound(int found) {
+  public void setFound(long found) {
     this.found = found;
   }
-  public List<ItemDoc> getResults() {
+  public List<Item> getResults() {
     return results;
   }
-  public void setResults(List<ItemDoc> results) {
+  public void setResults(List<Item> results) {
     this.results = results;
   }
   public int getStart() {

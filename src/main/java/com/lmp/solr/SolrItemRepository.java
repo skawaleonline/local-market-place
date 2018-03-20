@@ -13,6 +13,6 @@ public interface SolrItemRepository extends SolrCrudRepository<ItemDoc, String> 
   Page<ItemDoc> findByContent(String content, Pageable page);
   
   Page<ItemDoc> findByBrand(String content, Pageable page);
-
+  
   Page<ItemDoc> findByCategories(String categories, Pageable page);
  }
