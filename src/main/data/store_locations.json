@@ -1,0 +1,9 @@
+[
+    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "2065 White Oak Ln, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [ -121.9963813, 37.3605649]}}, 
+    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "3580 Monroe St, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [-121.9951399, 37.3663817]}}, 
+    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "3565 Benton St, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [ -121.9943855, 37.3459357]}}, 
+    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "834 E Fremont Ave, Sunnyvale, CA 94087, USA", "location": { "type": "Point", "coordinates":  [ -122.0164178, 37.3516796]}}, 
+    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "848 E Evelyn Ave, Sunnyvale, CA 94086, USA", "location": { "type": "Point", "coordinates":  [ -122.01435, 37.3702194]}}, 
+    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "815 Bing Dr, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [ -121.9924302, 37.3385095]}}, 
+    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "2800 Benton St, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [ -121.9781973, 37.3461153]}} 
+    ]

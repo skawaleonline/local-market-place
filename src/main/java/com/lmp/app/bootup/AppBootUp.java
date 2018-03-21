@@ -15,9 +15,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 import com.lmp.config.ConfigProperties;
 import com.lmp.db.pojo.Item;
+import com.lmp.db.pojo.Store;
 import com.lmp.db.repository.ItemRepository;
+import com.lmp.db.repository.StoreRepository;
 import com.lmp.solr.indexer.SolrIndexer;
 
 @Component
@@ -30,6 +33,8 @@ public class AppBootUp {
   @Autowired
   private ItemRepository itemRepo;
   @Autowired
+  private StoreRepository storeRepo;
+  @Autowired
   private SolrIndexer indexer;
 
   public void buildItemRepo() throws IOException, SolrServerException {
@@ -41,6 +46,7 @@ public class AppBootUp {
 
     itemRepo.deleteAll();
     indexer.deleteAll();
+    storeRepo.deleteAll();
     for(String file : prop.getDataSeedFile()) {
       List<Item> items = objectMapper.readValue(
           new File(file)
@@ -56,6 +62,14 @@ public class AppBootUp {
       indexer.addToIndex(items);
       logger.info("Added & indexed " + items.size() + " items for categories: " + categories.toString());
     }
+    logger.info("Seeding store locations: src/main/data/store_locations.json");
+    List<Store> stores = objectMapper.readValue(
+        new File("src/main/data/store_locations.json")
+        , new TypeReference<List<Store>>(){});
+    for (Store store : stores) {
+      storeRepo.save(store);
+    }
+    
   }
 
   private List<String> getCategoriesFromFileName(String fPath) {
