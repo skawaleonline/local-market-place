@@ -12,6 +12,7 @@ public class StoreInventory {
   private Store store;
   @Indexed(unique = true)
   private Item item;
+  private long listPrice;
   private long noOfItems;
   private long added;
   private long updated;

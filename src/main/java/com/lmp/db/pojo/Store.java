@@ -20,7 +20,7 @@ public class Store {
   @Nullable
   private Location location;
   private String address;
-  private List<StoreCapabilities> capabilities;
+  private StoreCapabilities capabilities;
 
   public String getId() {
     return id;
@@ -52,10 +52,52 @@ public class Store {
   public void setAddress(String address) {
     this.address = address;
   }
+  public StoreCapabilities getCapabilities() {
+    return capabilities;
+  }
+  public void setCapabilities(StoreCapabilities capabilities) {
+    this.capabilities = capabilities;
+  }
 }
 
+/**
+ * currency type
+ * inventory categories
+ * store times
+ * liquor sold?
+ * cooked food served?
+ * @author skawale
+ *
+ */
 class StoreCapabilities {
-
+  private boolean liquorSold;
+  private boolean foodServed;
+  private List<String> listedCategories;
+  private Currency currency;
+  public boolean isLiquorSold() {
+    return liquorSold;
+  }
+  public void setLiquorSold(boolean liquorSold) {
+    this.liquorSold = liquorSold;
+  }
+  public boolean isFoodServed() {
+    return foodServed;
+  }
+  public void setFoodServed(boolean foodServed) {
+    this.foodServed = foodServed;
+  }
+  public List<String> getListedCategories() {
+    return listedCategories;
+  }
+  public void setListedCategories(List<String> listedCategories) {
+    this.listedCategories = listedCategories;
+  }
+  public Currency getCurrency() {
+    return currency;
+  }
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
 }
 
 class Location {

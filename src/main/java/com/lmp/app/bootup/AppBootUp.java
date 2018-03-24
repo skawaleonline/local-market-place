@@ -3,6 +3,7 @@ package com.lmp.app.bootup;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,6 +44,61 @@ public class AppBootUp {
   @Autowired
   private SolrIndexer indexer;
 
+  private void writeProgress(String fName) throws IOException {
+    BufferedWriter writer = new BufferedWriter(new FileWriter(prop.getSeededFiles(), true));
+    writer.append(fName);
+    writer.newLine();
+    writer.close();
+  }
+
+  private Set<String> readProcessed() throws IOException {
+    try(BufferedReader br = new BufferedReader(new FileReader(prop.getSeededFiles()))) {
+      Set<String> set = new HashSet<>();
+      String st = "";
+      while ((st = br.readLine()) != null){
+        set.add(st);
+      }
+      return set;
+    } catch(FileNotFoundException e) {
+      return new HashSet<>();
+    }
+  }
+
+  private List<File> getAllFilesInDir(String dPath) {
+    File folder = new File(dPath);
+    File[] listOfFiles = folder.listFiles();
+    List<File> files = new ArrayList<>();
+    for (int i = 0; i < listOfFiles.length; i++) {
+      if (listOfFiles[i].isFile()) {
+        files.add(listOfFiles[i]);
+      }
+    }
+    return files;
+  }
+
+  private void deleteFile(String fName) {
+    File file = new File(fName);
+    if(file.exists()) {
+      file.delete();
+    }
+  }
+  
+  private List<String> getCategoriesFromFileName(String fPath) {
+    List<String> categories = new ArrayList<>(); 
+    if(fPath == null || fPath.isEmpty()) {
+      return categories;
+    }
+    String tokens[] = fPath.split("/"); // get the fName;
+    String fName = tokens[tokens.length - 1].split("\\.")[0];
+    Joiner joiner = Joiner.on(" ").skipNulls();
+    // categories are separated by "_"
+    for(String str : fName.split("_")) {
+      // words with white space are seperated by "-"
+      categories.add(joiner.join(Splitter.on('-').split(str)));
+    }
+    return categories;
+  }
+
   public void buildItemRepo() throws IOException, SolrServerException {
     ObjectMapper objectMapper = new ObjectMapper();
     if(!prop.isDataSeedEnabled() || prop.getDataSeedDir() == null 
@@ -53,10 +109,13 @@ public class AppBootUp {
     if(files == null || files.isEmpty()) {
       return ;
     }
-    Set<String> processed = readProcessed();
-    itemRepo.deleteAll();
-    indexer.deleteAll();
     storeRepo.deleteAll();
+    if(prop.isCleanupAndSeedData()) {
+      itemRepo.deleteAll();
+      indexer.deleteAll();
+      deleteFile(prop.getSeededFiles());
+    }
+    Set<String> processed = readProcessed();
     for(File file : files) {
       if(processed.contains(file.getName())) {
         logger.info("skipping file: {}", file.getName());
@@ -84,7 +143,7 @@ public class AppBootUp {
       logger.info("Added & indexed " + items.size() + " items for categories: " + categories.toString());
       writeProgress(file.getName());
     }
-    logger.info("Seeding store locations: src/main/data/store_locations.json");
+    logger.info("Seeding store locations: " + prop.getStoreSeedFile());
     List<Store> stores = objectMapper.readValue(
         new File("src/main/data/store_locations.json")
         , new TypeReference<List<Store>>(){});
@@ -92,49 +151,5 @@ public class AppBootUp {
       storeRepo.save(store);
     }
     
-  }
-
-  private void writeProgress(String fName) throws IOException {
-    BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/data/processed_cat.json", true));
-    writer.append(fName);
-    writer.newLine();
-    writer.close();
-  }
-
-  private Set<String> readProcessed() throws IOException {
-    BufferedReader br = new BufferedReader(new FileReader("src/main/data/processed_cat.json"));
-    Set<String> set = new HashSet();
-    String st = "";
-    while ((st = br.readLine()) != null){
-      set.add(st);
-    }
-    return set;
-  }
-
-  private List<File> getAllFilesInDir(String dPath) {
-    File folder = new File(dPath);
-    File[] listOfFiles = folder.listFiles();
-    List<File> files = new ArrayList<>();
-    for (int i = 0; i < listOfFiles.length; i++) {
-      if (listOfFiles[i].isFile()) {
-        files.add(listOfFiles[i]);
-      }
-    }
-    return files;
-  }
-  private List<String> getCategoriesFromFileName(String fPath) {
-    List<String> categories = new ArrayList<>(); 
-    if(fPath == null || fPath.isEmpty()) {
-      return categories;
-    }
-    String tokens[] = fPath.split("/"); // get the fName;
-    String fName = tokens[tokens.length - 1].split("\\.")[0];
-    Joiner joiner = Joiner.on(" ").skipNulls();
-    // categories are separated by "_"
-    for(String str : fName.split("_")) {
-      // words with white space are seperated by "-"
-      categories.add(joiner.join(Splitter.on('-').split(str)));
-    }
-    return categories;
   }
 }

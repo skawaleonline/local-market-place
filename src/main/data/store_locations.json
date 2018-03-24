@@ -1,62 +1,887 @@
-[
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "2065 White Oak Ln, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [ -121.9963813, 37.3605649]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "3580 Monroe St, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [-121.9951399, 37.3663817]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "3565 Benton St, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [ -121.9943855, 37.3459357]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "834 E Fremont Ave, Sunnyvale, CA 94087, USA", "location": { "type": "Point", "coordinates":  [ -122.0164178, 37.3516796]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "848 E Evelyn Ave, Sunnyvale, CA 94086, USA", "location": { "type": "Point", "coordinates":  [ -122.01435, 37.3702194]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "815 Bing Dr, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [ -121.9924302, 37.3385095]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "2800 Benton St, Santa Clara, CA 95051, USA", "location": { "type": "Point", "coordinates":  [ -121.9781973, 37.3461153]}},
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "615 Old San Francisco Rd, Sunnyvale, CA 94086, USA", "location": { "type": "Point", "coordinates":  [ 37.3675883,  -122.0220774]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1039 Sunnyvale Saratoga Rd, Sunnyvale, CA 94087, USA", "location": { "type": "Point", "coordinates":  [ 37.3585384,  -122.0329128]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1555 Los Padres Blvd, Santa Clara, CA 95050, USA", "location": { "type": "Point", "coordinates":  [ 37.351743,  -121.9645078]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "2105 Scott Blvd, Santa Clara, CA 95050, USA", "location": { "type": "Point", "coordinates":  [ 37.3613631,  -121.958998]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1201 Wildwood Ave, Sunnyvale, CA 94089, USA", "location": { "type": "Point", "coordinates":  [ 37.3922432,  -121.9942522]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "708 N Fair Oaks Ave, Sunnyvale, CA 94085, USA", "location": { "type": "Point", "coordinates":  [ 37.391498,  -122.0137948]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "90 Stern Ave, Cupertino, CA 95014, USA", "location": { "type": "Point", "coordinates":  [ 37.3224104,  -122.003394]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "250 W Maude Ave, Sunnyvale, CA 94085, USA", "location": { "type": "Point", "coordinates":  [ 37.3885289,  -122.0283612]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "4625 Albany Dr, San Jose, CA 95129, USA", "location": { "type": "Point", "coordinates":  [ 37.3217797,  -121.9841348]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "21220 Homestead Rd, Cupertino, CA 95014, USA", "location": { "type": "Point", "coordinates":  [ 37.3371565,  -122.0450195]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1590 Franklin St, Santa Clara, CA 95050, USA", "location": { "type": "Point", "coordinates":  [ 37.3471668,  -121.9510661]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1005 W El Camino Real, Sunnyvale, CA 94087, USA", "location": { "type": "Point", "coordinates":  [ 37.37231140000001,  -122.0489535]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1002 W Evelyn Ave, Sunnyvale, CA 94086, USA", "location": { "type": "Point", "coordinates":  [ 37.3828306,  -122.0454342]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "281 Washington St, Santa Clara, CA 95050, USA", "location": { "type": "Point", "coordinates":  [ 37.3432814,  -121.940461]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1005 W El Camino Real, Sunnyvale, CA 94087, USA", "location": { "type": "Point", "coordinates":  [ 37.37231140000001,  -122.0489535]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1201 Wildwood Ave, Sunnyvale, CA 94089, USA", "location": { "type": "Point", "coordinates":  [ 37.3922432,  -121.9942522]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "780 N Winchester Blvd, San Jose, CA 95128, USA", "location": { "type": "Point", "coordinates":  [ 37.3295588,  -121.9497774]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "3500 Stevens Creek Blvd, San Jose, CA 95117, USA", "location": { "type": "Point", "coordinates":  [ 37.3228727,  -121.9602644]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "5148 Moorpark Ave, San Jose, CA 95129, USA", "location": { "type": "Point", "coordinates":  [ 37.3091049,  -121.9928654]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "21220 Homestead Rd, Cupertino, CA 95014, USA", "location": { "type": "Point", "coordinates":  [ 37.3371565,  -122.0450195]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "21580 Stevens Creek Blvd, Cupertino, CA 95014, USA", "location": { "type": "Point", "coordinates":  [ 37.3228011,  -122.0522612]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1002 W Evelyn Ave, Sunnyvale, CA 94086, USA", "location": { "type": "Point", "coordinates":  [ 37.3828306,  -122.0454342]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "3775 Williams Rd, San Jose, CA 95117, USA", "location": { "type": "Point", "coordinates":  [ 37.3088686,  -121.9669072]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "21490 McClellan Rd, Cupertino, CA 95014, USA", "location": { "type": "Point", "coordinates":  [ 37.3151922,  -122.0501405]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1412 Saratoga Ave, San Jose, CA 95129, USA", "location": { "type": "Point", "coordinates":  [ 37.2979521,  -121.9837011]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "276 N Whisman Rd, Mountain View, CA 94043, USA", "location": { "type": "Point", "coordinates":  [ 37.3966858,  -122.060174]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "951 S Winchester Blvd, San Jose, CA 95128, USA", "location": { "type": "Point", "coordinates":  [ 37.3093022,  -121.9506702]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "890 Coleman Ave, San Jose, CA 95110, USA", "location": { "type": "Point", "coordinates":  [ 37.3461848,  -121.9146751]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "2170 Fruitdale Ave, San Jose, CA 95128, USA", "location": { "type": "Point", "coordinates":  [ 37.3104449,  -121.9309116]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "4199 Hamilton Ave, San Jose, CA 95130, USA", "location": { "type": "Point", "coordinates":  [ 37.2942271,  -121.9761637]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1444 S Winchester Blvd, San Jose, CA 95128, USA", "location": { "type": "Point", "coordinates":  [ 37.2977699,  -121.9494706]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "3111 Payne Ave, San Jose, CA 95117, USA", "location": { "type": "Point", "coordinates":  [ 37.3019924,  -121.9508439]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1408 N 1st St, San Jose, CA 95112, USA", "location": { "type": "Point", "coordinates":  [ 37.36205229999999,  -121.9095808]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1335 S Bascom Ave, San Jose, CA 95128, USA", "location": { "type": "Point", "coordinates":  [ 37.3008831,  -121.9322685]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1031 Leigh Ave, San Jose, CA 95126, USA", "location": { "type": "Point", "coordinates":  [ 37.306107,  -121.921932]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1905 Latham St, Mountain View, CA 94040, USA", "location": { "type": "Point", "coordinates":  [ 37.3942347,  -122.096371]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1380 Pear Ave, Mountain View, CA 94043, USA", "location": { "type": "Point", "coordinates":  [ 37.4158175,  -122.0772745]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1430 Fruitdale Ave, San Jose, CA 95128, USA", "location": { "type": "Point", "coordinates":  [ 37.3102557,  -121.9161898]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "2335 S Winchester Blvd, Campbell, CA 95008, USA", "location": { "type": "Point", "coordinates":  [ 37.2808467,  -121.950381]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "188 N 6th St, San Jose, CA 95112, USA", "location": { "type": "Point", "coordinates":  [ 37.341623,  -121.8869677]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "601 Bird Ave, San Jose, CA 95125, USA", "location": { "type": "Point", "coordinates":  [ 37.3200334,  -121.8980387]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1443 Gretel Ln, Mountain View, CA 94040, USA", "location": { "type": "Point", "coordinates":  [ 37.376629,  -122.0783739]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "284 S 11th St, San Jose, CA 95112, USA", "location": { "type": "Point", "coordinates":  [ 37.3369602,  -121.8764274]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "615 S Rengstorff Ave, Mountain View, CA 94040, USA", "location": { "type": "Point", "coordinates":  [ 37.3963645,  -122.1009198]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "262 W Sunnyoaks Ave, Campbell, CA 95008, USA", "location": { "type": "Point", "coordinates":  [ 37.2718559,  -121.9547989]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1951 Old Middlefield Way, Mountain View, CA 94043, USA", "location": { "type": "Point", "coordinates":  [ 37.4140129,  -122.0896252]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "998 Lundy Ave, San Jose, CA 95133, USA", "location": { "type": "Point", "coordinates":  [ 37.37361020000001,  -121.8719676]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "452 E Santa Clara St, San Jose, CA 95112, USA", "location": { "type": "Point", "coordinates":  [ 37.3404896,  -121.8804091]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "404 S 6th St, San Jose, CA 95112, USA", "location": { "type": "Point", "coordinates":  [ 37.3326264,  -121.88012]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "15 S Abbott Ave, Milpitas, CA 95035, USA", "location": { "type": "Point", "coordinates":  [ 37.4283907,  -121.914643]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "190 W Calaveras Blvd, Milpitas, CA 95035, USA", "location": { "type": "Point", "coordinates":  [ 37.4279188,  -121.9097727]}}, 
-    {"name": "7-Eleven", "franchise": "7-Eleven",  "address": "1591 Flickinger Ave, San Jose, CA 95131, USA", "location": { "type": "Point", "coordinates":  [ 37.3900747,  -121.8787076]}}
-     
-    ]
+[{
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "2065 White Oak Ln, Santa Clara, CA 95051, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [-121.9963813, 37.3605649]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "3580 Monroe St, Santa Clara, CA 95051, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [-121.9951399, 37.3663817]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "3565 Benton St, Santa Clara, CA 95051, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [-121.9943855, 37.3459357]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "834 E Fremont Ave, Sunnyvale, CA 94087, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [-122.0164178, 37.3516796]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "848 E Evelyn Ave, Sunnyvale, CA 94086, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [-122.01435, 37.3702194]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "815 Bing Dr, Santa Clara, CA 95051, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [-121.9924302, 37.3385095]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "2800 Benton St, Santa Clara, CA 95051, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [-121.9781973, 37.3461153]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "615 Old San Francisco Rd, Sunnyvale, CA 94086, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3675883, -122.0220774]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1039 Sunnyvale Saratoga Rd, Sunnyvale, CA 94087, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3585384, -122.0329128]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1555 Los Padres Blvd, Santa Clara, CA 95050, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.351743, -121.9645078]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "2105 Scott Blvd, Santa Clara, CA 95050, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3613631, -121.958998]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1201 Wildwood Ave, Sunnyvale, CA 94089, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3922432, -121.9942522]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "708 N Fair Oaks Ave, Sunnyvale, CA 94085, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.391498, -122.0137948]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "90 Stern Ave, Cupertino, CA 95014, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3224104, -122.003394]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "250 W Maude Ave, Sunnyvale, CA 94085, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3885289, -122.0283612]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "4625 Albany Dr, San Jose, CA 95129, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3217797, -121.9841348]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "21220 Homestead Rd, Cupertino, CA 95014, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3371565, -122.0450195]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1590 Franklin St, Santa Clara, CA 95050, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3471668, -121.9510661]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1005 W El Camino Real, Sunnyvale, CA 94087, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.37231140000001, -122.0489535]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1002 W Evelyn Ave, Sunnyvale, CA 94086, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3828306, -122.0454342]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "281 Washington St, Santa Clara, CA 95050, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3432814, -121.940461]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1005 W El Camino Real, Sunnyvale, CA 94087, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.37231140000001, -122.0489535]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1201 Wildwood Ave, Sunnyvale, CA 94089, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3922432, -121.9942522]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "780 N Winchester Blvd, San Jose, CA 95128, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3295588, -121.9497774]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "3500 Stevens Creek Blvd, San Jose, CA 95117, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3228727, -121.9602644]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "5148 Moorpark Ave, San Jose, CA 95129, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3091049, -121.9928654]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "21220 Homestead Rd, Cupertino, CA 95014, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3371565, -122.0450195]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "21580 Stevens Creek Blvd, Cupertino, CA 95014, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3228011, -122.0522612]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1002 W Evelyn Ave, Sunnyvale, CA 94086, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3828306, -122.0454342]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "3775 Williams Rd, San Jose, CA 95117, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3088686, -121.9669072]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "21490 McClellan Rd, Cupertino, CA 95014, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3151922, -122.0501405]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1412 Saratoga Ave, San Jose, CA 95129, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.2979521, -121.9837011]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "276 N Whisman Rd, Mountain View, CA 94043, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3966858, -122.060174]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "951 S Winchester Blvd, San Jose, CA 95128, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3093022, -121.9506702]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "890 Coleman Ave, San Jose, CA 95110, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3461848, -121.9146751]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "2170 Fruitdale Ave, San Jose, CA 95128, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3104449, -121.9309116]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "4199 Hamilton Ave, San Jose, CA 95130, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.2942271, -121.9761637]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1444 S Winchester Blvd, San Jose, CA 95128, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.2977699, -121.9494706]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "3111 Payne Ave, San Jose, CA 95117, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3019924, -121.9508439]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1408 N 1st St, San Jose, CA 95112, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.36205229999999, -121.9095808]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1335 S Bascom Ave, San Jose, CA 95128, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3008831, -121.9322685]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1031 Leigh Ave, San Jose, CA 95126, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.306107, -121.921932]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1905 Latham St, Mountain View, CA 94040, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3942347, -122.096371]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1380 Pear Ave, Mountain View, CA 94043, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.4158175, -122.0772745]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1430 Fruitdale Ave, San Jose, CA 95128, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3102557, -121.9161898]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "2335 S Winchester Blvd, Campbell, CA 95008, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.2808467, -121.950381]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "188 N 6th St, San Jose, CA 95112, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.341623, -121.8869677]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "601 Bird Ave, San Jose, CA 95125, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3200334, -121.8980387]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1443 Gretel Ln, Mountain View, CA 94040, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.376629, -122.0783739]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "284 S 11th St, San Jose, CA 95112, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3369602, -121.8764274]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "615 S Rengstorff Ave, Mountain View, CA 94040, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3963645, -122.1009198]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "262 W Sunnyoaks Ave, Campbell, CA 95008, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.2718559, -121.9547989]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1951 Old Middlefield Way, Mountain View, CA 94043, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.4140129, -122.0896252]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "998 Lundy Ave, San Jose, CA 95133, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.37361020000001, -121.8719676]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "452 E Santa Clara St, San Jose, CA 95112, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3404896, -121.8804091]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "404 S 6th St, San Jose, CA 95112, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3326264, -121.88012]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "15 S Abbott Ave, Milpitas, CA 95035, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.4283907, -121.914643]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "190 W Calaveras Blvd, Milpitas, CA 95035, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.4279188, -121.9097727]
+        }
+    },
+    {
+        "name": "7-Eleven",
+        "franchise": "7-Eleven",
+        "capabilities": {
+            "liquorSold": true,
+            "foodServed": false,
+            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "currency": "USD"
+        },
+        "address": "1591 Flickinger Ave, San Jose, CA 95131, USA",
+        "location": {
+            "type": "Point",
+            "coordinates": [37.3900747, -121.8787076]
+        }
+    }
+
+]

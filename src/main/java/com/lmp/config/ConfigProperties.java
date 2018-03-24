@@ -1,7 +1,5 @@
 package com.lmp.config;
 
-import java.util.List;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,19 +7,12 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "lmp.app")
 public class ConfigProperties {
 
-  private List<String> dataSeedFile;
   private boolean dataSeedEnabled;
-  private String solrUrl;
+  private boolean cleanupAndSeedData;
   private String solrHost;
   private String dataSeedDir;
-
-  public List<String> getDataSeedFile() {
-    return dataSeedFile;
-  }
-
-  public void setDataSeedFile(List<String> dataSeedFile) {
-    this.dataSeedFile = dataSeedFile;
-  }
+  private String storeSeedFile;
+  private String seededFiles;
 
   public boolean isDataSeedEnabled() {
     return dataSeedEnabled;
@@ -31,12 +22,12 @@ public class ConfigProperties {
     this.dataSeedEnabled = dataSeed;
   }
 
-  public String getSolrUrl() {
-    return solrUrl;
+  public boolean isCleanupAndSeedData() {
+    return cleanupAndSeedData;
   }
 
-  public void setSolrUrl(String solrUrl) {
-    this.solrUrl = solrUrl;
+  public void setCleanupAndSeedData(boolean cleanupAndSeedData) {
+    this.cleanupAndSeedData = cleanupAndSeedData;
   }
 
   public String getSolrHost() {
@@ -53,5 +44,21 @@ public class ConfigProperties {
 
   public void setDataSeedDir(String dataSeedDir) {
     this.dataSeedDir = dataSeedDir;
+  }
+
+  public String getStoreSeedFile() {
+    return storeSeedFile;
+  }
+
+  public void setStoreSeedFile(String storeSeedFile) {
+    this.storeSeedFile = storeSeedFile;
+  }
+
+  public String getSeededFiles() {
+    return seededFiles;
+  }
+
+  public void setSeededFiles(String seededFiles) {
+    this.seededFiles = seededFiles;
   }
 }
