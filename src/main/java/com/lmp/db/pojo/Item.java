@@ -3,17 +3,21 @@ package com.lmp.db.pojo;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Document(collection="item")
 public class Item {
 
   @Id
   private String id;
-  private List<String> category;
+  private List<String> categories;
   private String title;
   private String url;
   private String brand;
+  @Indexed(unique = true)
   private long upc;
   private long tcin;
   private String dpci;
@@ -31,12 +35,6 @@ public class Item {
   }
   public void setId(String id) {
     this.id = id;
-  }
-  public List<String> getCategory() {
-    return category;
-  }
-  public void setCategory(List<String> category) {
-    this.category = category;
   }
   public String getTitle() {
     return title;
@@ -116,6 +114,14 @@ public class Item {
   public void setImages(List<Images> images) {
     this.images = images;
   }
+  public List<String> getCategories() {
+    return categories;
+  }
+  public void setCategories(List<String> categories) {
+    this.categories = categories;
+  }
+
+  
 }
 
 class SoftBullets {

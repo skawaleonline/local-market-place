@@ -30,11 +30,13 @@ public class ItemDoc {
     ItemDoc itemDoc = new ItemDoc();
     Joiner joiner = Joiner.on(" ").skipNulls();
     itemDoc.id = item.getId();
+    itemDoc.upc = Strings.nullToEmpty(Long.toString(item.getUpc()));
     itemDoc.brand = Strings.nullToEmpty(item.getBrand());
-    itemDoc.categories = joiner.join(item.getCategory());
+    if(item.getCategories() != null) {
+      itemDoc.categories = joiner.join(item.getCategories());
+    }
     itemDoc.content = itemDoc.brand + " " + itemDoc.categories 
         + " " + item.getTitle();
-    itemDoc.upc = Strings.nullToEmpty(Long.toString(item.getUpc()));
     return itemDoc;
   }
 

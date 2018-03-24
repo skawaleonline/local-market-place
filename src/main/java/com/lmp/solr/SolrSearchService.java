@@ -46,8 +46,8 @@ public class SolrSearchService {
       itemDocs = solrRepo.findByContent(query.substring("content:".length()), pageRequest);
     } else if (query.startsWith("brand:")) {
       itemDocs = solrRepo.findByBrand(query.substring("brand:".length()), pageRequest);
-    } else if (query.startsWith("categories:")) {
-      itemDocs = solrRepo.findByCategories(query.substring("categories:".length()), pageRequest);
+    } else if (query.startsWith("cat:")) {
+      itemDocs = solrRepo.findByCategories(query.substring("cat:".length()), pageRequest);
     } else {
       itemDocs = solrRepo.findByContent(sRequest.getQuery(), pageRequest);
     }

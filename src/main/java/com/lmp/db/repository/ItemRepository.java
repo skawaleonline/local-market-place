@@ -12,5 +12,5 @@ public interface ItemRepository extends MongoRepository<Item, String> {
 
     public Item findByUpc(long upc);
     public List<Item> findAllByUpc(long upc);
-    public List<Item> findAllByCategory(String category);
+    public List<Item> findAllByCategories(String category);
 }
