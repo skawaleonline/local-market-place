@@ -83,8 +83,8 @@ public class AppBootUp {
     }
   }
   
-  private List<String> getCategoriesFromFileName(String fPath) {
-    List<String> categories = new ArrayList<>(); 
+  private Set<String> getCategoriesFromFileName(String fPath) {
+    Set<String> categories = new HashSet<>(); 
     if(fPath == null || fPath.isEmpty()) {
       return categories;
     }
@@ -124,7 +124,7 @@ public class AppBootUp {
       List<Item> items = objectMapper.readValue(
           file
           , new TypeReference<List<Item>>(){});
-      List<String> categories = getCategoriesFromFileName(file.getName());
+      Set<String> categories = getCategoriesFromFileName(file.getName());
       logger.info("Seeding data file: " + file.getName());
       logger.info("categories for file: " + file.getName() + " categories: " + categories.toString());
       for (Item item : items) {

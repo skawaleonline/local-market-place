@@ -1,6 +1,7 @@
 package com.lmp.db.pojo;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -13,7 +14,7 @@ public class Item {
 
   @Id
   private String id;
-  private List<String> categories;
+  private Set<String> categories;
   private String title;
   private String url;
   private String brand;
@@ -114,10 +115,10 @@ public class Item {
   public void setImages(List<Images> images) {
     this.images = images;
   }
-  public List<String> getCategories() {
+  public Set<String> getCategories() {
     return categories;
   }
-  public void setCategories(List<String> categories) {
+  public void setCategories(Set<String> categories) {
     this.categories = categories;
   }
 

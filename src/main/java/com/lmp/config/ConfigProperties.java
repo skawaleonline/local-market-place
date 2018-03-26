@@ -1,5 +1,6 @@
 package com.lmp.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +14,9 @@ public class ConfigProperties {
   private String dataSeedDir;
   private String storeSeedFile;
   private String seededFiles;
+  private String mongoDbHost;
+  private int mongoDbPort;
+  private String mongoDbName;
 
   public boolean isDataSeedEnabled() {
     return dataSeedEnabled;
@@ -60,5 +64,29 @@ public class ConfigProperties {
 
   public void setSeededFiles(String seededFiles) {
     this.seededFiles = seededFiles;
+  }
+
+  public String getMongoDbHost() {
+    return mongoDbHost;
+  }
+
+  public void setMongoDbHost(String mongoDbHost) {
+    this.mongoDbHost = mongoDbHost;
+  }
+
+  public int getMongoDbPort() {
+    return mongoDbPort;
+  }
+
+  public void setMongoDbPort(int mongoDbPort) {
+    this.mongoDbPort = mongoDbPort;
+  }
+
+  public String getMongoDbName() {
+    return mongoDbName;
+  }
+
+  public void setMongoDbName(String mongoDbName) {
+    this.mongoDbName = mongoDbName;
   }
 }
