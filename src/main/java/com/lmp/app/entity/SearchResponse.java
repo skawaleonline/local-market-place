@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 
 import com.google.common.collect.Lists;
 import com.lmp.db.pojo.Item;
+import com.lmp.db.pojo.Store;
 import com.lmp.db.pojo.StoreInventory;
 import com.lmp.solr.entity.ItemDoc;
 
 public class SearchResponse<T> extends BaseResponse {
 
   private List<T> results;
+  private List<Store> stores;
 
   public static SearchResponse<Item> buildItemResponse(Page<ItemDoc> result, Iterable<Item> items) {
     SearchResponse<Item> response = new SearchResponse<>();
@@ -51,5 +53,13 @@ public class SearchResponse<T> extends BaseResponse {
 
   public void setResults(List<T> results) {
     this.results = results;
+  }
+
+  public List<Store> getStores() {
+    return stores;
+  }
+
+  public void setStores(List<Store> stores) {
+    this.stores = stores;
   }
 }

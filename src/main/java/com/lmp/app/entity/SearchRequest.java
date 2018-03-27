@@ -23,8 +23,9 @@ public class SearchRequest {
     return sr;
   }
 
-  public static SearchRequest createSISearch(String storeId, int page, int count) {
+  public static SearchRequest createSISearch(String storeId, String q, int page, int count) {
     SearchRequest sr = new SearchRequest();
+    sr.query = q;
     sr.storeId = storeId;
     sr.page = page;
     sr.rows = count;

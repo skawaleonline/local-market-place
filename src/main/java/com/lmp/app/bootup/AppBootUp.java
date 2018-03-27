@@ -80,7 +80,6 @@ public class AppBootUp {
   private void fillStoreInventory(Item item, List<Store> stores) {
     for(Store store : stores) {
       if(item.canGoOnStoreInventory(store)) {
-        logger.info("Adding items {} for store id {}", item.getId(), store.getId());
         StoreInventory sItem = new StoreInventory();
         long time = System.currentTimeMillis();
         sItem.setStoreId(store.getId());
@@ -88,9 +87,6 @@ public class AppBootUp {
         sItem.setAdded(time);
         sItem.setUpdated(time);
         siRepo.save(sItem);
-      } else {
-        logger.info("ignoring items {} for store id {}", item.getId(), store.getId());
-        
       }
     }
   }
@@ -108,7 +104,6 @@ public class AppBootUp {
         , new TypeReference<List<Store>>(){});
     storeRepo.saveAll(stores);
 
-    //fillStoreInventory();
     List<File> files = FileIOUtil.getAllFilesInDir(prop.getDataSeedDir());
     if(files == null || files.isEmpty()) {
       return ;
@@ -118,6 +113,8 @@ public class AppBootUp {
       indexer.deleteAll();
       siRepo.deleteAll();
       FileIOUtil.deleteFile(prop.getSeededFiles());
+    } else {
+      //fillStoreInventory();
     }
     Set<String> processed = FileIOUtil.readProcessed(prop.getSeededFiles());
     for(File file : files) {

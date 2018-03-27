@@ -47,7 +47,7 @@ public class StoreController {
 
   @GetMapping("/store/{id}")
   @ResponseStatus(HttpStatus.OK)
-  @Cacheable("stores")
+  @Cacheable("stores-response")
   public ResponseEntity<?> getStore(@PathVariable("id") String id) {
     logger.info("getting store details for id {}", id);
     Optional<Store> store = storeRepo.findById(id);

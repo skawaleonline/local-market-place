@@ -22,14 +22,30 @@ public class StoreInventoryController {
   @Autowired
   private StoreInventoryService service;
 
-  @GetMapping("/store-inventory")
+  @GetMapping("/store-inventory/store")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> lookupByStoreId(@RequestParam("storeId") String storeId,
-      @RequestParam("size") int size, @RequestParam("page") int page ) {
+      @RequestParam(value = "query", required = false) String q, @RequestParam("size") int size,
+      @RequestParam("page") int page) {
     logger.info("searching for store id {}", storeId);
-    BaseResponse response = service.getAllInventoryForStore(SearchRequest.createSISearch(storeId, page, size));
+    BaseResponse response = service.searchStoreInventoryFor(SearchRequest.createSISearch(storeId, q, page, size));
+    // logger.info("getting store details for store id {}", storeId);
+
     if (response == null) {
       logger.info("searching for store id {}", storeId);
+      return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<BaseResponse>(response, HttpStatus.OK);
+  }
+
+  @GetMapping("/store-inventory/all")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> lookupAllStores(@RequestParam("query") String q, @RequestParam("size") int size,
+      @RequestParam("page") int page) {
+    logger.info("searching all stores for {}", q);
+    BaseResponse response = service.searchAllStoresFor(SearchRequest.createSISearch(null, q, page, size));
+    if (response == null) {
+      logger.info("no results for q {} in all stores", q);
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<BaseResponse>(response, HttpStatus.OK);
