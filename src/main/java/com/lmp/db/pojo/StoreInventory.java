@@ -3,31 +3,26 @@ package com.lmp.db.pojo;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="store-inventory")
-@CompoundIndexes( {
-  @CompoundIndex(name = "popular_items",
-      unique = true,
-      def = "{store.id : 1, item.id : 1, popularity : -1}")
-})
+@Document
 public class StoreInventory {
 
   @Id
   private String id;
-  @DBRef
-  private Store store;
+  @Indexed
+  private String storeId;
   @DBRef
   private Item item;
   private double listPrice;
   private boolean onSale;
   private double salePrice;
   private int popularity = 1;
-  private long noOfItems;
+  private int stock;
   private long added;
   private long updated;
-  private long expiration;
 
   public String getId() {
     return id;
@@ -35,11 +30,11 @@ public class StoreInventory {
   public void setId(String id) {
     this.id = id;
   }
-  public Store getStore() {
-    return store;
+  public String getStoreId() {
+    return storeId;
   }
-  public void setStore(Store store) {
-    this.store = store;
+  public void setStoreId(String storeId) {
+    this.storeId = storeId;
   }
   public Item getItem() {
     return item;
@@ -47,11 +42,11 @@ public class StoreInventory {
   public void setItem(Item item) {
     this.item = item;
   }
-  public long getNoOfItems() {
-    return noOfItems;
+  public int getStock() {
+    return stock;
   }
-  public void setNoOfItems(long noOfItems) {
-    this.noOfItems = noOfItems;
+  public void setStock(int stock) {
+    this.stock = stock;
   }
   public long getAdded() {
     return added;
@@ -64,12 +59,6 @@ public class StoreInventory {
   }
   public void setUpdated(long updated) {
     this.updated = updated;
-  }
-  public long getExpiration() {
-    return expiration;
-  }
-  public void setExpiration(long expiration) {
-    this.expiration = expiration;
   }
   public double getListPrice() {
     return listPrice;

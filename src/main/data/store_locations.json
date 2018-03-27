@@ -4,7 +4,7 @@
         "capabilities": {
             "liquorSold": true,
             "foodServed": false,
-            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "listedCategories": ["food & beverage"],
             "currency": "USD"
         },
         "address": "2065 White Oak Ln, Santa Clara, CA 95051, USA",
@@ -19,7 +19,7 @@
         "capabilities": {
             "liquorSold": true,
             "foodServed": false,
-            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "listedCategories": ["household essentials", "food & beverage"],
             "currency": "USD"
         },
         "address": "3580 Monroe St, Santa Clara, CA 95051, USA",
@@ -34,7 +34,7 @@
         "capabilities": {
             "liquorSold": true,
             "foodServed": false,
-            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "listedCategories": ["personal care"],
             "currency": "USD"
         },
         "address": "3565 Benton St, Santa Clara, CA 95051, USA",
@@ -49,7 +49,7 @@
         "capabilities": {
             "liquorSold": true,
             "foodServed": false,
-            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "listedCategories": ["household essentials"],
             "currency": "USD"
         },
         "address": "834 E Fremont Ave, Sunnyvale, CA 94087, USA",
@@ -74,12 +74,12 @@
         }
     },
     {
-        "name": "7-Eleven",
+        "name": "7-Eleven liquor",
         "franchise": "7-Eleven",
         "capabilities": {
             "liquorSold": true,
             "foodServed": false,
-            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "listedCategories": ["personal care", "household essentials"],
             "currency": "USD"
         },
         "address": "815 Bing Dr, Santa Clara, CA 95051, USA",
@@ -94,7 +94,7 @@
         "capabilities": {
             "liquorSold": true,
             "foodServed": false,
-            "listedCategories": ["personal care", "household essentials", "food & beverage"],
+            "listedCategories": ["beer", "cocktail mixes", "hard cider", "malt drinks", "spirits", "wine"],
             "currency": "USD"
         },
         "address": "2800 Benton St, Santa Clara, CA 95051, USA",

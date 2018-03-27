@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableSet;
 
 @Document(collection="item")
 public class Item {
@@ -31,6 +33,27 @@ public class Item {
   private String available_to_purchase_date_time;
   @JsonIgnore
   private List<Images> images;
+
+  /**
+   * check if item can be listed on store inventory
+   * it does check whether item is of the category which store can list
+   * @param store
+   * @return
+   */
+  public boolean canGoOnStoreInventory(Store store) {
+    Set<String> cats = MoreObjects.firstNonNull(
+        store.getCapabilities().getListedCategories(), ImmutableSet.<String>of());
+    if(categories == null || categories.isEmpty() 
+        || cats.isEmpty()) {
+      return false;
+    }
+    for(String cat : cats) {
+      if(categories.contains(cat)) {
+        return true;
+      }
+    }
+    return false;
+  }
   public String getId() {
     return id;
   }

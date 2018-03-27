@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -21,12 +22,13 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
+import com.lmp.app.utils.FileIOUtil;
 import com.lmp.config.ConfigProperties;
 import com.lmp.db.pojo.Item;
 import com.lmp.db.pojo.Store;
+import com.lmp.db.pojo.StoreInventory;
 import com.lmp.db.repository.ItemRepository;
+import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.db.repository.StoreRepository;
 import com.lmp.solr.indexer.SolrIndexer;
 
@@ -42,114 +44,88 @@ public class AppBootUp {
   @Autowired
   private StoreRepository storeRepo;
   @Autowired
+  private StoreInventoryRepository siRepo;
+  @Autowired
   private SolrIndexer indexer;
 
-  private void writeProgress(String fName) throws IOException {
-    BufferedWriter writer = new BufferedWriter(new FileWriter(prop.getSeededFiles(), true));
-    writer.append(fName);
-    writer.newLine();
-    writer.close();
-  }
-
-  private Set<String> readProcessed() throws IOException {
-    try(BufferedReader br = new BufferedReader(new FileReader(prop.getSeededFiles()))) {
-      Set<String> set = new HashSet<>();
-      String st = "";
-      while ((st = br.readLine()) != null){
-        set.add(st);
-      }
-      return set;
-    } catch(FileNotFoundException e) {
-      return new HashSet<>();
-    }
-  }
-
-  private List<File> getAllFilesInDir(String dPath) {
-    File folder = new File(dPath);
-    File[] listOfFiles = folder.listFiles();
-    List<File> files = new ArrayList<>();
-    for (int i = 0; i < listOfFiles.length; i++) {
-      if (listOfFiles[i].isFile()) {
-        files.add(listOfFiles[i]);
+  private void seedOneCategory(File file, List<Store> stores) throws IOException, SolrServerException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    List<Item> items = objectMapper.readValue(file, new TypeReference<List<Item>>() {});
+    logger.info("Seeding data file: {}", file.getName());
+    Iterator<Item> it = items.listIterator();
+    while(it.hasNext()) {
+      Item item = it.next();
+      try {
+        itemRepo.save(item);
+        fillStoreInventory(item, stores);
+      } catch (DuplicateKeyException e) {
+        logger.debug("found duplicate item upc {}", item.getUpc());
+        //it.remove();
       }
     }
-    return files;
+    // index documents
+    indexer.addToIndex(items);
+    logger.info("Added & indexed {} items from file {}", items.size(), file.getName());
+    FileIOUtil.writeProgress(prop.getSeededFiles(), file.getName());
   }
 
-  private void deleteFile(String fName) {
-    File file = new File(fName);
-    if(file.exists()) {
-      file.delete();
+  private void fillStoreInventory() {
+    List<Item> items = itemRepo.findAll();
+    List<Store> stores = storeRepo.findAll();
+    for(Item item : items) {
+      fillStoreInventory(item, stores);
     }
   }
   
-  private Set<String> getCategoriesFromFileName(String fPath) {
-    Set<String> categories = new HashSet<>(); 
-    if(fPath == null || fPath.isEmpty()) {
-      return categories;
+  private void fillStoreInventory(Item item, List<Store> stores) {
+    for(Store store : stores) {
+      if(item.canGoOnStoreInventory(store)) {
+        logger.info("Adding items {} for store id {}", item.getId(), store.getId());
+        StoreInventory sItem = new StoreInventory();
+        long time = System.currentTimeMillis();
+        sItem.setStoreId(store.getId());
+        sItem.setItem(item);
+        sItem.setAdded(time);
+        sItem.setUpdated(time);
+        siRepo.save(sItem);
+      } else {
+        logger.info("ignoring items {} for store id {}", item.getId(), store.getId());
+        
+      }
     }
-    String tokens[] = fPath.split("/"); // get the fName;
-    String fName = tokens[tokens.length - 1].split("\\.")[0];
-    Joiner joiner = Joiner.on(" ").skipNulls();
-    // categories are separated by "_"
-    for(String str : fName.split("_")) {
-      // words with white space are seperated by "-"
-      categories.add(joiner.join(Splitter.on('-').split(str)));
-    }
-    return categories;
   }
-
   public void buildItemRepo() throws IOException, SolrServerException {
-    ObjectMapper objectMapper = new ObjectMapper();
     if(!prop.isDataSeedEnabled() || prop.getDataSeedDir() == null 
         || prop.getDataSeedDir().isEmpty()) {
       return ;
     }
-    List<File> files = getAllFilesInDir(prop.getDataSeedDir());
+    storeRepo.deleteAll();
+    siRepo.deleteAll();
+    logger.info("Seeding store locations: " + prop.getStoreSeedFile());
+    ObjectMapper objectMapper = new ObjectMapper();
+    List<Store> stores = objectMapper.readValue(
+        new File(prop.getStoreSeedFile())
+        , new TypeReference<List<Store>>(){});
+    storeRepo.saveAll(stores);
+
+    //fillStoreInventory();
+    List<File> files = FileIOUtil.getAllFilesInDir(prop.getDataSeedDir());
     if(files == null || files.isEmpty()) {
       return ;
     }
-    storeRepo.deleteAll();
     if(prop.isCleanupAndSeedData()) {
       itemRepo.deleteAll();
       indexer.deleteAll();
-      deleteFile(prop.getSeededFiles());
+      siRepo.deleteAll();
+      FileIOUtil.deleteFile(prop.getSeededFiles());
     }
-    Set<String> processed = readProcessed();
+    Set<String> processed = FileIOUtil.readProcessed(prop.getSeededFiles());
     for(File file : files) {
       if(processed.contains(file.getName())) {
         logger.info("skipping file: {}", file.getName());
         continue;
       }
-      List<Item> items = objectMapper.readValue(
-          file
-          , new TypeReference<List<Item>>(){});
-      Set<String> categories = getCategoriesFromFileName(file.getName());
-      logger.info("Seeding data file: " + file.getName());
-      logger.info("categories for file: " + file.getName() + " categories: " + categories.toString());
-      for (Item item : items) {
-        if(item.getCategories() == null || item.getCategories().isEmpty()) {
-          item.setCategories(categories);
-        }
-        try {
-          itemRepo.save(item);
-        } catch(DuplicateKeyException e) {
-          logger.debug("found duplicate item upc {}", item.getUpc());
-        }
-      }
-      
-      // index documents
-      indexer.addToIndex(items);
-      logger.info("Added & indexed " + items.size() + " items for categories: " + categories.toString());
-      writeProgress(file.getName());
+      seedOneCategory(file, stores);
     }
-    logger.info("Seeding store locations: " + prop.getStoreSeedFile());
-    List<Store> stores = objectMapper.readValue(
-        new File("src/main/data/store_locations.json")
-        , new TypeReference<List<Store>>(){});
-    for (Store store : stores) {
-      storeRepo.save(store);
-    }
-    
   }
 }

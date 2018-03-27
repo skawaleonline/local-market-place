@@ -44,4 +44,12 @@ public class SearchResponse<T> extends BaseResponse {
     response.results = Lists.newArrayList(items.getContent());
     return response;
   }
+
+  public List<T> getResults() {
+    return results;
+  }
+
+  public void setResults(List<T> results) {
+    this.results = results;
+  }
 }

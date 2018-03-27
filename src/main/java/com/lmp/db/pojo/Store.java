@@ -1,6 +1,6 @@
 package com.lmp.db.pojo;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
@@ -72,7 +72,7 @@ public class Store {
 class StoreCapabilities {
   private boolean liquorSold;
   private boolean foodServed;
-  private List<String> listedCategories;
+  private Set<String> listedCategories;
   private Currency currency;
   public boolean isLiquorSold() {
     return liquorSold;
@@ -86,10 +86,10 @@ class StoreCapabilities {
   public void setFoodServed(boolean foodServed) {
     this.foodServed = foodServed;
   }
-  public List<String> getListedCategories() {
+  public Set<String> getListedCategories() {
     return listedCategories;
   }
-  public void setListedCategories(List<String> listedCategories) {
+  public void setListedCategories(Set<String> listedCategories) {
     this.listedCategories = listedCategories;
   }
   public Currency getCurrency() {

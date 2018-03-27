@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import com.lmp.app.entity.SearchRequest;
+import com.lmp.app.entity.SearchResponse;
 import com.lmp.db.pojo.Item;
 import com.lmp.db.repository.ItemRepository;
 import com.lmp.solr.SolrSearchService;
 import com.lmp.solr.entity.ItemDoc;
-import com.lmp.solr.entity.SearchRequest;
-import com.lmp.solr.entity.SearchResponse;
 
 @Service
 public class ItemService {
@@ -41,7 +41,7 @@ public class ItemService {
     return itemRepo.findAllByUpc(upc);
   }
 
-  public SearchResponse searchByText(SearchRequest sRequest) {
+  public SearchResponse<Item> searchByText(SearchRequest sRequest) {
     if(sRequest == null) {
       return null;
     }
@@ -51,6 +51,6 @@ public class ItemService {
       ids.add(itemDoc.getId());
     });
     Iterable<Item> items = itemRepo.findAllById(ids);
-    return SearchResponse.build(results, items);
+    return SearchResponse.buildItemResponse(results, items);
   }
 }

@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lmp.app.entity.SearchRequest;
+import com.lmp.app.entity.SearchResponse;
 import com.lmp.app.service.ItemService;
 import com.lmp.db.pojo.Item;
-import com.lmp.solr.entity.SearchRequest;
-import com.lmp.solr.entity.SearchResponse;
 
 @RestController
 public class UPCInventoryController {
@@ -41,7 +41,7 @@ public class UPCInventoryController {
   public ResponseEntity<?> lookupByText(@RequestParam("q") String q
       , @RequestParam("page") int page, @RequestParam("size") int size) {
     logger.debug("searching for query: {}", q);
-    SearchResponse response = itemService.searchByText(SearchRequest.createFor(q, page, size));
+    SearchResponse<Item> response = itemService.searchByText(SearchRequest.createFor(q, page, size));
     if (response == null) {
       logger.debug("no item found for q: {}", q);
       return new ResponseEntity(HttpStatus.NOT_FOUND);
