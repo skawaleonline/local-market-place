@@ -33,11 +33,19 @@ public class SolrIndexer {
   }
 
   @Transactional
+  public void addToIndex(Item item, String storeids) throws SolrServerException, IOException {
+    if (item == null) {
+      return ;
+    }
+    repository.save(ItemDoc.fromItem(item, storeids));
+  }
+
+  @Transactional
   public void addToIndex(Item item) throws SolrServerException, IOException {
     if (item == null) {
       return ;
     }
-    repository.save(ItemDoc.fromItem(item));
+    repository.save(ItemDoc.fromItem(item, ""));
   }
 
   @Transactional

@@ -8,6 +8,11 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
+@CompoundIndexes( {
+  @CompoundIndex(name = "store_items",
+      unique = true,
+      def = "{'storeId' : 1, 'item.$id' : 1, 'popularity' : -1 }")
+})
 public class StoreInventory {
 
   @Id
@@ -15,7 +20,8 @@ public class StoreInventory {
   @Indexed
   private String storeId;
   @DBRef
-  private Item item;
+  @Indexed
+  private Item item = new Item();
   private double listPrice;
   private boolean onSale;
   private double salePrice;

@@ -25,14 +25,14 @@ public class StoreInventoryController {
   @GetMapping("/store-inventory/store")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> lookupByStoreId(@RequestParam("storeId") String storeId,
-      @RequestParam(value = "query", required = false) String q, @RequestParam("size") int size,
+      @RequestParam("q") String q, @RequestParam("size") int size,
       @RequestParam("page") int page) {
-    logger.info("searching for store id {}", storeId);
+    logger.info("searching for store id {} & q {}", storeId, q);
     BaseResponse response = service.searchStoreInventoryFor(SearchRequest.createSISearch(storeId, q, page, size));
     // logger.info("getting store details for store id {}", storeId);
 
     if (response == null) {
-      logger.info("searching for store id {}", storeId);
+      logger.info("searching for store id {} & q {}", storeId, q);
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<BaseResponse>(response, HttpStatus.OK);
@@ -40,7 +40,7 @@ public class StoreInventoryController {
 
   @GetMapping("/store-inventory/all")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<?> lookupAllStores(@RequestParam("query") String q, @RequestParam("size") int size,
+  public ResponseEntity<?> lookupAllStores(@RequestParam("q") String q, @RequestParam("size") int size,
       @RequestParam("page") int page) {
     logger.info("searching all stores for {}", q);
     BaseResponse response = service.searchAllStoresFor(SearchRequest.createSISearch(null, q, page, size));

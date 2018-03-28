@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Joiner;
 import com.lmp.app.utils.FileIOUtil;
 import com.lmp.config.ConfigProperties;
 import com.lmp.db.pojo.Item;
@@ -57,53 +58,50 @@ public class AppBootUp {
       Item item = it.next();
       try {
         itemRepo.save(item);
-        fillStoreInventory(item, stores);
+        indexer.addToIndex(item, fillStoreInventory(item, stores));
       } catch (DuplicateKeyException e) {
-        logger.debug("found duplicate item upc {}", item.getUpc());
-        //it.remove();
+        logger.info("found duplicate item upc {}", item.getUpc());
+        logger.error(e.getMessage(), e);
+        it.remove();
       }
     }
     // index documents
-    indexer.addToIndex(items);
+    //indexer.addToIndex(items);
     logger.info("Added & indexed {} items from file {}", items.size(), file.getName());
     FileIOUtil.writeProgress(prop.getSeededFiles(), file.getName());
   }
 
-  private void fillStoreInventory() {
-    List<Item> items = itemRepo.findAll();
-    List<Store> stores = storeRepo.findAll();
-    for(Item item : items) {
-      fillStoreInventory(item, stores);
-    }
-  }
-  
-  private void fillStoreInventory(Item item, List<Store> stores) {
+  private String fillStoreInventory(Item item, List<Store> stores) {
+    List<String> storeIdsToIndex = new ArrayList<>();
     for(Store store : stores) {
       if(item.canGoOnStoreInventory(store)) {
         StoreInventory sItem = new StoreInventory();
         long time = System.currentTimeMillis();
         sItem.setStoreId(store.getId());
-        sItem.setItem(item);
+        sItem.getItem().setId(item.getId());
         sItem.setAdded(time);
         sItem.setUpdated(time);
+        storeIdsToIndex.add(store.getId());
         siRepo.save(sItem);
       }
     }
+    return Joiner.on(" ").join(storeIdsToIndex);
   }
-  public void buildItemRepo() throws IOException, SolrServerException {
-    if(!prop.isDataSeedEnabled() || prop.getDataSeedDir() == null 
-        || prop.getDataSeedDir().isEmpty()) {
-      return ;
-    }
-    storeRepo.deleteAll();
-    siRepo.deleteAll();
-    logger.info("Seeding store locations: " + prop.getStoreSeedFile());
+
+  private void seedStores() throws IOException{
+    logger.info("Seeding stores : " + prop.getStoreSeedFile());
     ObjectMapper objectMapper = new ObjectMapper();
     List<Store> stores = objectMapper.readValue(
         new File(prop.getStoreSeedFile())
         , new TypeReference<List<Store>>(){});
     storeRepo.saveAll(stores);
+  }
 
+  public void buildItemRepo() throws IOException, SolrServerException {
+    if(!prop.isDataSeedEnabled() || prop.getDataSeedDir() == null 
+        || prop.getDataSeedDir().isEmpty()) {
+      return ;
+    }
     List<File> files = FileIOUtil.getAllFilesInDir(prop.getDataSeedDir());
     if(files == null || files.isEmpty()) {
       return ;
@@ -112,11 +110,12 @@ public class AppBootUp {
       itemRepo.deleteAll();
       indexer.deleteAll();
       siRepo.deleteAll();
+      storeRepo.deleteAll();
+      seedStores();
       FileIOUtil.deleteFile(prop.getSeededFiles());
-    } else {
-      //fillStoreInventory();
     }
     Set<String> processed = FileIOUtil.readProcessed(prop.getSeededFiles());
+    List<Store> stores = storeRepo.findAll();
     for(File file : files) {
       if(processed.contains(file.getName())) {
         logger.info("skipping file: {}", file.getName());

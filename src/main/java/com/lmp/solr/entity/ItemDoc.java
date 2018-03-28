@@ -22,8 +22,10 @@ public class ItemDoc {
   private String content;
   @Field("upc")
   private String upc;
+  @Field("stores")
+  private String stores;
 
-  public static ItemDoc fromItem(Item item) {
+  public static ItemDoc fromItem(Item item, String storeids) {
     if(item == null) {
       return null;
     }
@@ -32,6 +34,7 @@ public class ItemDoc {
     itemDoc.id = item.getId();
     itemDoc.upc = Strings.nullToEmpty(Long.toString(item.getUpc()));
     itemDoc.brand = Strings.nullToEmpty(item.getBrand());
+    itemDoc.setStores(storeids);
     if(item.getCategories() != null) {
       itemDoc.categories = joiner.join(item.getCategories());
     }
@@ -74,5 +77,13 @@ public class ItemDoc {
 
   public void setUpc(String upc) {
     this.upc = upc;
+  }
+
+  public String getStores() {
+    return stores;
+  }
+
+  public void setStores(String stores) {
+    this.stores = stores;
   }
 }
