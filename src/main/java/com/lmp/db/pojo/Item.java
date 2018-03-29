@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;
 
@@ -31,8 +32,7 @@ public class Item {
   private String package_dimensions;
   @JsonIgnore
   private String available_to_purchase_date_time;
-  @JsonIgnore
-  private List<Images> images;
+  private List<Image> images;
 
   /**
    * check if item can be listed on store inventory
@@ -132,10 +132,10 @@ public class Item {
   public void setAvailable_to_purchase_date_time(String available_to_purchase_date_time) {
     this.available_to_purchase_date_time = available_to_purchase_date_time;
   }
-  public List<Images> getImages() {
+  public List<Image> getImages() {
     return images;
   }
-  public void setImages(List<Images> images) {
+  public void setImages(List<Image> images) {
     this.images = images;
   }
   public Set<String> getCategories() {
@@ -144,8 +144,6 @@ public class Item {
   public void setCategories(Set<String> categories) {
     this.categories = categories;
   }
-
-  
 }
 
 class SoftBullets {
@@ -165,4 +163,32 @@ class SoftBullets {
   public void setBullets(List<String> bullets) {
     this.bullets = bullets;
   }
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Image {
+
+  public String base_url;
+  public String primary;
+  @JsonIgnore
+  public List<String> alternate_urls;
+  public String getBase_url() {
+    return base_url;
+  }
+  public void setBase_url(String base_url) {
+    this.base_url = base_url;
+  }
+  public String getPrimary() {
+    return primary;
+  }
+  public void setPrimary(String primary) {
+    this.primary = primary;
+  }
+  public List<String> getAlternate_urls() {
+    return alternate_urls;
+  }
+  public void setAlternate_urls(List<String> alternate_urls) {
+    this.alternate_urls = alternate_urls;
+  }
+
 }
