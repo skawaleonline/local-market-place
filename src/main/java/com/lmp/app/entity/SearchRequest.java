@@ -8,8 +8,6 @@ import java.util.Map;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.springframework.lang.Nullable;
-
 import com.lmp.solr.entity.ItemField;
 
 public class SearchRequest {
@@ -23,10 +21,9 @@ public class SearchRequest {
   private int rows;
   private Map<String, String> filters = new HashMap<>();
   private List<ItemField> fields = new ArrayList<>();
-  @Nullable
   private double lat;
-  @Nullable
   private double lng;
+  private int radius = 5;
 
   public static SearchRequest createFor(String q, int page, int count) {
     SearchRequest sr = new SearchRequest();
@@ -96,6 +93,15 @@ public class SearchRequest {
     this.lng = lng;
   }
 
+  public int getRadius() {
+    return radius;
+  }
+
+  public void setRadius(int radius) {
+    this.radius = radius;
+  }
+
+  @Override
   public String toString() {
     return "query: " + query 
         + "storeId: " + storeId

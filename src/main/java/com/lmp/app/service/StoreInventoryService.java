@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.lmp.app.entity.BaseResponse;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.SearchResponse;
+import com.lmp.db.pojo.Store;
 import com.lmp.db.pojo.StoreInventory;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.solr.SolrSearchService;
@@ -25,6 +26,8 @@ public class StoreInventoryService {
   StoreInventoryRepository repo;
   @Autowired
   SolrSearchService solrService;
+  @Autowired
+  StoreService storeService;
 
   @SuppressWarnings("deprecation")
   private Pageable createPageRequest(SearchRequest sRequest) {
@@ -32,12 +35,21 @@ public class StoreInventoryService {
   }
 
   private BaseResponse searchAllStoresFor(SearchRequest sRequest) {
-    Page<ItemDoc> results = solrService.search(sRequest);
+    // get stores around
+    List<Store> stores = storeService.getStoresAround(sRequest);
+    List<String> storeids = new ArrayList<>();
+    stores.forEach(store -> {
+      storeids.add(store.getId());
+    });
+    Page<ItemDoc> results = solrService.searchWithinStores(sRequest, stores);
+    if(results == null || results.getContent() == null) {
+      return new BaseResponse();
+    }
     List<String> ids = new ArrayList<>();
     results.getContent().forEach(itemDoc -> {
       ids.add(itemDoc.getId());
     });
-    Page<StoreInventory> items = repo.findAllByItemIdIn(ids, createPageRequest(sRequest));
+    Page<StoreInventory> items = repo.findAllByStoreIdInAndItemIdIn(storeids, ids, createPageRequest(sRequest));
   
     return SearchResponse.buildStoreInventoryResponse(items);
   }

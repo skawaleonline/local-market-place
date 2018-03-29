@@ -15,4 +15,7 @@ public interface StoreInventoryRepository extends MongoRepository<StoreInventory
   public Page<StoreInventory> findAllByStoreIdAndItemIdIn(String id, List<String> ids, Pageable page);
 
   public Page<StoreInventory> findAllByItemIdIn(List<String> ids, Pageable page);
+
+  public Page<StoreInventory> findAllByStoreIdInAndItemIdIn(List<String> storeIds, List<String> ids, Pageable page);
+  
 }
