@@ -20,7 +20,7 @@ public class SearchResponse<T> extends BaseResponse {
     SearchResponse<Item> response = new SearchResponse<>();
     response.statusCode = HttpStatus.OK.value();
     response.found = result.getTotalElements();
-    response.start = result.getPageable().getPageNumber();
+    response.page = result.getPageable().getPageNumber();
     response.rows = result.getPageable().getPageSize();
     response.results = Lists.newArrayList(items);
     return response;
@@ -31,7 +31,7 @@ public class SearchResponse<T> extends BaseResponse {
     SearchResponse<StoreInventory> response = new SearchResponse<>();
     response.statusCode = HttpStatus.OK.value();
     response.found = result.getTotalElements();
-    response.start = result.getPageable().getPageNumber();
+    response.page = result.getPageable().getPageNumber();
     response.rows = result.getPageable().getPageSize();
     response.results = Lists.newArrayList(items);
     return response;
@@ -41,7 +41,7 @@ public class SearchResponse<T> extends BaseResponse {
     SearchResponse<StoreInventory> response = new SearchResponse<>();
     response.statusCode = HttpStatus.OK.value();
     response.found = items.getTotalElements();
-    response.start = items.getPageable().getPageNumber();
+    response.page = items.getPageable().getPageNumber();
     response.rows = items.getPageable().getPageSize();
     response.results = Lists.newArrayList(items.getContent());
     return response;

@@ -6,15 +6,15 @@ import org.springframework.http.HttpStatus;
 public class BaseResponse {
 
   protected int statusCode;
-  protected String errorMessage;
+  protected String message;
   protected long found;
-  protected int start;
+  protected int page;
   protected int rows;
 
   public static BaseResponse invalidSearchRequest(String message) {
     BaseResponse response = new BaseResponse();
     response.statusCode = HttpStatus.BAD_REQUEST.value();
-    response.errorMessage = message;
+    response.message = message;
     return response;
   }
 
@@ -30,11 +30,11 @@ public class BaseResponse {
   public void setStatusCode(int statusCode) {
     this.statusCode = statusCode;
   }
-  public String getErrorMessage() {
-    return errorMessage;
+  public String getMessage() {
+    return message;
   }
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public void setErrorMessage(String message) {
+    this.message = message;
   }
   public long getFound() {
     return found;
@@ -42,11 +42,11 @@ public class BaseResponse {
   public void setFound(long found) {
     this.found = found;
   }
-  public int getStart() {
-    return start;
+  public int getPage() {
+    return page;
   }
-  public void setStart(int start) {
-    this.start = start;
+  public void setPage(int page) {
+    this.page = page;
   }
   public int getRows() {
     return rows;

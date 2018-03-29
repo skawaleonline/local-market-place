@@ -3,7 +3,6 @@ package com.lmp.db.pojo;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,10 +16,8 @@ public class StoreInventory {
 
   @Id
   private String id;
-  @Indexed
   private String storeId;
   @DBRef
-  @Indexed
   private Item item = new Item();
   private double listPrice;
   private boolean onSale;

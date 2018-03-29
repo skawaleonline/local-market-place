@@ -17,7 +17,7 @@ import com.lmp.app.service.ItemService;
 import com.lmp.db.pojo.Item;
 
 @RestController
-public class UPCInventoryController {
+public class UPCInventoryController extends BaseController {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

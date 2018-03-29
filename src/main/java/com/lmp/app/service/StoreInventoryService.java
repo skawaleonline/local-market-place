@@ -31,32 +31,37 @@ public class StoreInventoryService {
     return new PageRequest(sRequest.getPage(), sRequest.getRows());
   }
 
-  public BaseResponse searchStoreInventoryFor(SearchRequest sRequest) {
-    if(sRequest == null || sRequest.getStoreId() == null || sRequest.getStoreId().isEmpty()) {
-      return SearchResponse.invalidSearchRequest("missing store id in the request");
-    }
-    Page<StoreInventory> items = null;
-    if(sRequest.getQuery() == null || sRequest.getQuery().isEmpty()) {
-      items = repo.findAllByStoreId(sRequest.getStoreId(), createPageRequest(sRequest));
-    } else {
-      Page<ItemDoc> results = solrService.search(sRequest);
-      List<String> ids = new ArrayList<>();
-      results.getContent().forEach(itemDoc -> {
-        ids.add(itemDoc.getId());
-      });
-      items = repo.findAllByStoreIdAndItemIdIn(sRequest.getStoreId(), ids, createPageRequest(sRequest));
-    }
+  private BaseResponse searchAllStoresFor(SearchRequest sRequest) {
+    Page<ItemDoc> results = solrService.search(sRequest);
+    List<String> ids = new ArrayList<>();
+    results.getContent().forEach(itemDoc -> {
+      ids.add(itemDoc.getId());
+    });
+    Page<StoreInventory> items = repo.findAllByItemIdIn(ids, createPageRequest(sRequest));
+  
     return SearchResponse.buildStoreInventoryResponse(items);
   }
 
-  public BaseResponse searchAllStoresFor(SearchRequest sRequest) {
-      Page<ItemDoc> results = solrService.search(sRequest);
-      List<String> ids = new ArrayList<>();
-      results.getContent().forEach(itemDoc -> {
-        ids.add(itemDoc.getId());
-      });
-      Page<StoreInventory> items = repo.findAllByItemIdIn(ids, createPageRequest(sRequest));
-    
+  @Cacheable("store-items")
+  public BaseResponse searchStoreInventoryFor(SearchRequest sRequest) {
+    Page<StoreInventory> items = null;
+    // Search for query across all the stores
+    if(sRequest.getStoreId() == null || sRequest.getStoreId().isEmpty()) {
+      return searchAllStoresFor(sRequest);
+    } else {
+      // get all items in the store
+      if(sRequest.getQuery() == null || sRequest.getQuery().isEmpty()) {
+        items = repo.findAllByStoreId(sRequest.getStoreId(), createPageRequest(sRequest));
+      } else {
+        // search for query in in store
+        Page<ItemDoc> results = solrService.search(sRequest);
+        List<String> ids = new ArrayList<>();
+        results.getContent().forEach(itemDoc -> {
+          ids.add(itemDoc.getId());
+        });
+        items = repo.findAllByStoreIdAndItemIdIn(sRequest.getStoreId(), ids, createPageRequest(sRequest));
+      }
+    }
     return SearchResponse.buildStoreInventoryResponse(items);
   }
 }
