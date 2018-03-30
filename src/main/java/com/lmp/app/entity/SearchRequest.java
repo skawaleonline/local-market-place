@@ -1,9 +1,7 @@
 package com.lmp.app.entity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -19,7 +17,7 @@ public class SearchRequest {
   @Min(0)
   @Max(50)
   private int rows;
-  private Map<String, String> filters = new HashMap<>();
+  private List<RequestFilter> filters = new ArrayList<>();
   private List<ItemField> fields = new ArrayList<>();
   private double lat;
   private double lng;
@@ -59,12 +57,14 @@ public class SearchRequest {
   public void setRows(int rows) {
     this.rows = rows;
   }
-  public Map<String, String> getFilters() {
+  public List<RequestFilter> getFilters() {
     return filters;
   }
-  public void setFilters(Map<String, String> filters) {
+
+  public void setFilters(List<RequestFilter> filters) {
     this.filters = filters;
   }
+
   public List<ItemField> getFields() {
     return fields;
   }

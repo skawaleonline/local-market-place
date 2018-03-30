@@ -69,7 +69,7 @@ public class SolrSearchService {
         conditions2 = conditions2.or(new Criteria("stores").is(store.getId()));
       }
     }
-    return conditions2 == null ? conditions1 : conditions1.and(conditions2);
+    return conditions2 == null ? conditions1 : conditions1.connect().and(conditions2);
   }
 
   private Page<ItemDoc> searchFields(SearchRequest sRequest) {
