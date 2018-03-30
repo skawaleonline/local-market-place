@@ -54,7 +54,7 @@ public class SolrSearchService {
       if(condition == null) {
         condition = new Criteria(fName).contains(term); 
       } else {
-        condition = condition.and(new Criteria(fName).contains(term));
+        condition = condition.or(new Criteria(fName).contains(term));
       }
     }
     return condition;
