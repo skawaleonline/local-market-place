@@ -25,6 +25,8 @@ public class Item {
   private long upc;
   private long tcin;
   private String dpci;
+  private float list_price;
+  private float offer_price;
   private long release_date;
   private List<String> bullet_description;
   private SoftBullets soft_bullets;
@@ -143,6 +145,18 @@ public class Item {
   }
   public void setCategories(Set<String> categories) {
     this.categories = categories;
+  }
+  public float getList_price() {
+    return list_price;
+  }
+  public void setList_price(float list_price) {
+    this.list_price = list_price;
+  }
+  public float getOffer_price() {
+    return offer_price;
+  }
+  public void setOffer_price(float offer_price) {
+    this.offer_price = offer_price;
   }
 }
 

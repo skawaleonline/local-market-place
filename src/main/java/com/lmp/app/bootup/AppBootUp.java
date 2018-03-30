@@ -1,16 +1,12 @@
 package com.lmp.app.bootup;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServerException;
@@ -48,6 +44,7 @@ public class AppBootUp {
   private StoreInventoryRepository siRepo;
   @Autowired
   private SolrIndexer indexer;
+  private DecimalFormat df = new DecimalFormat("###.##");
 
   private void seedOneCategory(File file, List<Store> stores) throws IOException, SolrServerException {
     ObjectMapper objectMapper = new ObjectMapper();
@@ -73,6 +70,7 @@ public class AppBootUp {
 
   private String fillStoreInventory(Item item, List<Store> stores) {
     List<String> storeIdsToIndex = new ArrayList<>();
+    Random random = new Random();
     for(Store store : stores) {
       if(item.canGoOnStoreInventory(store)) {
         StoreInventory sItem = new StoreInventory();
@@ -81,7 +79,15 @@ public class AppBootUp {
         sItem.getItem().setId(item.getId());
         sItem.setAdded(time);
         sItem.setUpdated(time);
+        sItem.setListPrice(item.getList_price() * (0.6f + random.nextFloat())); // min 0.6 factor for price
         storeIdsToIndex.add(store.getId());
+        if(random.nextInt(100) < 20) {
+          // put 20% inventory on sale 
+          sItem.setOnSale(true);
+          sItem.setSalePrice(sItem.getListPrice() * (1 - ((10.0f +random.nextInt(30)))/100)); // min 10 percent discount
+        } else {
+          sItem.setSalePrice(sItem.getListPrice());
+        }
         siRepo.save(sItem);
       }
     }
