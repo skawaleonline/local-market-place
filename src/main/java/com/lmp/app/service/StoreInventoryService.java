@@ -43,10 +43,10 @@ public class StoreInventoryService {
     });
     Page<StoreInventory> items = null;
     if (sRequest.isOnSaleRequest()) {
-      items = repo.findAllByStoreIdAndItemIdInAndOnSale(sRequest.getStoreId(), ids, true,
+      items = repo.findAllByStoreIdInAndItemIdInAndOnSale(storeIds, ids, true,
           createPageRequest(sRequest));
     } else {
-      items = repo.findAllByStoreIdAndItemIdIn(sRequest.getStoreId(), ids, createPageRequest(sRequest));
+      items = repo.findAllByStoreIdInAndItemIdIn(storeIds, ids, createPageRequest(sRequest));
     }
     return items;
   }
