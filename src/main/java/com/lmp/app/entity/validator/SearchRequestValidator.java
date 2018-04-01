@@ -1,15 +1,14 @@
 package com.lmp.app.entity.validator;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.google.common.base.Strings;
 import com.lmp.app.entity.FilterField;
-import com.lmp.app.entity.RequestFilter;
 import com.lmp.app.entity.SearchRequest;
 
 @Component
@@ -22,7 +21,7 @@ public class SearchRequestValidator implements Validator {
   public void validate(Object obj, Errors e) {
     SearchRequest sRequest = (SearchRequest) obj;
     validateQueryAndStoreId(sRequest, e);
-    validateFilters(sRequest.getFilters(), e);
+    validateFilters(sRequest, e);
   }
 
   /**
@@ -36,20 +35,20 @@ public class SearchRequestValidator implements Validator {
     }
   }
 
-  private void validateFilters(List<RequestFilter> filters, Errors e) {
+  private void validateFilters(SearchRequest sr, Errors e) {
+    Map<String, String> filters = sr.getFilters();
     if (filters != null && !filters.isEmpty()) {
-      ValidationUtils.rejectIfEmptyOrWhitespace(e, "filters", "field.required");
-      for (RequestFilter filter : filters) {
-        if (filter == null || filter.getName() == null || filter.getValue() == null) {
+      for (Entry<String, String> filter : filters.entrySet()) {
+        if (filter == null || filter.getKey() == null || filter.getValue() == null) {
           e.reject("field.invalid", "empty or null filter");
         } else {
-          if (filter.getName().equalsIgnoreCase(FilterField.ON_SALE.getValue())) {
+          if (filter.getKey().equals(FilterField.ON_SALE.getValue())) {
             if (!(filter.getValue().equalsIgnoreCase("true") || filter.getValue().equalsIgnoreCase("false"))) {
-              e.reject("field.invalid", "filter " + filter.getName() + " can have either true or false");
+              e.reject("field.invalid", "filter " + filter.getKey() + " can have either true or false");
             }
-          } else if (filter.getName().equalsIgnoreCase(FilterField.BRAND.getValue())) {
+          } else if (filter.getKey().equals(FilterField.BRAND.getValue())) {
           } else {
-            e.reject("field.invalid", "invalid filter: " + filter.getName());
+            e.reject("field.invalid", "invalid filter: " + filter.getKey());
           }
         }
       }

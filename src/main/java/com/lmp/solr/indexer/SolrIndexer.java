@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lmp.db.pojo.Item;
-import com.lmp.solr.SolrItemRepository;
 import com.lmp.solr.entity.ItemDoc;
+import com.lmp.solr.repository.SolrSearchRepository;
 
 @Component
 public class SolrIndexer {
@@ -21,7 +21,7 @@ public class SolrIndexer {
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Resource
-  private SolrItemRepository repository;
+  private SolrSearchRepository repository;
 
   public void addToIndex(List<Item> items) throws SolrServerException, IOException {
     if(items == null || items.isEmpty()) {

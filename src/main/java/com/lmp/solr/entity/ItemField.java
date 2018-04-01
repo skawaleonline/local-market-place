@@ -2,8 +2,8 @@ package com.lmp.solr.entity;
 
 public enum ItemField {
 
-  ID("id"), CONTENTS("contents"), TITLE("title"), BRAND("brand"), CATEGORIES("categories"), UPC("upc"),
-  LIST_PRICE("listPrice"), SELL_PRICE("sellPrice");
+  ID("id"), CONTENT("content"), TITLE("title"), BRAND("brand"), CATEGORIES("categories"), UPC("upc"),
+  LIST_PRICE("listPrice"), SELL_PRICE("sellPrice"), STORES("stores");
 
   private String value;
 

@@ -1,10 +1,15 @@
 package com.lmp.app.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.lmp.solr.entity.ItemField;
 
@@ -17,7 +22,7 @@ public class SearchRequest {
   @Min(0)
   @Max(50)
   private int rows;
-  private List<RequestFilter> filters = new ArrayList<>();
+  private Map<String, String> filters = new HashMap<>();
   private List<ItemField> fields = new ArrayList<>();
   private double lat;
   private double lng;
@@ -39,8 +44,27 @@ public class SearchRequest {
     sr.rows = count;
     return sr;
   }
+
+  public Pageable pageRequesst() {
+    return new PageRequest(getPage(), getRows());
+  }
+
+  public boolean isOnSaleRequest() {
+    if(filters == null || !filters.containsKey(FilterField.ON_SALE.getValue())) {
+      return false;
+    }
+    return Boolean.getBoolean(filters.get(FilterField.ON_SALE.getValue()));
+  }
+
+  public String brandFromFilter() {
+    if(filters == null || !filters.containsKey(FilterField.BRAND.getValue())) {
+      return null;
+    }
+    return filters.get(FilterField.BRAND.getValue());
+  }
+
   public String getQuery() {
-    return query;
+    return query == null ? null : query.trim().toLowerCase();
   }
   public void setQuery(String query) {
     this.query = query;
@@ -57,14 +81,12 @@ public class SearchRequest {
   public void setRows(int rows) {
     this.rows = rows;
   }
-  public List<RequestFilter> getFilters() {
+  public Map<String, String> getFilters() {
     return filters;
   }
-
-  public void setFilters(List<RequestFilter> filters) {
+  public void setFilters(Map<String, String> filters) {
     this.filters = filters;
   }
-
   public List<ItemField> getFields() {
     return fields;
   }
@@ -72,7 +94,7 @@ public class SearchRequest {
     this.fields = fields;
   }
   public String getStoreId() {
-    return storeId;
+    return storeId == null ? null : storeId.trim().toLowerCase();
   }
   public void setStoreId(String storeId) {
     this.storeId = storeId;
