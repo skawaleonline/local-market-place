@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.lmp.app.entity.ValidationError;
+import com.lmp.app.entity.validator.ValidationError;
 import com.lmp.app.utils.ValidationErrorBuilder;
 
 @ControllerAdvice(assignableTypes = StoreInventoryController.class)

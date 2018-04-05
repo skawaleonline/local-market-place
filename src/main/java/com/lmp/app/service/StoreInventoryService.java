@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -30,11 +28,6 @@ public class StoreInventoryService {
   @Autowired
   StoreService storeService;
 
-  @SuppressWarnings("deprecation")
-  private Pageable createPageRequest(SearchRequest sRequest) {
-    return new PageRequest(sRequest.getPage(), sRequest.getRows());
-  }
-
   private Page<StoreInventory> searchInStores(SearchRequest sRequest, List<String> storeIds) {
     Page<ItemDoc> results = solrService.search(sRequest, storeIds);
     List<String> ids = new ArrayList<>();
@@ -43,10 +36,10 @@ public class StoreInventoryService {
     });
     Page<StoreInventory> items = null;
     if (sRequest.isOnSaleRequest()) {
-      items = repo.findAllByStoreIdInAndItemIdInAndOnSale(storeIds, ids, true,
-          createPageRequest(sRequest));
+      items = repo.findAllByStoreIdInAndItemIdInAndOnSale(storeIds, ids, sRequest.isOnSaleRequest(),
+          sRequest.pageRequesst());
     } else {
-      items = repo.findAllByStoreIdInAndItemIdIn(storeIds, ids, createPageRequest(sRequest));
+      items = repo.findAllByStoreIdInAndItemIdIn(storeIds, ids, sRequest.pageRequesst());
     }
     return items;
   }
@@ -71,9 +64,10 @@ public class StoreInventoryService {
     } else {
       // search for all within store
       if (sRequest.isOnSaleRequest()) {
-        items = repo.findAllByStoreIdAndOnSale(sRequest.getStoreId(), true, createPageRequest(sRequest));
+        items = repo.findAllByStoreIdAndOnSale(sRequest.getStoreId(), sRequest.isOnSaleRequest(),
+            sRequest.pageRequesst());
       } else {
-        items = repo.findAllByStoreId(sRequest.getStoreId(), createPageRequest(sRequest));
+        items = repo.findAllByStoreId(sRequest.getStoreId(), sRequest.pageRequesst());
       }
     }
     return items;

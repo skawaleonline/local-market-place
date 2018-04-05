@@ -1,4 +1,4 @@
-package com.lmp.app.entity;
+package com.lmp.app.entity.validator;
 
 import java.util.ArrayList;
 import java.util.List;

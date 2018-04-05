@@ -47,11 +47,25 @@ public class SearchRequestValidator implements Validator {
               e.reject("field.invalid", "filter " + filter.getKey() + " can have either true or false");
             }
           } else if (filter.getKey().equals(FilterField.BRAND.getValue())) {
+          } else if (filter.getKey().equals(FilterField.MAX_PRICE.getValue()) ||
+              filter.getKey().equals(FilterField.MIN_PRICE.getValue())) {
+            if(!isNumber(filter.getValue())) {
+              e.reject("field.invalid", "invalid value for filter " + filter.getKey());
+            }
           } else {
             e.reject("field.invalid", "invalid filter: " + filter.getKey());
           }
         }
       }
     }
+  }
+  
+  private boolean isNumber(String num) {
+    try {
+    Double.parseDouble(num);
+    } catch(NumberFormatException e) {
+      return false;
+    }
+    return true;
   }
 }
