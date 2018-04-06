@@ -6,7 +6,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.lmp.db.pojo.Item;
+import com.lmp.db.pojo.ItemEntity;
 
 @SolrDocument(solrCoreName = "itemdoc")
 public class ItemDoc {
@@ -25,7 +25,7 @@ public class ItemDoc {
   @Field("stores")
   private String stores;
 
-  public static ItemDoc fromItem(Item item, String storeids) {
+  public static ItemDoc fromItem(ItemEntity item, String storeids) {
     if(item == null) {
       return null;
     }

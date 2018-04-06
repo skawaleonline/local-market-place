@@ -9,15 +9,15 @@ import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.lmp.db.pojo.Store;
+import com.lmp.db.pojo.StoreEntity;
 
-public interface StoreRepository extends MongoRepository<Store, String> {
+public interface StoreRepository extends MongoRepository<StoreEntity, String> {
 
-  public Store findByName(String name);
+  public StoreEntity findByName(String name);
 
-  public List<Store> findAllByFranchise(String franchise);
+  public List<StoreEntity> findAllByFranchise(String franchise);
 
-  public GeoResults<Store> findByLocationWithin(Circle circle);
+  public GeoResults<StoreEntity> findByLocationWithin(Circle circle);
 
-  public GeoResults<Store> findByLocationNear(Point point, Distance distance);
+  public GeoResults<StoreEntity> findByLocationNear(Point point, Distance distance);
 }

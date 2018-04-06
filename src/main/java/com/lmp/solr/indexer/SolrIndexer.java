@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lmp.db.pojo.Item;
+import com.lmp.db.pojo.ItemEntity;
 import com.lmp.solr.entity.ItemDoc;
 import com.lmp.solr.repository.SolrSearchRepository;
 
@@ -23,17 +23,17 @@ public class SolrIndexer {
   @Resource
   private SolrSearchRepository repository;
 
-  public void addToIndex(List<Item> items) throws SolrServerException, IOException {
+  public void addToIndex(List<ItemEntity> items) throws SolrServerException, IOException {
     if(items == null || items.isEmpty()) {
       return ;
     }
-    for (Item item : items) {
+    for (ItemEntity item : items) {
       addToIndex(item);
     }
   }
 
   @Transactional
-  public void addToIndex(Item item, String storeids) throws SolrServerException, IOException {
+  public void addToIndex(ItemEntity item, String storeids) throws SolrServerException, IOException {
     if (item == null) {
       return ;
     }
@@ -41,7 +41,7 @@ public class SolrIndexer {
   }
 
   @Transactional
-  public void addToIndex(Item item) throws SolrServerException, IOException {
+  public void addToIndex(ItemEntity item) throws SolrServerException, IOException {
     if (item == null) {
       return ;
     }

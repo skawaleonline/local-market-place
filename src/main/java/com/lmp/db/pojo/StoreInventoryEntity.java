@@ -1,25 +1,27 @@
 package com.lmp.db.pojo;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection="storeInventory")
+@TypeAlias("storeInventory")
 @CompoundIndexes( {
   @CompoundIndex(name = "store_items",
       unique = true,
       def = "{'storeId' : 1, 'item.$id' : 1, 'popularity' : -1 }")
 })
-public class StoreInventory {
+public class StoreInventoryEntity implements Comparable<StoreInventoryEntity>{
 
   @Id
   private String id;
   private String storeId;
   @DBRef
-  private Item item = new Item();
+  private ItemEntity item = new ItemEntity();
   private double listPrice;
   @Indexed
   private boolean onSale;
@@ -41,10 +43,10 @@ public class StoreInventory {
   public void setStoreId(String storeId) {
     this.storeId = storeId;
   }
-  public Item getItem() {
+  public ItemEntity getItem() {
     return item;
   }
-  public void setItem(Item item) {
+  public void setItem(ItemEntity item) {
     this.item = item;
   }
   public int getStock() {
@@ -88,5 +90,14 @@ public class StoreInventory {
   }
   public void setPopularity(int popularity) {
     this.popularity = popularity;
+  }
+
+  @Override
+  public int compareTo(StoreInventoryEntity o) {
+    int res = this.storeId.compareTo(o.storeId) ;
+    if(res == 0) {
+      return Integer.compare(this.popularity, o.popularity);
+    }
+    return res;
   }
 }

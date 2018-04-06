@@ -13,8 +13,8 @@ import com.google.common.collect.Lists;
 import com.lmp.app.entity.BaseResponse;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.SearchResponse;
-import com.lmp.db.pojo.Store;
-import com.lmp.db.pojo.StoreInventory;
+import com.lmp.db.pojo.StoreEntity;
+import com.lmp.db.pojo.StoreInventoryEntity;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.solr.SolrSearchService;
 import com.lmp.solr.entity.ItemDoc;
@@ -29,13 +29,13 @@ public class StoreInventoryService {
   @Autowired
   StoreService storeService;
 
-  private Page<StoreInventory> searchInStores(SearchRequest sRequest, List<String> storeIds) {
+  private Page<StoreInventoryEntity> searchInStores(SearchRequest sRequest, List<String> storeIds) {
     Page<ItemDoc> results = solrService.search(sRequest, storeIds);
     List<String> ids = new ArrayList<>();
     results.getContent().forEach(itemDoc -> {
       ids.add(itemDoc.getId());
     });
-    Page<StoreInventory> items = null;
+    Page<StoreInventoryEntity> items = null;
     if (sRequest.isOnSaleRequest()) {
       items = repo.findAllByStoreIdInAndItemIdInAndOnSale(storeIds, ids, sRequest.isOnSaleRequest(),
           sRequest.pageRequesst());
@@ -47,17 +47,17 @@ public class StoreInventoryService {
 
   private BaseResponse searchAllStoresAround(SearchRequest sRequest) {
     // get stores around
-    List<Store> stores = storeService.getStoresAround(sRequest);
+    List<StoreEntity> stores = storeService.getStoresAround(sRequest);
     List<String> storeIds = new ArrayList<>();
     stores.forEach(store -> {
       storeIds.add(store.getId());
     });
-    Page<StoreInventory> items = searchInStores(sRequest, storeIds);
+    Page<StoreInventoryEntity> items = searchInStores(sRequest, storeIds);
     return SearchResponse.buildStoreInventoryResponse(items);
   }
 
-  private Page<StoreInventory> getAllInventoryForStore(SearchRequest sRequest) {
-    Page<StoreInventory> items = null;
+  private Page<StoreInventoryEntity> getAllInventoryForStore(SearchRequest sRequest) {
+    Page<StoreInventoryEntity> items = null;
     // if brand filter is set then do solr search for documents
     if (sRequest.brandFromFilter() != null) {
       // has brand filter, we need to search in store inventory
@@ -76,7 +76,7 @@ public class StoreInventoryService {
 
   @Cacheable("store-items")
   public BaseResponse search(SearchRequest sRequest) {
-    Page<StoreInventory> items = null;
+    Page<StoreInventoryEntity> items = null;
     // Search for query across all the stores
     if(Strings.isNullOrEmpty(sRequest.getStoreId())) {
       return searchAllStoresAround(sRequest);

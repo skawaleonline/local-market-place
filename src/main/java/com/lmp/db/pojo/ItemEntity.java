@@ -13,7 +13,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;
 
 @Document(collection="item")
-public class Item {
+public class ItemEntity {
 
   @Id
   private String id;
@@ -42,7 +42,7 @@ public class Item {
    * @param store
    * @return
    */
-  public boolean canGoOnStoreInventory(Store store) {
+  public boolean canGoOnStoreInventory(StoreEntity store) {
     Set<String> cats = MoreObjects.firstNonNull(
         store.getCapabilities().getListedCategories(), ImmutableSet.<String>of());
     if(categories == null || categories.isEmpty() 

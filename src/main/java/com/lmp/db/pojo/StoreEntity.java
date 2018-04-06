@@ -10,7 +10,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 @Document(collection="store")
-public class Store {
+public class StoreEntity {
 
   @Id
   private String id;

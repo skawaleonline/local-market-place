@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.SearchResponse;
-import com.lmp.db.pojo.Item;
+import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.repository.ItemRepository;
 import com.lmp.solr.SolrSearchService;
 import com.lmp.solr.entity.ItemDoc;
@@ -22,26 +22,26 @@ public class ItemService {
   @Autowired
   private SolrSearchService solrService;
 
-  public List<Item> find() {
+  public List<ItemEntity> find() {
     
     return null;
   }
 
-  public Item findByUpc(long upc) {
+  public ItemEntity findByUpc(long upc) {
     if(upc <= 0) {
       return null;
     }
     return itemRepo.findByUpc(upc);
   }
 
-  public List<Item> findAllByUpc(long upc) {
+  public List<ItemEntity> findAllByUpc(long upc) {
     if(upc <= 0) {
       return null;
     }
     return itemRepo.findAllByUpc(upc);
   }
 
-  public SearchResponse<Item> searchByText(SearchRequest sRequest) {
+  public SearchResponse<ItemEntity> searchByText(SearchRequest sRequest) {
     if(sRequest == null) {
       return null;
     }
@@ -50,7 +50,7 @@ public class ItemService {
     results.getContent().forEach(itemDoc -> {
       ids.add(itemDoc.getId());
     });
-    Iterable<Item> items = itemRepo.findAllById(ids);
+    Iterable<ItemEntity> items = itemRepo.findAllById(ids);
     return SearchResponse.buildItemResponse(results, items);
   }
 }

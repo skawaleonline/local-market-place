@@ -21,9 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
 import com.lmp.app.utils.FileIOUtil;
 import com.lmp.config.ConfigProperties;
-import com.lmp.db.pojo.Item;
-import com.lmp.db.pojo.Store;
-import com.lmp.db.pojo.StoreInventory;
+import com.lmp.db.pojo.ItemEntity;
+import com.lmp.db.pojo.StoreEntity;
+import com.lmp.db.pojo.StoreInventoryEntity;
 import com.lmp.db.repository.ItemRepository;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.db.repository.StoreRepository;
@@ -46,13 +46,13 @@ public class AppBootUp {
   private SolrIndexer indexer;
   private DecimalFormat df = new DecimalFormat("###.##");
 
-  private void seedOneCategory(File file, List<Store> stores) throws IOException, SolrServerException {
+  private void seedOneCategory(File file, List<StoreEntity> stores) throws IOException, SolrServerException {
     ObjectMapper objectMapper = new ObjectMapper();
-    List<Item> items = objectMapper.readValue(file, new TypeReference<List<Item>>() {});
+    List<ItemEntity> items = objectMapper.readValue(file, new TypeReference<List<ItemEntity>>() {});
     logger.info("Seeding data file: {}", file.getName());
-    Iterator<Item> it = items.listIterator();
+    Iterator<ItemEntity> it = items.listIterator();
     while(it.hasNext()) {
-      Item item = it.next();
+      ItemEntity item = it.next();
       try {
         itemRepo.save(item);
         indexer.addToIndex(item, fillStoreInventory(item, stores));
@@ -68,12 +68,12 @@ public class AppBootUp {
     FileIOUtil.writeProgress(prop.getSeededFiles(), file.getName());
   }
 
-  private String fillStoreInventory(Item item, List<Store> stores) {
+  private String fillStoreInventory(ItemEntity item, List<StoreEntity> stores) {
     List<String> storeIdsToIndex = new ArrayList<>();
     Random random = new Random();
-    for(Store store : stores) {
+    for(StoreEntity store : stores) {
       if(item.canGoOnStoreInventory(store)) {
-        StoreInventory sItem = new StoreInventory();
+        StoreInventoryEntity sItem = new StoreInventoryEntity();
         long time = System.currentTimeMillis();
         sItem.setStoreId(store.getId());
         sItem.getItem().setId(item.getId());
@@ -97,9 +97,9 @@ public class AppBootUp {
   private void seedStores() throws IOException{
     logger.info("Seeding stores : " + prop.getStoreSeedFile());
     ObjectMapper objectMapper = new ObjectMapper();
-    List<Store> stores = objectMapper.readValue(
+    List<StoreEntity> stores = objectMapper.readValue(
         new File(prop.getStoreSeedFile())
-        , new TypeReference<List<Store>>(){});
+        , new TypeReference<List<StoreEntity>>(){});
     storeRepo.saveAll(stores);
   }
 
@@ -121,7 +121,7 @@ public class AppBootUp {
       FileIOUtil.deleteFile(prop.getSeededFiles());
     }
     Set<String> processed = FileIOUtil.readProcessed(prop.getSeededFiles());
-    List<Store> stores = storeRepo.findAll();
+    List<StoreEntity> stores = storeRepo.findAll();
     for(File file : files) {
       if(processed.contains(file.getName())) {
         logger.info("skipping file: {}", file.getName());
