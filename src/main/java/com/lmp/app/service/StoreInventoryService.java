@@ -1,4 +1,4 @@
-package com.lmp.app.service;
+  package com.lmp.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.lmp.app.entity.BaseResponse;
 import com.lmp.app.entity.SearchRequest;
@@ -77,11 +78,11 @@ public class StoreInventoryService {
   public BaseResponse search(SearchRequest sRequest) {
     Page<StoreInventory> items = null;
     // Search for query across all the stores
-    if(sRequest.getStoreId() == null || sRequest.getStoreId().isEmpty()) {
+    if(Strings.isNullOrEmpty(sRequest.getStoreId())) {
       return searchAllStoresAround(sRequest);
     } else {
       // get all items in the store
-      if(sRequest.getQuery() == null || sRequest.getQuery().isEmpty()) {
+      if(Strings.isNullOrEmpty(sRequest.getQuery())) {
         items = getAllInventoryForStore(sRequest);
       } else {
         // search for query in store

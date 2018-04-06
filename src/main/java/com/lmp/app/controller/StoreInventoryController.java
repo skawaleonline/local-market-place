@@ -48,7 +48,7 @@ public class StoreInventoryController extends BaseController {
     if (errors.hasErrors()) {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
-    logger.info("searching for the request {}", searchRequest.toString());
+    logger.info("searching for the request {}", searchRequest);
     BaseResponse response = service.search(searchRequest);
     // logger.info("getting store details for store id {}", storeId);
 

@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.Criteria;
 import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.stereotype.Service;
@@ -36,8 +34,7 @@ public class SolrSearchService {
     if (sRequest.brandFromFilter() != null) {
       // do and brand name, as we want exact search
       // do and with query fields in content field
-      conditions1 = QueryUtils.andQuery(ItemField.BRAND, sRequest.brandFromFilter());
-      conditions1.connect().and(conditions1);
+      conditions1 = conditions1.connect().and(QueryUtils.andQuery(ItemField.BRAND, sRequest.brandFromFilter()));
     }
 
     Criteria conditions2 = QueryUtils.orQuery(ItemField.STORES, storeIds);
