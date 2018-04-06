@@ -37,8 +37,8 @@ public class Item {
     BeanUtils.copyProperties(itemEnyity, item);
     item.onSale = onSale;
     item.inStock = inStock;
-    item.listPrice = list_price;
-    item.offerPrice = salePrice;
+    item.listPrice = Math.round(list_price * 100.0) / 100.0;
+    item.offerPrice = Math.round(salePrice * 100.0) / 100.0;
     return item;
   }
   public String getId() {

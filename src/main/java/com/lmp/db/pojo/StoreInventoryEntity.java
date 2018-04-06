@@ -1,5 +1,10 @@
 package com.lmp.db.pojo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -7,6 +12,9 @@ import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.lmp.app.entity.Item;
+import com.lmp.app.entity.StoreInventory;
 
 @Document(collection="storeInventory")
 @TypeAlias("storeInventory")

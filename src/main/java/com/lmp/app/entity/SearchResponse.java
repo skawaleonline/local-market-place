@@ -22,6 +22,22 @@ public class SearchResponse<T> extends BaseResponse {
     this.statusCode = HttpStatus.OK.value();
     return this;
   }
+  private static Map<String, StoreInventory> buildStoreItemMap(List<StoreInventoryEntity> items) {
+    Map<String, StoreInventory> map = new HashMap<>();
+    for(StoreInventoryEntity ie : items) {
+      Item item = Item.fromItemEntity(ie.getItem()
+          , ie.isOnSale(), ie.getStock() > 0, ie.getListPrice(), ie.getSalePrice());
+      if(map.containsKey(ie.getStoreId())) {
+        map.get(ie.getStoreId()).getItems().add(item);
+      } else {
+        List<Item> list = new ArrayList<>();
+        list.add(item);
+        map.put(ie.getStoreId(), new StoreInventory(ie.getStoreId(), list));
+      }
+    }
+    return map;
+  }
+
   public static SearchResponse<ItemEntity> buildItemResponse(Page<ItemDoc> result, Iterable<ItemEntity> items) {
     SearchResponse<ItemEntity> response = new SearchResponse<>();
     response.statusCode = HttpStatus.OK.value();
@@ -37,24 +53,12 @@ public class SearchResponse<T> extends BaseResponse {
       SearchResponse<StoreInventory> blank = new SearchResponse<>();
       return blank.blank();
     }
-    Map<String, StoreInventory> map = new HashMap<>();
-    for(StoreInventoryEntity ie : page.getContent()) {
-      Item item = Item.fromItemEntity(ie.getItem()
-          , ie.isOnSale(), ie.getStock() > 0, ie.getListPrice(), ie.getSalePrice());
-      if(map.containsKey(ie.getStoreId())) {
-        map.get(ie.getStoreId()).getItems().add(item);
-      } else {
-        List<Item> items = new ArrayList<>();
-        items.add(item);
-        map.put(ie.getStoreId(), new StoreInventory(ie.getStoreId(), items));
-      }
-    }
     SearchResponse<StoreInventory> response = new SearchResponse<>();
     response.statusCode = HttpStatus.OK.value();
     response.found = page.getTotalElements();
     response.page = page.getPageable().getPageNumber();
     response.rows = page.getPageable().getPageSize();
-    response.results = map.values();
+    response.results = buildStoreItemMap(page.getContent()).values();
     return response;
   }
 
