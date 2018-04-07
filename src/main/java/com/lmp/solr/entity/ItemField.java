@@ -14,5 +14,4 @@ public enum ItemField {
   public String getValue() {
     return value;
   }
-
 }

@@ -10,6 +10,7 @@ import org.springframework.validation.Validator;
 import com.google.common.base.Strings;
 import com.lmp.app.entity.FilterField;
 import com.lmp.app.entity.SearchRequest;
+import com.lmp.solr.entity.ItemField;
 
 @Component
 public class SearchRequestValidator implements Validator {
@@ -22,8 +23,20 @@ public class SearchRequestValidator implements Validator {
     SearchRequest sRequest = (SearchRequest) obj;
     validateQueryAndStoreId(sRequest, e);
     validateFilters(sRequest, e);
+    validateFields(sRequest, e);
   }
 
+  private void validateFields(SearchRequest sRequest, Errors e) {
+    if(sRequest.getFields() != null && sRequest.getFields().size() > 0) {
+      for(String field : sRequest.getFields()) {
+        try{
+          ItemField.valueOf(field.trim().toUpperCase());
+        } catch(IllegalArgumentException ex) {
+          e.reject("field.invalid", "invalid field '" + field + "' in fields param");
+        }
+      }
+    }
+  }
   /**
    * either one of query or storeId is required
    * 

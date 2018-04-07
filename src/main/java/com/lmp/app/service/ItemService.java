@@ -53,4 +53,14 @@ public class ItemService {
     Iterable<ItemEntity> items = itemRepo.findAllById(ids);
     return SearchResponse.buildItemResponse(results, items);
   }
+
+  public Iterable<ItemEntity> getAllDocs(int page, int size) {
+    Page<ItemDoc> results = solrService.getAllDocs(page, size);
+    List<String> ids = new ArrayList<>();
+    results.forEach(doc -> {
+      ids.add(doc.getId());
+    });
+    Iterable<ItemEntity> items = itemRepo.findAllById(ids);
+    return items;
+  }
 }

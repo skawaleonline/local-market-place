@@ -25,6 +25,7 @@ public class ItemDoc {
   @Field("stores")
   private String stores;
 
+
   public static ItemDoc fromItem(ItemEntity item, String storeids) {
     if(item == null) {
       return null;

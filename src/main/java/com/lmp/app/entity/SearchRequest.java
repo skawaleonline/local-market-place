@@ -1,6 +1,5 @@
 package com.lmp.app.entity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +9,6 @@ import javax.validation.constraints.Min;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import com.lmp.solr.entity.ItemField;
 
 public class SearchRequest {
 
@@ -23,7 +20,7 @@ public class SearchRequest {
   @Max(50)
   private int rows;
   private Map<String, String> filters = new HashMap<>();
-  private List<ItemField> fields = new ArrayList<>();
+  private List<String> fields;
   private double lat;
   private double lng;
   private int radius = 5;
@@ -87,10 +84,10 @@ public class SearchRequest {
   public void setFilters(Map<String, String> filters) {
     this.filters = filters;
   }
-  public List<ItemField> getFields() {
+  public List<String> getFields() {
     return fields;
   }
-  public void setFields(List<ItemField> fields) {
+  public void setFields(List<String> fields) {
     this.fields = fields;
   }
   public String getStoreId() {

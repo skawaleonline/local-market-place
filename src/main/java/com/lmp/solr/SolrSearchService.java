@@ -1,11 +1,13 @@
 package com.lmp.solr;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.Criteria;
 import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,9 @@ import com.google.common.base.Strings;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.solr.entity.ItemDoc;
 import com.lmp.solr.entity.ItemField;
+import com.lmp.solr.entity.KeywordDoc;
 import com.lmp.solr.entity.QueryUtils;
+import com.lmp.solr.repository.SolrKeyWordRepository;
 import com.lmp.solr.repository.SolrSearchRepository;
 
 @Service
@@ -26,6 +30,8 @@ public class SolrSearchService {
   private static ItemField DEFAULT_FIELD = ItemField.CONTENT;
   @Autowired
   private SolrSearchRepository solrRepo;
+  @Autowired
+  private SolrKeyWordRepository keyWordRepo;
 
   private Criteria addSearchConditions(SearchRequest sRequest, List<String> storeIds) {
     // do or query for brand, as we want exact search
@@ -52,7 +58,26 @@ public class SolrSearchService {
       return null;
     }
     Criteria conditions = addSearchConditions(sRequest, storesIds);
+    SimpleQuery query = new SimpleQuery(conditions, sRequest.pageRequesst());
+    if(sRequest.getFields() != null && sRequest.getFields().size() > 0) {
+      // add mandetory field
+      sRequest.getFields().add(ItemField.ID.getValue());
+      query.addProjectionOnFields(sRequest.getFields().toArray(new String[]{}));
+    }
+    
     logger.info("searching for solr query {}", conditions.toString());
-    return solrRepo.search(new SimpleQuery(conditions, sRequest.pageRequesst()));
+    return solrRepo.search(query);
+  }
+
+  public Page<ItemDoc> getAllDocs(int page, int size) {
+    return solrRepo.findAll(new PageRequest(page, size));
+  }
+
+  public List<KeywordDoc> searchKeywords(String q) {
+    Page<KeywordDoc> docs = keyWordRepo.findByKeyword(q);
+    if(docs != null) {
+      return docs.getContent();
+    }
+    return new ArrayList<KeywordDoc>();
   }
 }

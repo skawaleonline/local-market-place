@@ -11,8 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
 import com.lmp.db.pojo.ItemEntity;
 import com.lmp.solr.entity.ItemDoc;
+import com.lmp.solr.entity.KeywordDoc;
+import com.lmp.solr.repository.SolrKeyWordRepository;
 import com.lmp.solr.repository.SolrSearchRepository;
 
 @Component
@@ -23,9 +26,12 @@ public class SolrIndexer {
   @Resource
   private SolrSearchRepository repository;
 
+  @Resource
+  private SolrKeyWordRepository keyWordRepo;
+
   public void addToIndex(List<ItemEntity> items) throws SolrServerException, IOException {
-    if(items == null || items.isEmpty()) {
-      return ;
+    if (items == null || items.isEmpty()) {
+      return;
     }
     for (ItemEntity item : items) {
       addToIndex(item);
@@ -35,7 +41,7 @@ public class SolrIndexer {
   @Transactional
   public void addToIndex(ItemEntity item, String storeids) throws SolrServerException, IOException {
     if (item == null) {
-      return ;
+      return;
     }
     repository.save(ItemDoc.fromItem(item, storeids));
   }
@@ -43,9 +49,29 @@ public class SolrIndexer {
   @Transactional
   public void addToIndex(ItemEntity item) throws SolrServerException, IOException {
     if (item == null) {
-      return ;
+      return;
     }
     repository.save(ItemDoc.fromItem(item, ""));
+  }
+
+  @Transactional
+  public void addKeyWord(String keyword) {
+    if (Strings.isNullOrEmpty(keyword)) {
+      return;
+    }
+    keyWordRepo.save(new KeywordDoc(keyword.trim().toLowerCase()));
+  }
+
+  @Transactional
+  public void addKeyWord(KeywordDoc keyword) {
+    if (keyword == null) {
+      return;
+    }
+    keyWordRepo.save(keyword);
+  }
+  @Transactional
+  public void deleteAllKeyWords() {
+    keyWordRepo.deleteAll();
   }
 
   @Transactional
