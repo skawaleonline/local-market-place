@@ -58,15 +58,22 @@ public class QueryUtils {
   * Split on white space and create an AND query
   */
   public static Criteria andQuery(ItemField field, String searchTerm) {
+    if(field == null) {
+      return null;
+    }
+    return andQuery(field.getValue(), searchTerm);
+  }
+
+  public static Criteria andQuery(String field, String searchTerm) {
     if(searchTerm == null || searchTerm.isEmpty()) {
       return null;
     }
     Criteria condition = null;
     for(String term : searchTerm.split(" ")) {
       if(condition == null) {
-        condition = new Criteria(field.getValue()).contains(term); 
+        condition = new Criteria(field).contains(term); 
       } else {
-        condition = condition.and(new Criteria(field.getValue()).contains(term));
+        condition = condition.and(new Criteria(field).contains(term));
       }
     }
     return condition;

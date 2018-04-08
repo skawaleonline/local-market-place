@@ -19,11 +19,11 @@ public class KeywordDoc {
   public KeywordDoc() {
   }
   public KeywordDoc(String keyword) {
-    this.keyword = keyword;
+    this.keyword = keyword.toLowerCase().trim();
   }
 
   public KeywordDoc(String keyword, int p) {
-    this.keyword = keyword;
+    this.keyword = keyword.toLowerCase().trim();
     this.priority = p;
   }
 

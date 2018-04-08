@@ -7,10 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.core.query.Criteria;
 import org.springframework.data.solr.core.query.SimpleQuery;
 
+import com.google.common.base.Strings;
 import com.lmp.solr.entity.KeywordDoc;
+import com.lmp.solr.entity.QueryUtils;
 
 public class SolrKeyWordCustomRepositoryImpl implements SolrKeyWordCustomRepository {
 
@@ -21,8 +22,11 @@ public class SolrKeyWordCustomRepositoryImpl implements SolrKeyWordCustomReposit
 
   @Override
   public Page<KeywordDoc> findByKeyword(String q) {
+    if(Strings.isNullOrEmpty(q)) {
+      return Page.empty();
+    }
     SimpleQuery query = new SimpleQuery();
-    query.addCriteria(new Criteria("keyword").contains(q));
+    query.addCriteria(QueryUtils.andQuery("keyword", q.trim().toLowerCase()));
     query.addSort(Sort.by("priority"));
     query.setOffset(0L);
     query.setRows(10);
