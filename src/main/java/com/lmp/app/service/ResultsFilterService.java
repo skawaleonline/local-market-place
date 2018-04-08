@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.lmp.app.entity.ResultFilter;
+import com.lmp.app.entity.ResponseFilter;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.solr.SolrSearchService;
 import com.lmp.solr.entity.ItemDoc;
@@ -22,7 +22,7 @@ public class ResultsFilterService {
   @Autowired
   private StoreService storeService;
 
-  public ResultFilter getFiltersFor(SearchRequest sRequest, ItemField facetField) {
+  public ResponseFilter getFiltersFor(SearchRequest sRequest, ItemField facetField) {
     FacetPage<ItemDoc> docs = null;
     // Search for query across all the stores
     if (Strings.isNullOrEmpty(sRequest.getStoreId())) {
@@ -33,6 +33,6 @@ public class ResultsFilterService {
       // search for query in store
       docs = solrService.facetSearch(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}), facetField);
     }
-    return ResultFilter.buildResultFilter(facetField.getValue(), docs);
+    return ResponseFilter.buildResultFilter(facetField.getValue(), docs);
   }
 }

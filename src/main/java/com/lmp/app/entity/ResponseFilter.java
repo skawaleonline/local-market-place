@@ -1,9 +1,7 @@
 package com.lmp.app.entity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.solr.core.query.result.FacetFieldEntry;
@@ -11,13 +9,13 @@ import org.springframework.data.solr.core.query.result.FacetPage;
 
 import com.lmp.solr.entity.ItemDoc;
 
-public class ResultFilter {
+public class ResponseFilter {
 
   private String fieldName;
   private List<CountPair> values = new ArrayList<>();
 
-  public static ResultFilter buildResultFilter(String fieldName, FacetPage<ItemDoc> docs) {
-    ResultFilter response = new ResultFilter();
+  public static ResponseFilter buildResultFilter(String fieldName, FacetPage<ItemDoc> docs) {
+    ResponseFilter response = new ResponseFilter();
     response.fieldName = fieldName;
     if(docs == null || docs.getFacetResultPage(fieldName) != null) {
       Page<FacetFieldEntry> page = docs.getFacetResultPage(fieldName);

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lmp.app.entity.BaseResponse;
-import com.lmp.app.entity.ResultFilter;
+import com.lmp.app.entity.ResponseFilter;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.validator.SearchRequestValidator;
 import com.lmp.app.service.ResultsFilterService;
@@ -71,13 +71,13 @@ public class StoreInventoryController extends BaseController {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
     logger.info("searching for the request {}", searchRequest);
-    ResultFilter response = filterService.getFiltersFor(searchRequest, ItemField.BRAND);
+    ResponseFilter response = filterService.getFiltersFor(searchRequest, ItemField.BRAND);
     // logger.info("getting store details for store id {}", storeId);
 
     if (response == null) {
       logger.info("no results for request {}", searchRequest.toString());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<ResultFilter>(response, HttpStatus.OK);
+    return new ResponseEntity<ResponseFilter>(response, HttpStatus.OK);
   }
 }
