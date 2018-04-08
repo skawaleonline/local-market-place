@@ -47,11 +47,7 @@ public class StoreInventoryService {
 
   private BaseResponse searchAllStoresAround(SearchRequest sRequest) {
     // get stores around
-    List<StoreEntity> stores = storeService.getStoresAround(sRequest);
-    List<String> storeIds = new ArrayList<>();
-    stores.forEach(store -> {
-      storeIds.add(store.getId());
-    });
+    List<String> storeIds = storeService.getStoresIdsAround(sRequest);
     Page<StoreInventoryEntity> items = searchInStores(sRequest, storeIds);
     return SearchResponse.buildStoreInventoryResponse(items);
   }

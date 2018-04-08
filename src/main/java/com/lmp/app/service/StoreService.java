@@ -39,6 +39,22 @@ public class StoreService {
     }
     return stores;
   }
+
+  @Cacheable("storesids-around")
+  public List<String> getStoresIdsAround(SearchRequest sRequest) {
+    List<StoreEntity> stores = new ArrayList<>();
+    if(sRequest.getLat() != 0 && sRequest.getLng() != 0) {
+      GeoResults<StoreEntity> list = getStoresAround(sRequest.getLat(), sRequest.getLng(), sRequest.getRadius());
+      for(GeoResult<StoreEntity> store : list.getContent()) {
+        stores.add(store.getContent());
+      }
+    }
+    List<String> storeIds = new ArrayList<>();
+    stores.forEach(store -> {
+      storeIds.add(store.getId());
+    });
+    return storeIds;
+  }
   public StoreEntity getStoreById(String id) {
     Optional<StoreEntity> store = repo.findById(id);
     return store.isPresent() ? store.get() : null;

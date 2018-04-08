@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.query.FilterQuery;
+import org.springframework.data.solr.core.query.SimpleFacetQuery;
 import org.springframework.data.solr.core.query.SimpleQuery;
+import org.springframework.data.solr.core.query.result.FacetPage;
 
 import com.lmp.solr.entity.ItemDoc;
 
@@ -28,4 +31,16 @@ public class SolrCustomRepositoryImpl implements SolrCustomRepository {
     return itemDocs;
   }
 
+  public FacetPage<ItemDoc> facetSearch(SimpleFacetQuery facetQuery, FilterQuery filterQuery) {
+    if(filterQuery != null) {
+      facetQuery.addFilterQuery(filterQuery);
+    }
+    FacetPage<ItemDoc> page = solrTemplate.queryForFacetPage("itemdoc", facetQuery, ItemDoc.class);
+    if(page == null || page.getContent() == null) {
+      logger.error("null response from solr for query: {}", facetQuery.toString());
+      return null;
+    }
+    logger.debug("solr docs found: {}, for query {}",page.getContent().size(), facetQuery.toString());
+    return page;    
+  }
 }

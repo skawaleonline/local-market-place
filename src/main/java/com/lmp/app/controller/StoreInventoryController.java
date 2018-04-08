@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lmp.app.entity.BaseResponse;
+import com.lmp.app.entity.ResultFilter;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.validator.SearchRequestValidator;
+import com.lmp.app.service.ResultsFilterService;
 import com.lmp.app.service.StoreInventoryService;
 import com.lmp.app.utils.ValidationErrorBuilder;
+import com.lmp.solr.entity.ItemField;
 
 @RestController
 public class StoreInventoryController extends BaseController {
@@ -29,6 +32,8 @@ public class StoreInventoryController extends BaseController {
 
   @Autowired
   private StoreInventoryService service;
+  @Autowired
+  private ResultsFilterService filterService;
 
   private SearchRequestValidator searchRequestValidator;
 
@@ -57,5 +62,22 @@ public class StoreInventoryController extends BaseController {
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<BaseResponse>(response, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/store-inventory/filters", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> lookupStoreInventoryFilters(@Valid @RequestBody SearchRequest searchRequest, Errors errors) {
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
+    }
+    logger.info("searching for the request {}", searchRequest);
+    ResultFilter response = filterService.getFiltersFor(searchRequest, ItemField.BRAND);
+    // logger.info("getting store details for store id {}", storeId);
+
+    if (response == null) {
+      logger.info("no results for request {}", searchRequest.toString());
+      return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<ResultFilter>(response, HttpStatus.OK);
   }
 }
