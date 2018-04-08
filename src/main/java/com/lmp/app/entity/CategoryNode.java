@@ -3,6 +3,8 @@ package com.lmp.app.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Strings;
+
 /**
  * Category Tree data structure
  * @author skawale
@@ -15,7 +17,7 @@ public class CategoryNode implements Comparable<CategoryNode>{
   private List<CategoryNode> subCategories;
 
   public CategoryNode(String name, int priority) {
-    this.name = name;
+    this.name = name.toLowerCase().trim();
     this.priority = priority;
     this.subCategories = new ArrayList<>();
   }
@@ -59,6 +61,11 @@ public class CategoryNode implements Comparable<CategoryNode>{
     return Integer.compare(o.priority, this.priority);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    CategoryNode node = (CategoryNode) o;
+    return this.name.equalsIgnoreCase(node.name);
+  }
   @Override
   public int hashCode() {
     return this.name.hashCode();

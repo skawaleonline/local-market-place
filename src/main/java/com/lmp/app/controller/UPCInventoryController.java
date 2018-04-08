@@ -1,6 +1,7 @@
 package com.lmp.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.lmp.app.entity.CategoryNode;
 import com.lmp.app.entity.CategoryTree;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.SearchResponse;
@@ -83,10 +86,12 @@ public class UPCInventoryController extends BaseController {
 
   @GetMapping("/categories")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<?> buildCategories() {
-    CategoryTree tree = ctService.buildProductCategorization();
-    SearchResponse<CategoryTree> response = new SearchResponse<>();
-    response.setResults(Lists.asList(tree, new CategoryTree[]{}));
+  public ResponseEntity<?> getCategories(@RequestParam(value = "name", required = false) String name) {
+    Map<String, CategoryNode> map = ctService.buildProductCategorization();
+    logger.info("getting categories for {}", name);
+    CategoryNode node = map.get(Strings.isNullOrEmpty(name) ? "root" : name.toLowerCase().trim());
+    SearchResponse<CategoryNode> response = new SearchResponse<>();
+    response.setResults(Lists.asList(node, new CategoryNode[]{}));
     return new ResponseEntity<SearchResponse>(response, HttpStatus.OK);
   }
 }

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
 import com.lmp.app.entity.CategoryNode;
 import com.lmp.app.entity.CategoryTree;
 import com.lmp.db.pojo.ItemEntity;
@@ -27,8 +26,8 @@ public class CategorizationService {
   @Autowired
   private ItemService itemService;
 
-  @Cacheable("catrgories-tree")
-  public CategoryTree buildProductCategorization() {
+  @Cacheable("catrgories")
+  public Map<String, CategoryNode> buildProductCategorization() {
     int page = 0;
     int size = 5000;
     Map<String, CategoryNode> countMap = new HashMap<>();
@@ -67,6 +66,8 @@ public class CategorizationService {
       });
       cTree.addPath(list);
     }
-    return cTree;
+    countMap.put("root", cTree.getRoot());
+    return countMap;
   }
+
 }
