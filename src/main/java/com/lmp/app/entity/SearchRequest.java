@@ -1,5 +1,6 @@
 package com.lmp.app.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class SearchRequest {
   @Max(50)
   private int rows;
   private Map<String, String> filters = new HashMap<>();
-  private List<String> fields;
+  private List<String> fields = new ArrayList<>();
   private double lat;
   private double lng;
   private int radius = 5;

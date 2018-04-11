@@ -11,12 +11,12 @@ import com.lmp.solr.entity.ItemDoc;
 
 public class ResponseFilter {
 
-  private String fieldName;
+  private String filterName;
   private List<CountPair> values = new ArrayList<>();
 
   public static ResponseFilter buildResultFilter(String fieldName, FacetPage<ItemDoc> docs) {
     ResponseFilter response = new ResponseFilter();
-    response.fieldName = fieldName;
+    response.filterName = fieldName;
     if(docs == null || docs.getFacetResultPage(fieldName) != null) {
       Page<FacetFieldEntry> page = docs.getFacetResultPage(fieldName);
       page.getContent().forEach(entry -> {
@@ -25,11 +25,11 @@ public class ResponseFilter {
     }
     return response;
   }
-  public String getFieldName() {
-    return fieldName;
+  public String getFilterName() {
+    return filterName;
   }
-  public void setFieldName(String fieldName) {
-    this.fieldName = fieldName;
+  public void setFilterName(String filterName) {
+    this.filterName = filterName;
   }
   public List<CountPair> getValue() {
     return values;

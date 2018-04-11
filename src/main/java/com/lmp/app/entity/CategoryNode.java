@@ -17,13 +17,14 @@ public class CategoryNode implements Comparable<CategoryNode>{
   private List<CategoryNode> subCategories;
 
   public CategoryNode(String name, int priority) {
-    this.name = name.toLowerCase().trim();
+    this.name = name;
     this.priority = priority;
     this.subCategories = new ArrayList<>();
   }
 
   public void addChild(CategoryNode cat) {
-    if(!subCategories.contains(cat)) {
+    if(!subCategories.contains(cat) && 
+        !cat.name.equalsIgnoreCase(this.name)) {// to avoid the infinite loop
       subCategories.add(cat);
     }
   }

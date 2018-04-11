@@ -13,16 +13,20 @@ public class KeywordDoc {
 
   @Field("keyword")
   private String keyword;
+  @Field("original")
+  private String original;
   @Field("priority")
   private int priority = 5;
 
   public KeywordDoc() {
   }
   public KeywordDoc(String keyword) {
+    this.original = keyword.trim();
     this.keyword = keyword.toLowerCase().trim();
   }
 
   public KeywordDoc(String keyword, int p) {
+    this.original = keyword.trim();
     this.keyword = keyword.toLowerCase().trim();
     this.priority = p;
   }
@@ -35,6 +39,24 @@ public class KeywordDoc {
     this.keyword = keyword;
   }
 
+  public String getId() {
+    return id;
+  }
+  public void setId(String id) {
+    this.id = id;
+  }
+  public String getOriginal() {
+    return original;
+  }
+  public void setOriginal(String original) {
+    this.original = original;
+  }
+  public int getPriority() {
+    return priority;
+  }
+  public void setPriority(int priority) {
+    this.priority = priority;
+  }
   @Override
   public boolean equals(Object o) {
     KeywordDoc kd = (KeywordDoc) o;

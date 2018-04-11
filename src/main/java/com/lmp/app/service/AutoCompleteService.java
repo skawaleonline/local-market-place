@@ -36,7 +36,7 @@ public class AutoCompleteService {
     }
     List<KeywordDoc> keywords = solrService.searchKeywords(q);
     for (KeywordDoc keywordDoc : keywords) {
-      result.add(keywordDoc.getKeyword());
+      result.add(keywordDoc.getOriginal());
     }
     return result;
   }
