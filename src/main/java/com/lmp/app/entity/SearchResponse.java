@@ -62,6 +62,17 @@ public class SearchResponse<T> extends BaseResponse {
     return response;
   }
 
+  public static SearchResponse<StoreInventory> buildStoreInventoryResponse(Page<StoreInventoryEntity> page, long count) {
+    SearchResponse<StoreInventory> response = buildStoreInventoryResponse(page);
+    response.found = count;
+    return response;
+  }
+  public static SearchResponse<StoreInventory> buildStoreInventoryResponse(Page<StoreInventoryEntity> page, long count, int pageNo) {
+    SearchResponse<StoreInventory> response = buildStoreInventoryResponse(page, count);
+    response.page = pageNo;
+    return response;
+  }  
+
   public Collection<T> getResults() {
     return results;
   }

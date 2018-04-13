@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.FilterQuery;
@@ -29,6 +30,17 @@ public class SolrCustomRepositoryImpl implements SolrCustomRepository {
     }
     logger.debug("solr docs found: {}, for query {}",itemDocs.getContent().size(), query.toString());
     return itemDocs;
+  }
+
+  @Override
+  @Cacheable("results-count")
+  public long count(SimpleQuery countQuery) {
+    if (countQuery == null) {
+      return 0;
+    }
+    long count = solrTemplate.count("itemdoc", countQuery);
+    logger.debug("solr docs count: {}, for query {}", count, countQuery.toString());
+    return count;
   }
 
   public FacetPage<ItemDoc> facetSearch(SimpleFacetQuery facetQuery, FilterQuery filterQuery) {

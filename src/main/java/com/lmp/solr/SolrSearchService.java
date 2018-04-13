@@ -55,6 +55,23 @@ public class SolrSearchService {
     return search(sRequest, null);
   }
 
+  public long count(SearchRequest sRequest, List<String> storesIds) {
+    // if no query or no brand name filter present
+    if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFromFilter() == null) {
+      logger.error("invalid request. blank query and brand filter. Returning empty page");
+      return 0;
+    }
+    Criteria conditions = addSearchConditions(sRequest, storesIds);
+    SimpleQuery query = new SimpleQuery(conditions, sRequest.pageRequesst());
+    if (sRequest.getFields() != null && sRequest.getFields().size() > 0) {
+      // add mandetory field
+      sRequest.getFields().add(ItemField.ID.getValue());
+      query.addProjectionOnFields(sRequest.getFields().toArray(new String[] {}));
+    }
+    logger.info("searching for solr query {}", conditions.toString());
+    return solrRepo.count(query);
+  }
+
   public Page<ItemDoc> search(SearchRequest sRequest, List<String> storesIds) {
     // if no query or no brand name filter present
     if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFromFilter() == null) {
@@ -68,7 +85,6 @@ public class SolrSearchService {
       sRequest.getFields().add(ItemField.ID.getValue());
       query.addProjectionOnFields(sRequest.getFields().toArray(new String[] {}));
     }
-
     logger.info("searching for solr query {}", conditions.toString());
     return solrRepo.search(query);
   }

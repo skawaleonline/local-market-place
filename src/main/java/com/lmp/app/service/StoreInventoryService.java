@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
@@ -29,35 +30,42 @@ public class StoreInventoryService {
   @Autowired
   StoreService storeService;
 
-  private Page<StoreInventoryEntity> searchInStores(SearchRequest sRequest, List<String> storeIds) {
+  private BaseResponse searchInStores(SearchRequest sRequest, List<String> storeIds) {
+    // check for the count first
     Page<ItemDoc> results = solrService.search(sRequest, storeIds);
+    if(results == null || results.getTotalElements() <= 0 
+        || results.getTotalElements() <= sRequest.fetchedCount()) {
+      return SearchResponse.buildStoreInventoryResponse(Page.empty());
+    }
+    
+    long count = results.getTotalElements();
     List<String> ids = new ArrayList<>();
     results.getContent().forEach(itemDoc -> {
       ids.add(itemDoc.getId());
     });
+    //search items in solr first then retrieve those from MongoDB
     Page<StoreInventoryEntity> items = null;
     if (sRequest.isOnSaleRequest()) {
       items = repo.findAllByStoreIdInAndItemIdInAndOnSale(storeIds, ids, sRequest.isOnSaleRequest(),
-          sRequest.pageRequesst());
+          new PageRequest(0, sRequest.getRows()));
     } else {
-      items = repo.findAllByStoreIdInAndItemIdIn(storeIds, ids, sRequest.pageRequesst());
+      items = repo.findAllByStoreIdInAndItemIdIn(storeIds, ids, new PageRequest(0, sRequest.getRows()));
     }
-    return items;
+    return SearchResponse.buildStoreInventoryResponse(items, count, sRequest.getPage());
   }
 
   private BaseResponse searchAllStoresAround(SearchRequest sRequest) {
     // get stores around
     List<String> storeIds = storeService.getStoresIdsAround(sRequest);
-    Page<StoreInventoryEntity> items = searchInStores(sRequest, storeIds);
-    return SearchResponse.buildStoreInventoryResponse(items);
+    return searchInStores(sRequest, storeIds);
   }
 
-  private Page<StoreInventoryEntity> getAllInventoryForStore(SearchRequest sRequest) {
+  private BaseResponse getAllInventoryForStore(SearchRequest sRequest) {
     Page<StoreInventoryEntity> items = null;
     // if brand filter is set then do solr search for documents
     if (sRequest.brandFromFilter() != null) {
       // has brand filter, we need to search in store inventory
-      items = searchInStores(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}));
+      return searchInStores(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}));
     } else {
       // search for all within store
       if (sRequest.isOnSaleRequest()) {
@@ -67,25 +75,23 @@ public class StoreInventoryService {
         items = repo.findAllByStoreId(sRequest.getStoreId(), sRequest.pageRequesst());
       }
     }
-    return items;
+    return SearchResponse.buildStoreInventoryResponse(items);
   }
 
   @Cacheable("store-items")
   public BaseResponse search(SearchRequest sRequest) {
-    Page<StoreInventoryEntity> items = null;
     // Search for query across all the stores
     if(Strings.isNullOrEmpty(sRequest.getStoreId())) {
       return searchAllStoresAround(sRequest);
     } else {
       // get all items in the store
       if(Strings.isNullOrEmpty(sRequest.getQuery())) {
-        items = getAllInventoryForStore(sRequest);
+        return getAllInventoryForStore(sRequest);
       } else {
         // search for query in store
-        items = searchInStores(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}));
+        return searchInStores(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}));
       }
     }
-    return SearchResponse.buildStoreInventoryResponse(items);
   }
 
 }

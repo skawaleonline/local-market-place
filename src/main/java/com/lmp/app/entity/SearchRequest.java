@@ -47,6 +47,9 @@ public class SearchRequest {
     return new PageRequest(getPage(), getRows());
   }
 
+  public long fetchedCount() {
+    return (this.page) * this.rows;
+  }
   public boolean isOnSaleRequest() {
     if(filters == null || !filters.containsKey(FilterField.ON_SALE.getValue())) {
       return false;

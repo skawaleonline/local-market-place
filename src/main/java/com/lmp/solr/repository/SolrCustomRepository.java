@@ -11,5 +11,6 @@ import com.lmp.solr.entity.ItemDoc;
 public interface SolrCustomRepository {
 
   Page<ItemDoc> search(SimpleQuery query);
+  long count(SimpleQuery query);
   FacetPage<ItemDoc> facetSearch(SimpleFacetQuery facetQuery, FilterQuery filterQuery);
 }

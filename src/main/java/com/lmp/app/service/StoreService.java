@@ -28,7 +28,6 @@ public class StoreService {
     return stores;
   }
 
-  @Cacheable("stores-around")
   public List<StoreEntity> getStoresAround(SearchRequest sRequest) {
     List<StoreEntity> stores = new ArrayList<>();
     if(sRequest.getLat() != 0 && sRequest.getLng() != 0) {
@@ -40,7 +39,6 @@ public class StoreService {
     return stores;
   }
 
-  @Cacheable("storesids-around")
   public List<String> getStoresIdsAround(SearchRequest sRequest) {
     List<StoreEntity> stores = new ArrayList<>();
     if(sRequest.getLat() != 0 && sRequest.getLng() != 0) {
