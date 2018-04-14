@@ -3,6 +3,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,8 @@ import com.lmp.solr.entity.ItemDoc;
 
 @Service
 public class StoreInventoryService {
+
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
   StoreInventoryRepository repo;
@@ -69,9 +73,10 @@ public class StoreInventoryService {
     } else {
       // search for all within store
       if (sRequest.isOnSaleRequest()) {
-        items = repo.findAllByStoreIdAndOnSale(sRequest.getStoreId(), sRequest.isOnSaleRequest(),
-            sRequest.pageRequesst());
+        logger.info("on sale request");
+        items = repo.findAllByStoreIdAndOnSaleTrue(sRequest.getStoreId(), sRequest.pageRequesst());
       } else {
+        logger.info("no on sale request");
         items = repo.findAllByStoreId(sRequest.getStoreId(), sRequest.pageRequesst());
       }
     }

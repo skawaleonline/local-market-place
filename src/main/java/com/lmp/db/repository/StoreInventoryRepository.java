@@ -13,7 +13,7 @@ public interface StoreInventoryRepository
 
   public Page<StoreInventoryEntity> findAllByStoreId(String id, Pageable page);
 
-  public Page<StoreInventoryEntity> findAllByStoreIdAndOnSale(String id, boolean onSale, Pageable page);
+  public Page<StoreInventoryEntity> findAllByStoreIdAndOnSaleTrue(String id, Pageable page);
 
   public Page<StoreInventoryEntity> findAllByStoreIdAndItemIdIn(String id, List<String> ids, Pageable page);
 

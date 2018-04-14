@@ -50,11 +50,12 @@ public class SearchRequest {
   public long fetchedCount() {
     return (this.page) * this.rows;
   }
+
   public boolean isOnSaleRequest() {
     if(filters == null || !filters.containsKey(FilterField.ON_SALE.getValue())) {
       return false;
     }
-    return Boolean.getBoolean(filters.get(FilterField.ON_SALE.getValue()));
+    return "true".equalsIgnoreCase(filters.get(FilterField.ON_SALE.getValue()));
   }
 
   public String brandFilter() {
