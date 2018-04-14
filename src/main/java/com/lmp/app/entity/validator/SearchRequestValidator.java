@@ -43,8 +43,9 @@ public class SearchRequestValidator implements Validator {
    * @param sr
    */
   private void validateQueryAndStoreId(SearchRequest sr, Errors e) {
-    if (Strings.isNullOrEmpty(sr.getQuery()) && Strings.isNullOrEmpty(sr.getStoreId())) {
-      e.reject("query_storeid.required", "either query or storeId is required");
+    if (Strings.isNullOrEmpty(sr.getQuery()) && Strings.isNullOrEmpty(sr.getStoreId()) 
+        && sr.categoryFilter() == null) {
+      e.reject("query_storeid.required", "either query, storeId or category filter is required");
     }
   }
 
@@ -60,6 +61,7 @@ public class SearchRequestValidator implements Validator {
               e.reject("field.invalid", "filter " + filter.getKey() + " can have either true or false");
             }
           } else if (filter.getKey().equals(FilterField.BRAND.getValue())) {
+          } else if (filter.getKey().equals(FilterField.CATEGORY.getValue())) {
           } else if (filter.getKey().equals(FilterField.MAX_PRICE.getValue()) ||
               filter.getKey().equals(FilterField.MIN_PRICE.getValue())) {
             if(!isNumber(filter.getValue())) {

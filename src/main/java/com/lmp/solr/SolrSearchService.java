@@ -41,10 +41,13 @@ public class SolrSearchService {
     // do or query for brand, as we want exact search
     Criteria conditions1 = QueryUtils.andQuery(DEFAULT_FIELD,
         Splitter.on(" ").splitToList(Strings.nullToEmpty(sRequest.getQuery())));
-    if (sRequest.brandFromFilter() != null) {
+    if (sRequest.brandFilter() != null) {
       // do and brand name, as we want exact search
       // do and with query fields in content field
-      conditions1 = conditions1.connect().and(QueryUtils.andQuery(ItemField.BRAND, sRequest.brandFromFilter()));
+      conditions1 = conditions1.connect().and(QueryUtils.andQuery(ItemField.BRAND, sRequest.brandFilter()));
+    }
+    if (sRequest.categoryFilter() != null) {
+      conditions1 = conditions1.connect().and(QueryUtils.andQuery(ItemField.CATEGORIES, sRequest.categoryFilter()));
     }
 
     Criteria conditions2 = QueryUtils.orQuery(ItemField.STORES, storeIds);
@@ -55,27 +58,11 @@ public class SolrSearchService {
     return search(sRequest, null);
   }
 
-  public long count(SearchRequest sRequest, List<String> storesIds) {
-    // if no query or no brand name filter present
-    if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFromFilter() == null) {
-      logger.error("invalid request. blank query and brand filter. Returning empty page");
-      return 0;
-    }
-    Criteria conditions = addSearchConditions(sRequest, storesIds);
-    SimpleQuery query = new SimpleQuery(conditions, sRequest.pageRequesst());
-    if (sRequest.getFields() != null && sRequest.getFields().size() > 0) {
-      // add mandetory field
-      sRequest.getFields().add(ItemField.ID.getValue());
-      query.addProjectionOnFields(sRequest.getFields().toArray(new String[] {}));
-    }
-    logger.info("searching for solr query {}", conditions.toString());
-    return solrRepo.count(query);
-  }
-
   public Page<ItemDoc> search(SearchRequest sRequest, List<String> storesIds) {
-    // if no query or no brand name filter present
-    if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFromFilter() == null) {
-      logger.error("invalid request. blank query and brand filter. Returning empty page");
+    // if no query or no brand/category name filter present
+    if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFilter() == null 
+        && sRequest.categoryFilter() == null) {
+      logger.error("invalid request. blank query and brand/category filter. Returning empty page");
       return null;
     }
     Criteria conditions = addSearchConditions(sRequest, storesIds);
@@ -107,8 +94,10 @@ public class SolrSearchService {
       logger.error("facet field missing");
       return null;
     }
-    if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFromFilter() == null) {
-      logger.error("invalid request. blank query and brand filter. Returning empty page");
+    // if no query or no brand/category name filter present
+    if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFilter() == null 
+        && sRequest.categoryFilter() == null) {
+      logger.error("invalid request. blank query and brand/category filter. Returning empty page");
       return null;
     }
     Criteria conditions = addSearchConditions(sRequest, storesIds);

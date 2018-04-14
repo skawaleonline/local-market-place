@@ -57,11 +57,18 @@ public class SearchRequest {
     return Boolean.getBoolean(filters.get(FilterField.ON_SALE.getValue()));
   }
 
-  public String brandFromFilter() {
+  public String brandFilter() {
     if(filters == null || !filters.containsKey(FilterField.BRAND.getValue())) {
       return null;
     }
     return filters.get(FilterField.BRAND.getValue());
+  }
+
+  public String categoryFilter() {
+    if(filters == null || !filters.containsKey(FilterField.CATEGORY.getValue())) {
+      return null;
+    }
+    return filters.get(FilterField.CATEGORY.getValue());
   }
 
   public String getQuery() {

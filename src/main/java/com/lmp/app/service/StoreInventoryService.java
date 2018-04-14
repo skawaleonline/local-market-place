@@ -63,8 +63,8 @@ public class StoreInventoryService {
   private BaseResponse getAllInventoryForStore(SearchRequest sRequest) {
     Page<StoreInventoryEntity> items = null;
     // if brand filter is set then do solr search for documents
-    if (sRequest.brandFromFilter() != null) {
-      // has brand filter, we need to search in store inventory
+    if (sRequest.brandFilter() != null || sRequest.categoryFilter() != null) {
+      // has brand / category filter, we need to search in store inventory
       return searchInStores(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}));
     } else {
       // search for all within store
