@@ -11,6 +11,8 @@ import javax.validation.constraints.Min;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.google.common.base.Strings;
+
 public class SearchRequest {
 
   private String query;
@@ -51,6 +53,14 @@ public class SearchRequest {
     return (this.page) * this.rows;
   }
 
+  public boolean isSolrSearchNeeded() {
+    return !Strings.isNullOrEmpty(query) || !Strings.isNullOrEmpty(brandFilter()) || !Strings.isNullOrEmpty(categoryFilter())
+        || !Strings.isNullOrEmpty(upcFilter());
+  }
+  public boolean isFilterOn() {
+    return isOnSaleRequest() || !Strings.isNullOrEmpty(brandFilter()) || !Strings.isNullOrEmpty(categoryFilter())
+        || !Strings.isNullOrEmpty(upcFilter());
+  }
   public boolean isOnSaleRequest() {
     if(filters == null || !filters.containsKey(FilterField.ON_SALE.getValue())) {
       return false;
@@ -70,6 +80,13 @@ public class SearchRequest {
       return null;
     }
     return filters.get(FilterField.CATEGORY.getValue());
+  }
+
+  public String upcFilter() {
+    if(filters == null || !filters.containsKey(FilterField.UPC.getValue())) {
+      return null;
+    }
+    return filters.get(FilterField.UPC.getValue());
   }
 
   public String getQuery() {

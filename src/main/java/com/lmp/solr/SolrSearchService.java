@@ -49,7 +49,9 @@ public class SolrSearchService {
     if (sRequest.categoryFilter() != null) {
       conditions1 = conditions1.connect().and(QueryUtils.andQuery(ItemField.CATEGORIES, sRequest.categoryFilter()));
     }
-
+    if (sRequest.upcFilter() != null) {
+      conditions1 = conditions1.connect().and(new Criteria(ItemField.UPC.getValue()).is(sRequest.upcFilter()));
+    }
     Criteria conditions2 = QueryUtils.orQuery(ItemField.STORES, storeIds);
     return conditions2 == null ? conditions1 : conditions1.connect().and(conditions2);
   }
@@ -59,10 +61,9 @@ public class SolrSearchService {
   }
 
   public Page<ItemDoc> search(SearchRequest sRequest, List<String> storesIds) {
-    // if no query or no brand/category name filter present
-    if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFilter() == null 
-        && sRequest.categoryFilter() == null) {
-      logger.error("invalid request. blank query and brand/category filter. Returning empty page");
+    // if no query or no brand/category/upc name filter present
+    if (Strings.isNullOrEmpty(sRequest.getQuery()) && !sRequest.isSolrSearchNeeded()) {
+      logger.error("invalid request. blank query and brand/category/upc filter. Returning empty page");
       return null;
     }
     Criteria conditions = addSearchConditions(sRequest, storesIds);
@@ -94,10 +95,9 @@ public class SolrSearchService {
       logger.error("facet field missing");
       return null;
     }
-    // if no query or no brand/category name filter present
-    if (Strings.isNullOrEmpty(sRequest.getQuery()) && sRequest.brandFilter() == null 
-        && sRequest.categoryFilter() == null) {
-      logger.error("invalid request. blank query and brand/category filter. Returning empty page");
+    // if no query or no brand/category/upc name filter present
+    if (Strings.isNullOrEmpty(sRequest.getQuery()) && !sRequest.isSolrSearchNeeded()) {
+      logger.error("invalid request. blank query and brand/category/upc filter. Returning empty page");
       return null;
     }
     Criteria conditions = addSearchConditions(sRequest, storesIds);

@@ -11,9 +11,9 @@ import com.lmp.db.pojo.StoreInventoryEntity;
 public interface StoreInventoryRepository
     extends MongoRepository<StoreInventoryEntity, String>{
 
-  public Page<StoreInventoryEntity> findAllByStoreId(String id, Pageable page);
+  public Page<StoreInventoryEntity> findAllByStoreIdIn(List<String> id, Pageable page);
 
-  public Page<StoreInventoryEntity> findAllByStoreIdAndOnSaleTrue(String id, Pageable page);
+  public Page<StoreInventoryEntity> findAllByStoreIdInAndOnSaleTrue(List<String> id, Pageable page);
 
   public Page<StoreInventoryEntity> findAllByStoreIdAndItemIdIn(String id, List<String> ids, Pageable page);
 

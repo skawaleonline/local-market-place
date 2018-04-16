@@ -2,7 +2,7 @@ package com.lmp.app.entity;
 
 public enum FilterField {
 
-  ON_SALE("onsale"), BRAND("brand"), CATEGORY("cat"), MIN_PRICE("min_price"), MAX_PRICE("max_price");
+  ON_SALE("onsale"), BRAND("brand"), CATEGORY("cat"), UPC("upc"), MIN_PRICE("min_price"), MAX_PRICE("max_price");
 
   private String value;
 

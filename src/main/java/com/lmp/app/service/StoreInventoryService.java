@@ -16,7 +16,6 @@ import com.google.common.collect.Lists;
 import com.lmp.app.entity.BaseResponse;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.SearchResponse;
-import com.lmp.db.pojo.StoreEntity;
 import com.lmp.db.pojo.StoreInventoryEntity;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.solr.SolrSearchService;
@@ -35,19 +34,22 @@ public class StoreInventoryService {
   StoreService storeService;
 
   private BaseResponse searchInStores(SearchRequest sRequest, List<String> storeIds) {
-    // check for the count first
+    // check if we need solr search for the request
+    List<String> ids = new ArrayList<>();
+
     Page<ItemDoc> results = solrService.search(sRequest, storeIds);
-    if(results == null || results.getTotalElements() <= 0 
-        || results.getTotalElements() <= sRequest.fetchedCount()) {
+    if (results == null || results.getTotalElements() <= 0 || results.getTotalElements() <= sRequest.fetchedCount()) {
+      logger.info("no solr results results.getTotalElements(): {} sRequest.fetchedCount() {}",
+          results.getTotalElements(), sRequest.fetchedCount());
       return SearchResponse.buildStoreInventoryResponse(Page.empty());
     }
-    
+
     long count = results.getTotalElements();
-    List<String> ids = new ArrayList<>();
     results.getContent().forEach(itemDoc -> {
       ids.add(itemDoc.getId());
     });
-    //search items in solr first then retrieve those from MongoDB
+    // search items in solr first then retrieve those from MongoDB
+    logger.info("going for mongo with {}", ids.toString());
     Page<StoreInventoryEntity> items = null;
     if (sRequest.isOnSaleRequest()) {
       items = repo.findAllByStoreIdInAndItemIdInAndOnSale(storeIds, ids, sRequest.isOnSaleRequest(),
@@ -66,20 +68,20 @@ public class StoreInventoryService {
 
   private BaseResponse getAllInventoryForStore(SearchRequest sRequest) {
     Page<StoreInventoryEntity> items = null;
+    List<String> storeIds = Lists.asList(sRequest.getStoreId(), new String[] {});
     // if brand filter is set then do solr search for documents
-    if (sRequest.brandFilter() != null || sRequest.categoryFilter() != null) {
+    if (sRequest.isSolrSearchNeeded()) {
       // has brand / category filter, we need to search in store inventory
-      return searchInStores(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}));
+      return searchInStores(sRequest, storeIds);
     } else {
       // search for all within store
       if (sRequest.isOnSaleRequest()) {
-        logger.info("on sale request");
-        items = repo.findAllByStoreIdAndOnSaleTrue(sRequest.getStoreId(), sRequest.pageRequesst());
+        items = repo.findAllByStoreIdInAndOnSaleTrue(storeIds, sRequest.pageRequesst());
       } else {
-        logger.info("no on sale request");
-        items = repo.findAllByStoreId(sRequest.getStoreId(), sRequest.pageRequesst());
+        items = repo.findAllByStoreIdIn(storeIds, sRequest.pageRequesst());
       }
     }
+    
     return SearchResponse.buildStoreInventoryResponse(items);
   }
 
