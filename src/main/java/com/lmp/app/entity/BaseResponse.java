@@ -24,6 +24,12 @@ public class BaseResponse {
     return response;
   }
 
+  public static BaseResponse empty() {
+    BaseResponse response = new BaseResponse();
+    response.statusCode = HttpStatus.OK.value();
+    return response;
+  }
+
   public int getStatusCode() {
     return statusCode;
   }
