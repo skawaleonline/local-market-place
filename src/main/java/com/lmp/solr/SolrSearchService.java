@@ -64,7 +64,7 @@ public class SolrSearchService {
     // if no query or no brand/category/upc name filter present
     if (Strings.isNullOrEmpty(sRequest.getQuery()) && !sRequest.isSolrSearchNeeded()) {
       logger.error("invalid request. blank query and brand/category/upc filter. Returning empty page");
-      return null;
+      return Page.empty();
     }
     Criteria conditions = addSearchConditions(sRequest, storesIds);
     SimpleQuery query = new SimpleQuery(conditions, sRequest.pageRequesst());

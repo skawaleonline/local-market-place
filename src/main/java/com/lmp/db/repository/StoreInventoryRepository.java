@@ -15,18 +15,9 @@ public interface StoreInventoryRepository
 
   public Page<StoreInventoryEntity> findAllByStoreIdInAndOnSaleTrue(List<String> id, Pageable page);
 
-  public Page<StoreInventoryEntity> findAllByStoreIdAndItemIdIn(String id, List<String> ids, Pageable page);
-
-  public Page<StoreInventoryEntity> findAllByStoreIdAndItemIdInAndOnSale(String id, List<String> ids, boolean onSale,
-      Pageable page);
-
-  public Page<StoreInventoryEntity> findAllByItemIdIn(List<String> ids, Pageable page);
-
-  public Page<StoreInventoryEntity> findAllByItemIdInAndOnSale(List<String> ids, boolean onSale, Pageable page);
-
   public Page<StoreInventoryEntity> findAllByStoreIdInAndItemIdIn(List<String> storeIds, List<String> ids, Pageable page);
 
-  public Page<StoreInventoryEntity> findAllByStoreIdInAndItemIdInAndOnSale(List<String> storeIds, List<String> ids,
-      boolean onSale, Pageable page);
+  public Page<StoreInventoryEntity> findAllByStoreIdInAndItemIdInAndOnSaleTrue(List<String> storeIds, List<String> ids,
+      Pageable page);
 
 }
