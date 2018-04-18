@@ -57,10 +57,12 @@ public class SearchRequest {
     return !Strings.isNullOrEmpty(query) || !Strings.isNullOrEmpty(brandFilter()) || !Strings.isNullOrEmpty(categoryFilter())
         || !Strings.isNullOrEmpty(upcFilter());
   }
+
   public boolean isFilterOn() {
     return isOnSaleRequest() || !Strings.isNullOrEmpty(brandFilter()) || !Strings.isNullOrEmpty(categoryFilter())
         || !Strings.isNullOrEmpty(upcFilter());
   }
+
   public boolean isOnSaleRequest() {
     if(filters == null || !filters.containsKey(FilterField.ON_SALE.getValue())) {
       return false;

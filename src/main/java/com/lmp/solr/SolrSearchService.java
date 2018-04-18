@@ -47,7 +47,7 @@ public class SolrSearchService {
       conditions1 = conditions1.connect().and(QueryUtils.andQuery(ItemField.BRAND, sRequest.brandFilter()));
     }
     if (sRequest.categoryFilter() != null) {
-      conditions1 = conditions1.connect().and(QueryUtils.andQuery(ItemField.CATEGORIES, sRequest.categoryFilter()));
+      conditions1 = conditions1.connect().and(new Criteria(ItemField.CATEGORIES.getValue()).is(sRequest.categoryFilter()));
     }
     if (sRequest.upcFilter() != null) {
       conditions1 = conditions1.connect().and(new Criteria(ItemField.UPC.getValue()).is(sRequest.upcFilter()));
