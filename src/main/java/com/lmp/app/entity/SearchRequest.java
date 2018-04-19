@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 public class SearchRequest {
 
@@ -22,7 +23,7 @@ public class SearchRequest {
   @Min(0)
   @Max(50)
   private int rows;
-  private Map<String, String> filters = new HashMap<>();
+  private Map<String, List<String>> filters = new HashMap<>();
   private List<String> fields = new ArrayList<>();
   private double lat;
   private double lng;
@@ -54,37 +55,38 @@ public class SearchRequest {
   }
 
   public boolean isSolrSearchNeeded() {
-    return !Strings.isNullOrEmpty(query) || !Strings.isNullOrEmpty(brandFilter()) || !Strings.isNullOrEmpty(categoryFilter())
-        || !Strings.isNullOrEmpty(upcFilter());
+    return !Strings.isNullOrEmpty(query) || brandFilter() != null || categoryFilter() != null
+        || upcFilter() != null;
   }
 
   public boolean isFilterOn() {
-    return isOnSaleRequest() || !Strings.isNullOrEmpty(brandFilter()) || !Strings.isNullOrEmpty(categoryFilter())
-        || !Strings.isNullOrEmpty(upcFilter());
+    return isOnSaleRequest() || brandFilter() != null || categoryFilter() != null
+        || upcFilter() != null;
   }
 
   public boolean isOnSaleRequest() {
     if(filters == null || !filters.containsKey(FilterField.ON_SALE.getValue())) {
       return false;
     }
-    return "true".equalsIgnoreCase(filters.get(FilterField.ON_SALE.getValue()));
+    List<String> values = filters.get(FilterField.ON_SALE.getValue());
+    return (values == null || values.isEmpty()) ? false : "true".equalsIgnoreCase(values.get(0));
   }
 
-  public String brandFilter() {
+  public List<String> brandFilter() {
     if(filters == null || !filters.containsKey(FilterField.BRAND.getValue())) {
       return null;
     }
     return filters.get(FilterField.BRAND.getValue());
   }
 
-  public String categoryFilter() {
+  public List<String> categoryFilter() {
     if(filters == null || !filters.containsKey(FilterField.CATEGORY.getValue())) {
       return null;
     }
     return filters.get(FilterField.CATEGORY.getValue());
   }
 
-  public String upcFilter() {
+  public List<String> upcFilter() {
     if(filters == null || !filters.containsKey(FilterField.UPC.getValue())) {
       return null;
     }
@@ -109,10 +111,10 @@ public class SearchRequest {
   public void setRows(int rows) {
     this.rows = rows;
   }
-  public Map<String, String> getFilters() {
+  public Map<String, List<String>> getFilters() {
     return filters;
   }
-  public void setFilters(Map<String, String> filters) {
+  public void setFilters(Map<String, List<String>> filters) {
     this.filters = filters;
   }
   public List<String> getFields() {

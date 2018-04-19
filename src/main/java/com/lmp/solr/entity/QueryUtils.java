@@ -54,6 +54,20 @@ public class QueryUtils {
     return condition;
   }
 
+  public static Criteria oRIsQuery(ItemField field, List<String> searchTerm) {
+    if(searchTerm == null || searchTerm.isEmpty()) {
+      return null;
+    }
+    Criteria condition = null;
+    for(String term : searchTerm) {
+      if(condition == null) {
+        condition = new Criteria(field.getValue()).is(term); 
+      } else {
+        condition = condition.or(new Criteria(field.getValue()).is(term));
+      }
+    }
+    return condition;
+  }
   /*
   * Split on white space and create an AND query
   */

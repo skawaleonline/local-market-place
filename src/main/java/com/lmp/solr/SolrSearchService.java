@@ -39,21 +39,23 @@ public class SolrSearchService {
 
   private Criteria addSearchConditions(SearchRequest sRequest, List<String> storeIds) {
     // do or query for brand, as we want exact search
-    Criteria conditions1 = QueryUtils.andQuery(DEFAULT_FIELD,
+    Criteria conditions = QueryUtils.andQuery(DEFAULT_FIELD,
         Splitter.on(" ").splitToList(Strings.nullToEmpty(sRequest.getQuery())));
     if (sRequest.brandFilter() != null) {
       // do and brand name, as we want exact search
       // do and with query fields in content field
-      conditions1 = conditions1.connect().and(QueryUtils.andQuery(ItemField.BRAND, sRequest.brandFilter()));
+      conditions = conditions.connect().and(QueryUtils.oRIsQuery(ItemField.BRAND, sRequest.brandFilter()));
     }
     if (sRequest.categoryFilter() != null) {
-      conditions1 = conditions1.connect().and(new Criteria(ItemField.CATEGORIES.getValue()).is(sRequest.categoryFilter()));
+      conditions = conditions.connect().and(QueryUtils.oRIsQuery(ItemField.CATEGORIES, sRequest.categoryFilter()));
     }
     if (sRequest.upcFilter() != null) {
-      conditions1 = conditions1.connect().and(new Criteria(ItemField.UPC.getValue()).is(sRequest.upcFilter()));
+      conditions = conditions.connect().and(QueryUtils.oRIsQuery(ItemField.UPC, sRequest.upcFilter()));
     }
-    Criteria conditions2 = QueryUtils.orQuery(ItemField.STORES, storeIds);
-    return conditions2 == null ? conditions1 : conditions1.connect().and(conditions2);
+    if(storeIds != null) {
+      conditions = conditions.connect().and(QueryUtils.orQuery(ItemField.STORES, storeIds));
+    }
+    return conditions;
   }
 
   public Page<ItemDoc> search(SearchRequest sRequest) {

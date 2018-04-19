@@ -1,5 +1,6 @@
 package com.lmp.app.entity.validator;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -50,14 +51,14 @@ public class SearchRequestValidator implements Validator {
   }
 
   private void validateFilters(SearchRequest sr, Errors e) {
-    Map<String, String> filters = sr.getFilters();
+    Map<String, List<String>> filters = sr.getFilters();
     if (filters != null && !filters.isEmpty()) {
-      for (Entry<String, String> filter : filters.entrySet()) {
+      for (Entry<String, List<String>> filter : filters.entrySet()) {
         if (filter == null || filter.getKey() == null || filter.getValue() == null) {
           e.reject("field.invalid", "empty or null filter");
         } else {
           if (filter.getKey().equals(FilterField.ON_SALE.getValue())) {
-            if (!(filter.getValue().equalsIgnoreCase("true") || filter.getValue().equalsIgnoreCase("false"))) {
+            if (!(filter.getValue().get(0).equalsIgnoreCase("true") || filter.getValue().get(0).equalsIgnoreCase("false"))) {
               e.reject("field.invalid", "filter " + filter.getKey() + " can have either true or false");
             }
           } else if (filter.getKey().equals(FilterField.BRAND.getValue())) {
@@ -65,7 +66,7 @@ public class SearchRequestValidator implements Validator {
           } else if (filter.getKey().equals(FilterField.UPC.getValue())) {
           } else if (filter.getKey().equals(FilterField.MAX_PRICE.getValue()) ||
               filter.getKey().equals(FilterField.MIN_PRICE.getValue())) {
-            if(!isNumber(filter.getValue())) {
+            if(!isNumber(filter.getValue().get(0))) {
               e.reject("field.invalid", "invalid value for filter " + filter.getKey());
             }
           } else {
