@@ -83,9 +83,9 @@ public class StoreInventoryService {
     if (sRequest.isSolrSearchNeeded()) {
       // search solr and then mongo for this request
       docs = searchSolr(sRequest, storeIdsToSearch);
-    }
-    if(docs == null || docs.getTotalElements() == 0) {
-      return SearchResponse.empty();
+      if(docs == null || docs.getTotalElements() == 0) {
+        return SearchResponse.empty();
+      }
     }
     // dont search solr, directly search in mongo
     return searchDBForDocs(sRequest, storeIdsToSearch, docs);
