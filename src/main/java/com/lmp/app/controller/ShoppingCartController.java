@@ -37,12 +37,12 @@ public class ShoppingCartController extends BaseController {
 
   @Autowired
   public ShoppingCartController(CartRequestValidator cartRequestValidator) {
-      this.cartRequestValidator = cartRequestValidator;
+    this.cartRequestValidator = cartRequestValidator;
   }
 
-  @InitBinder("searchRequest")
+  @InitBinder("shoppingCartRequest")
   public void setupBinder(WebDataBinder binder) {
-      binder.addValidators(cartRequestValidator);
+    binder.addValidators(cartRequestValidator);
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -57,17 +57,19 @@ public class ShoppingCartController extends BaseController {
     }
     return new ResponseEntity<ShoppingCart>(cart, HttpStatus.OK);
   }
+
   @RequestMapping(value = "/add", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<?> addToCart(@Valid @RequestBody ShoppingCartRequest cartRequest, Errors errors) {
+  public ResponseEntity<?> addToCart(@Valid @RequestBody ShoppingCartRequest shoppingCartRequest, Errors errors) {
+    CartRequestValidator.validateQuantity(shoppingCartRequest, errors);
     if (errors.hasErrors()) {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
-    logger.info("shopping cart request " + cartRequest.toString());
-    ShoppingCart cart = service.add(cartRequest);
+    logger.info("shopping cart request " + shoppingCartRequest.toString());
+    ShoppingCart cart = service.add(shoppingCartRequest);
 
     if (cart == null) {
-      logger.info("no cart found or add failed {}", cartRequest.toString());
+      logger.info("no cart found or add failed {}", shoppingCartRequest.toString());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<ShoppingCart>(cart, HttpStatus.OK);
@@ -75,15 +77,15 @@ public class ShoppingCartController extends BaseController {
 
   @RequestMapping(value = "/remove", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<?> removeFromCart(@Valid @RequestBody ShoppingCartRequest cartRequest, Errors errors) {
+  public ResponseEntity<?> removeFromCart(@Valid @RequestBody ShoppingCartRequest shoppingCartRequest, Errors errors) {
     if (errors.hasErrors()) {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
-    logger.info("shopping cart request " + cartRequest.toString());
-    ShoppingCart cart = service.remove(cartRequest);
+    logger.info("shopping cart request " + shoppingCartRequest.toString());
+    ShoppingCart cart = service.remove(shoppingCartRequest);
 
     if (cart == null) {
-      logger.info("no cart found or add failed {}", cartRequest.toString());
+      logger.info("no cart found or add failed {}", shoppingCartRequest.toString());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<ShoppingCart>(cart, HttpStatus.OK);
@@ -91,16 +93,17 @@ public class ShoppingCartController extends BaseController {
 
   @RequestMapping(value = "/update", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<?> updateCart(@Valid @RequestBody ShoppingCartRequest cartRequest, Errors errors) {
+  public ResponseEntity<?> updateCart(@Valid @RequestBody ShoppingCartRequest shoppingCartRequest, Errors errors) {
+    CartRequestValidator.validateQuantity(shoppingCartRequest, errors);
     if (errors.hasErrors()) {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
-    logger.info("shopping cart request " + cartRequest.toString());
-    ShoppingCart cart = service.update(cartRequest);
+    logger.info("shopping cart request " + shoppingCartRequest.toString());
+    ShoppingCart cart = service.update(shoppingCartRequest);
     // logger.info("getting store details for store id {}", storeId);
 
     if (cart == null) {
-      logger.info("no cart found or add failed {}", cartRequest.toString());
+      logger.info("no cart found or add failed {}", shoppingCartRequest.toString());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<ShoppingCart>(cart, HttpStatus.OK);
