@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,8 @@ import com.google.common.base.Strings;
 import com.lmp.app.entity.BaseResponse;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.SearchResponse;
-import com.lmp.db.pojo.StoreInventoryEntity;
+import com.lmp.app.entity.ShoppingCart.CartItem;
+import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.solr.SolrSearchService;
 import com.lmp.solr.entity.ItemDoc;
@@ -43,7 +45,7 @@ public class StoreInventoryService {
   }
 
   private BaseResponse searchDBForDocs(SearchRequest sRequest, List<String> storeIds, Page<ItemDoc> docs) {
-    Page<StoreInventoryEntity> items = null;
+    Page<StoreItemEntity> items = null;
     if (docs != null) {
       List<String> ids = new ArrayList<>();
       docs.getContent().forEach(itemDoc -> {
@@ -91,4 +93,8 @@ public class StoreInventoryService {
     return searchDBForDocs(sRequest, storeIdsToSearch, docs);
   }
 
+  public CartItem findById(String id) {
+    Optional<StoreItemEntity> sItem = repo.findById(id);
+    return sItem.isPresent() ? sItem.get().toCartItem() : null;
+  }
 }

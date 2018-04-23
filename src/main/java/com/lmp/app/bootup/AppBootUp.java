@@ -23,7 +23,7 @@ import com.lmp.app.utils.FileIOUtil;
 import com.lmp.config.ConfigProperties;
 import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.pojo.StoreEntity;
-import com.lmp.db.pojo.StoreInventoryEntity;
+import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.db.repository.ItemRepository;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.db.repository.StoreRepository;
@@ -73,7 +73,7 @@ public class AppBootUp {
     Random random = new Random();
     for(StoreEntity store : stores) {
       if(item.canGoOnStoreInventory(store)) {
-        StoreInventoryEntity sItem = new StoreInventoryEntity();
+        StoreItemEntity sItem = new StoreItemEntity();
         long time = System.currentTimeMillis();
         sItem.setStoreId(store.getId());
         sItem.getItem().setId(item.getId());

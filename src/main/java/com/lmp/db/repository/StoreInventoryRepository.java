@@ -6,18 +6,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.lmp.db.pojo.StoreInventoryEntity;
+import com.lmp.db.pojo.StoreItemEntity;
 
 public interface StoreInventoryRepository
-    extends MongoRepository<StoreInventoryEntity, String>{
+    extends MongoRepository<StoreItemEntity, String>{
 
-  public Page<StoreInventoryEntity> findAllByStoreIdIn(List<String> id, Pageable page);
+  public Page<StoreItemEntity> findAllByStoreIdIn(List<String> id, Pageable page);
 
-  public Page<StoreInventoryEntity> findAllByStoreIdInAndOnSaleTrue(List<String> id, Pageable page);
+  public Page<StoreItemEntity> findAllByStoreIdInAndOnSaleTrue(List<String> id, Pageable page);
 
-  public Page<StoreInventoryEntity> findAllByStoreIdInAndItemIdIn(List<String> storeIds, List<String> ids, Pageable page);
+  public Page<StoreItemEntity> findAllByStoreIdInAndItemIdIn(List<String> storeIds, List<String> ids, Pageable page);
 
-  public Page<StoreInventoryEntity> findAllByStoreIdInAndItemIdInAndOnSaleTrue(List<String> storeIds, List<String> ids,
+  public Page<StoreItemEntity> findAllByStoreIdInAndItemIdInAndOnSaleTrue(List<String> storeIds, List<String> ids,
       Pageable page);
 
 }

@@ -11,7 +11,7 @@ public class StoreInventory {
     this.storeId = storeId;
     this.items = items;
   }
-  
+
   public String getStoreId() {
     return storeId;
   }
@@ -24,6 +24,4 @@ public class StoreInventory {
   public void setItems(List<Item> items) {
     this.items = items;
   }
-
-  
 }
