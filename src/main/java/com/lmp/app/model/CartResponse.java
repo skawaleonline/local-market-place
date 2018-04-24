@@ -1,6 +1,10 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 import java.util.List;
+
+import com.lmp.app.entity.CustomerOrder;
+import com.lmp.app.entity.ResponseStatus;
+import com.lmp.app.entity.ShoppingCart;
 
 public class CartResponse extends BaseResponse {
 

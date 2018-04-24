@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.lmp.app.entity.ResponseFilter;
-import com.lmp.app.entity.SearchRequest;
+import com.lmp.app.model.ResponseFilter;
+import com.lmp.app.model.SearchRequest;
 import com.lmp.solr.SolrSearchService;
 import com.lmp.solr.entity.ItemDoc;
 import com.lmp.solr.entity.ItemField;

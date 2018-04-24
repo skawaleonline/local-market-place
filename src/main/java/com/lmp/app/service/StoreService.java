@@ -13,7 +13,7 @@ import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
-import com.lmp.app.entity.SearchRequest;
+import com.lmp.app.model.SearchRequest;
 import com.lmp.db.pojo.StoreEntity;
 import com.lmp.db.repository.StoreRepository;
 

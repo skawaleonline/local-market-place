@@ -1,4 +1,4 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 
 import com.google.common.collect.Lists;
+import com.lmp.app.entity.Item;
+import com.lmp.app.entity.StoreInventory;
 import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.solr.entity.ItemDoc;

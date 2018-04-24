@@ -1,4 +1,4 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.google.common.base.Strings;
+import com.lmp.app.entity.FilterField;
 
 public class SearchRequest {
 

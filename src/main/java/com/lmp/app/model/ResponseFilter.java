@@ -1,4 +1,4 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class ResponseFilter {
   public static ResponseFilter buildResultFilter(String fieldName, FacetPage<ItemDoc> docs) {
     ResponseFilter response = new ResponseFilter();
     response.filterName = fieldName;
-    if(docs == null || docs.getFacetResultPage(fieldName) != null) {
+    if(docs != null && docs.getFacetResultPage(fieldName) != null) {
       Page<FacetFieldEntry> page = docs.getFacetResultPage(fieldName);
       page.getContent().forEach(entry -> {
         response.values.add(new CountPair(entry.getValue(), entry.getValueCount()));

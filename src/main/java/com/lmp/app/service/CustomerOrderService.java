@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
-import com.lmp.app.entity.CheckoutRequest;
 import com.lmp.app.entity.CustomerOrder;
 import com.lmp.app.entity.OrderStatus;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
-import com.lmp.app.entity.ShoppingCartRequest;
 import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
 import com.lmp.app.exceptions.OrderNotFoundException;
 import com.lmp.app.exceptions.ProductNotInStockException;
+import com.lmp.app.model.CheckoutRequest;
+import com.lmp.app.model.ShoppingCartRequest;
 import com.lmp.db.pojo.CustomerOrderEntity;
 import com.lmp.db.repository.CustomerOrderRepository;
 

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.lmp.app.entity.SearchRequest;
+import com.lmp.app.model.SearchRequest;
 import com.lmp.solr.entity.ItemDoc;
 import com.lmp.solr.entity.ItemField;
 import com.lmp.solr.entity.KeywordDoc;
@@ -98,7 +98,8 @@ public class SolrSearchService {
       return null;
     }
     // if no query or no brand/category/upc name filter present
-    if (Strings.isNullOrEmpty(sRequest.getQuery()) && !sRequest.isSolrSearchNeeded()) {
+    if (Strings.isNullOrEmpty(sRequest.getQuery()) && Strings.isNullOrEmpty(sRequest.getStoreId()) 
+        && !sRequest.isSolrSearchNeeded()) {
       logger.error("invalid request. blank query and brand/category/upc filter. Returning empty page");
       return null;
     }

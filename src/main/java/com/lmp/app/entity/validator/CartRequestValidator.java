@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.google.common.base.Strings;
-import com.lmp.app.entity.ShoppingCartRequest;
+import com.lmp.app.model.ShoppingCartRequest;
 
 @Component
 public class CartRequestValidator implements Validator {

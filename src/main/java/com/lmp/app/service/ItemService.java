@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.lmp.app.entity.SearchRequest;
-import com.lmp.app.entity.SearchResponse;
+import com.lmp.app.model.SearchRequest;
+import com.lmp.app.model.SearchResponse;
 import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.repository.ItemRepository;
 import com.lmp.solr.SolrSearchService;

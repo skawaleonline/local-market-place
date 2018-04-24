@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Strings;
-import com.lmp.app.entity.BaseResponse;
-import com.lmp.app.entity.CartResponse;
-import com.lmp.app.entity.CheckoutRequest;
 import com.lmp.app.entity.CustomerOrder;
 import com.lmp.app.entity.ShoppingCart;
-import com.lmp.app.entity.ShoppingCartRequest;
 import com.lmp.app.entity.validator.CartRequestValidator;
+import com.lmp.app.model.BaseResponse;
+import com.lmp.app.model.CartResponse;
+import com.lmp.app.model.CheckoutRequest;
+import com.lmp.app.model.ShoppingCartRequest;
 import com.lmp.app.service.CustomerOrderService;
 import com.lmp.app.service.ShoppingCartService;
 import com.lmp.app.utils.ValidationErrorBuilder;

@@ -1,4 +1,4 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 public class ShoppingCartRequest {
 

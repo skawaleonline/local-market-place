@@ -17,11 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
-import com.lmp.app.entity.BaseResponse;
-import com.lmp.app.entity.SearchRequest;
-import com.lmp.app.entity.SearchResponse;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
+import com.lmp.app.model.BaseResponse;
+import com.lmp.app.model.SearchRequest;
+import com.lmp.app.model.SearchResponse;
 import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.solr.SolrSearchService;

@@ -1,7 +1,9 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.http.HttpStatus;
+
+import com.lmp.app.entity.ResponseStatus;
 
 public class BaseResponse {
 
