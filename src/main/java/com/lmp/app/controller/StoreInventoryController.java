@@ -26,6 +26,7 @@ import com.lmp.app.utils.ValidationErrorBuilder;
 import com.lmp.solr.entity.ItemField;
 
 @RestController
+@RequestMapping("/store-inventory")
 public class StoreInventoryController extends BaseController {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -47,7 +48,7 @@ public class StoreInventoryController extends BaseController {
       binder.addValidators(searchRequestValidator);
   }
 
-  @RequestMapping(value = "/store-inventory/search", method = RequestMethod.POST)
+  @RequestMapping(value = "/search", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> lookupStoreInventory(@Valid @RequestBody SearchRequest searchRequest, Errors errors) {
     if (errors.hasErrors()) {
@@ -64,7 +65,7 @@ public class StoreInventoryController extends BaseController {
     return new ResponseEntity<BaseResponse>(response, HttpStatus.OK);
   }
 
-  @RequestMapping(value = "/store-inventory/filters", method = RequestMethod.POST)
+  @RequestMapping(value = "/filters", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> lookupStoreInventoryFilters(@Valid @RequestBody SearchRequest searchRequest, Errors errors) {
     if (errors.hasErrors()) {

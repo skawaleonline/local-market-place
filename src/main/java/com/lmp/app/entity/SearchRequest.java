@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 public class SearchRequest {
 
