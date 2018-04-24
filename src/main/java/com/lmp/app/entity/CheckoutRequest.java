@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 public class CheckoutRequest {
 
   private String userId;
+  private String orderId;
 
   public CheckoutRequest() {
   }
@@ -20,4 +21,13 @@ public class CheckoutRequest {
   public void setUserId(String userId) {
     this.userId = userId;
   }
+
+  public String getOrderId() {
+    return orderId;
+  }
+
+  public void setOrderId(String orderId) {
+    this.orderId = orderId;
+  }
+  
 }

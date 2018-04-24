@@ -40,7 +40,7 @@ public class CustomerOrderEntity {
         .setOrderedOn(System.currentTimeMillis())
         .setPickupOrder(cart.isPickupOrder())
         .setTotalPrice(cart.getTotalPrice())
-        .setStatus(OrderStatus.RECIEVED);
+        .setStatus(OrderStatus.REVIEW);
     return entity;
   }
   public String getId() {

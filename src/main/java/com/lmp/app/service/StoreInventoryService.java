@@ -116,12 +116,12 @@ public class StoreInventoryService {
   }
 
   @Transactional
-  public boolean updateStockCount(ShoppingCart cart) {
-    if(cart == null) {
+  public boolean updateStockCount(List<CartItem> cartItems, boolean increment) {
+    if(cartItems == null || cartItems.size() == 0) {
       return false;
     }
     Map<String, Integer> map = new HashMap<>();
-    cart.getItems().forEach(item -> {
+    cartItems.forEach(item -> {
       map.put(item.getId(), item.getQuantity());
     });
     Iterable<StoreItemEntity> items = repo.findAllById(map.keySet());
@@ -129,7 +129,7 @@ public class StoreInventoryService {
       return false;
     }
     items.forEach(item -> {
-      item.setStock(item.getStock() - map.get(item.getId()));
+      item.setStock(increment ? item.getStock() + map.get(item.getId()) : item.getStock() - map.get(item.getId()));
     });
     repo.saveAll(items);
     return true;

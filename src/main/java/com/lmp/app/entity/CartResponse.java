@@ -11,25 +11,23 @@ public class CartResponse extends BaseResponse {
   public CartResponse() {
   }
 
-  public static CartResponse orderPlaced(CustomerOrder order) {
-    CartResponse cResponse = new CartResponse();
-    cResponse.setStatusCode(ResponseStatus.ORDER_PLACED.getCode());
-    cResponse.setErrorMessage(ResponseStatus.ORDER_PLACED.toString());
+  public static CartResponse orderReceived(CustomerOrder order) {
+    CartResponse cResponse = BaseResponse.responseStatus(ResponseStatus.ORDER_RECIEVED);
     cResponse.setOrder(order);
     return cResponse;
   }
-
-  public static CartResponse cartNotFound() {
-    CartResponse cResponse = new CartResponse();
-    cResponse.setStatusCode(ResponseStatus.CART_NOT_FOUND.getCode());
-    cResponse.setErrorMessage(ResponseStatus.CART_NOT_FOUND.toString());
+  public static CartResponse orderPlaced(CustomerOrder order) {
+    CartResponse cResponse = BaseResponse.responseStatus(ResponseStatus.ORDER_PLACED);
+    cResponse.setOrder(order);
     return cResponse;
   }
-
+  public static CartResponse orderCancelled(CustomerOrder order) {
+    CartResponse cResponse = BaseResponse.responseStatus(ResponseStatus.ORDER_CANCELLED);
+    cResponse.setOrder(order);
+    return cResponse;
+  }
   public static CartResponse productOutOfStock(List<String> itemIds) {
-    CartResponse cResponse = new CartResponse();
-    cResponse.setStatusCode(ResponseStatus.ITEM_OUT_OF_STOCK.getCode());
-    cResponse.setErrorMessage(ResponseStatus.ITEM_OUT_OF_STOCK.toString());
+    CartResponse cResponse = BaseResponse.responseStatus(ResponseStatus.ITEM_OUT_OF_STOCK);
     cResponse.setItemIds(itemIds);
     return cResponse;
   }

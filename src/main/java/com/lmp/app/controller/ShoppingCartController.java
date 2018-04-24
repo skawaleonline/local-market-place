@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Strings;
+import com.lmp.app.entity.BaseResponse;
 import com.lmp.app.entity.CartResponse;
 import com.lmp.app.entity.CheckoutRequest;
 import com.lmp.app.entity.CustomerOrder;
@@ -106,6 +107,18 @@ public class ShoppingCartController extends BaseController {
     return new ResponseEntity<ShoppingCart>(cart, HttpStatus.OK);
   }
 
+  @RequestMapping(value = "/moveToList", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> moveToList(@Valid @RequestBody ShoppingCartRequest shoppingCartRequest, Errors errors) {
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
+    }
+    logger.info("move to list request" + shoppingCartRequest.toString());
+    service.moveToList(shoppingCartRequest);
+    logger.info("item moved to list {} ", shoppingCartRequest.getItemId());
+    return new ResponseEntity<CartResponse>(
+        BaseResponse.responseStatus(com.lmp.app.entity.ResponseStatus.MOVED_TO_LIST), HttpStatus.OK);
+  }
   @RequestMapping(value = "/checkout", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> checkout(@Valid @RequestBody CheckoutRequest checkoutRequest, Errors errors) {
@@ -118,7 +131,36 @@ public class ShoppingCartController extends BaseController {
     logger.info("Checkout request" + checkoutRequest.toString());
     CustomerOrder order=  orderService.placeOrder(checkoutRequest);
     logger.info("order placed. order number {} ", order.getId());
+    return new ResponseEntity<CartResponse>(CartResponse.orderReceived(order), HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/confirmCheckout", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> confirmCheckout(@Valid @RequestBody CheckoutRequest checkoutRequest, Errors errors) {
+    if(Strings.isNullOrEmpty(checkoutRequest.getUserId()) || Strings.isNullOrEmpty(checkoutRequest.getOrderId())) {
+      errors.reject("userId.required", "userId and orderId are required");
+    }
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
+    }
+    logger.info("confirm checkout request" + checkoutRequest.toString());
+    CustomerOrder order=  orderService.confirmOrder(checkoutRequest);
+    logger.info("order placed. order number {} ", order.getId());
     return new ResponseEntity<CartResponse>(CartResponse.orderPlaced(order), HttpStatus.OK);
   }
 
+  @RequestMapping(value = "/cancelCheckout", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> cancelCheckout(@Valid @RequestBody CheckoutRequest checkoutRequest, Errors errors) {
+    if(Strings.isNullOrEmpty(checkoutRequest.getUserId()) || Strings.isNullOrEmpty(checkoutRequest.getOrderId())) {
+      errors.reject("userId.required", "userId and orderId are required");
+    }
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
+    }
+    logger.info("confirm checkout request" + checkoutRequest.toString());
+    CustomerOrder order=  orderService.cancelCheckout(checkoutRequest);
+    logger.info("order placed. order number {} ", order.getId());
+    return new ResponseEntity<CartResponse>(CartResponse.orderCancelled(order), HttpStatus.OK);
+  }
 }

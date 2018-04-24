@@ -2,8 +2,8 @@ package com.lmp.app.entity;
 
 public enum OrderStatus {
 
-  RECIEVED("Recieved"), IN_PROGRESS("In Progress"), READY("Ready"), SHIPPED("Shipped"), DELIVERED(
-      "Delivered"), COMPLETED("Completed");
+  REVIEW("Review"), NEW("New"), IN_PROGRESS("In Progress"), READY("Ready"), SHIPPED("Shipped"), DELIVERED(
+      "Delivered"), COMPLETED("Completed"), CANCELLED("Cancelled");
 
   private OrderStatus(String name) {
     this.name = name;

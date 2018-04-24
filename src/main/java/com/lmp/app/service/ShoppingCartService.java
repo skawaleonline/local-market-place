@@ -1,5 +1,6 @@
 package com.lmp.app.service;
 
+import java.util.ListIterator;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -45,11 +46,18 @@ public class ShoppingCartService {
     return ShoppingCart.fromEntity(cart.get());
   }
 
+  /* clear items in cart not the items marked as saved for later*/
   public boolean clear(String id) throws CartNotFoundException {
     if(Strings.isNullOrEmpty(id)) {
       return false;
     }
-    repo.deleteById(id);
+    ShoppingCart cart = getCart(id);
+    ListIterator<CartItem> lit = cart.getItems().listIterator();
+    while(lit.hasNext()) {
+      if(!lit.next().isSaveForLater()) {
+        lit.remove();
+      }
+    }
     return true;
   }
 
@@ -99,6 +107,19 @@ public class ShoppingCartService {
     return getCart(cartRequest);
   }
 
+  public ShoppingCart moveToList(ShoppingCartRequest cartRequest) throws CartNotFoundException {
+    ShoppingCart cart = getCart(cartRequest);
+    if(cart == null) {
+      return ShoppingCart.forUser(cartRequest.getUserId());
+    }
+    for(CartItem ci : cart.getItems()) {
+      if(ci.getId().equals(cartRequest.getItemId())) {
+        ci.setSaveForLater(true);
+      }
+    }
+    repo.save(ShoppingCartEntity.toEntity(cart));
+    return getCart(cartRequest);
+  }
   public double getTotal(String cartId) {
     return 0;
   }

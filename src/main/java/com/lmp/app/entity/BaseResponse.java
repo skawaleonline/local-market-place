@@ -8,6 +8,14 @@ public class BaseResponse {
   protected int statusCode;
   protected String message;
 
+
+  public static CartResponse responseStatus(ResponseStatus status) {
+    CartResponse cResponse = new CartResponse();
+    cResponse.setStatusCode(status.getCode());
+    cResponse.setErrorMessage(status.toString());
+    return cResponse;
+  }
+
   public static BaseResponse invalidSearchRequest(String message) {
     BaseResponse response = new BaseResponse();
     response.statusCode = HttpStatus.BAD_REQUEST.value();

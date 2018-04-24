@@ -45,6 +45,7 @@ public class ShoppingCart {
     private boolean inStock;
     private List<Image> images;
     private int quantity;
+    private boolean saveForLater;
 
     public CartItem changeQuantities(int change) {
       this.quantity += change;
@@ -116,6 +117,12 @@ public class ShoppingCart {
     }
     public void setImages(List<Image> images) {
       this.images = images;
+    }
+    public boolean isSaveForLater() {
+      return saveForLater;
+    }
+    public void setSaveForLater(boolean saveForLater) {
+      this.saveForLater = saveForLater;
     }
     public int getQuantity() {
       return quantity;
