@@ -1,4 +1,4 @@
-package com.lmp.app.entity.validator;
+package com.lmp.app.model.validator;
 
 import java.util.List;
 import java.util.Map;

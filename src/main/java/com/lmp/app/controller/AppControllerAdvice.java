@@ -10,13 +10,13 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.lmp.app.entity.ResponseStatus;
-import com.lmp.app.entity.validator.ValidationError;
 import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
 import com.lmp.app.exceptions.OrderNotFoundException;
 import com.lmp.app.exceptions.ProductNotInStockException;
 import com.lmp.app.model.BaseResponse;
 import com.lmp.app.model.CartResponse;
+import com.lmp.app.model.validator.ValidationError;
 import com.lmp.app.utils.ValidationErrorBuilder;
 
 @ControllerAdvice

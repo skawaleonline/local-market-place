@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lmp.app.entity.validator.SearchRequestValidator;
 import com.lmp.app.model.BaseResponse;
 import com.lmp.app.model.ResponseFilter;
 import com.lmp.app.model.SearchRequest;
+import com.lmp.app.model.validator.SearchRequestValidator;
 import com.lmp.app.service.ResultsFilterService;
 import com.lmp.app.service.StoreInventoryService;
 import com.lmp.app.utils.ValidationErrorBuilder;

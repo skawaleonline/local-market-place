@@ -1,4 +1,4 @@
-package com.lmp.app.entity.validator;
+package com.lmp.app.model.validator;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
