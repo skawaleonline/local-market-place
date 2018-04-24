@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
 import com.lmp.app.entity.BaseResponse;
@@ -114,10 +115,15 @@ public class StoreInventoryService {
     return map;
   }
 
-  public boolean updateStockCount(Map<String, Integer> map) {
-    if(map == null || map.size() == 0) {
+  @Transactional
+  public boolean updateStockCount(ShoppingCart cart) {
+    if(cart == null) {
       return false;
     }
+    Map<String, Integer> map = new HashMap<>();
+    cart.getItems().forEach(item -> {
+      map.put(item.getId(), item.getQuantity());
+    });
     Iterable<StoreItemEntity> items = repo.findAllById(map.keySet());
     if(items == null) {
       return false;

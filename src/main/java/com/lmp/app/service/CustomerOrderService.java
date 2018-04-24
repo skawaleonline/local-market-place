@@ -32,32 +32,36 @@ public class CustomerOrderService {
   @Autowired
   @Transactional
   public CustomerOrder placeOrder(CheckoutRequest cRequest) throws CartNotFoundException, ProductNotInStockException {
-    if(cRequest == null || Strings.isNullOrEmpty(cRequest.getUserId())) {
+    if (cRequest == null || Strings.isNullOrEmpty(cRequest.getUserId())) {
       return null;
     }
     // Get the cart for this order
     ShoppingCart cart = cartService.getCart(new ShoppingCartRequest(cRequest.getUserId()));
-    if(cart == null) {
+    if (cart == null) {
       throw new CartNotFoundException();
     }
     // check the if cart items are in stock
     List<String> ids = new ArrayList<>();
-    cart.getItems().forEach(item -> {ids.add(item.getId());});
+    cart.getItems().forEach(item -> {
+      ids.add(item.getId());
+    });
     Map<String, Integer> map = sItemService.getInStockCount(ids);
     ProductNotInStockException outOfStockException = new ProductNotInStockException();
-    for(CartItem item : cart.getItems()) {
-      if(item.getQuantity() > map.getOrDefault(item.getId(), 0)) {
+    for (CartItem item : cart.getItems()) {
+      if (item.getQuantity() > map.getOrDefault(item.getId(), 0)) {
         outOfStockException.getOutOfStockItems().add(item.getId());
       }
     }
-    if(outOfStockException.getOutOfStockItems().size() > 0) {
+    if (outOfStockException.getOutOfStockItems().size() > 0) {
       throw outOfStockException;
     }
 
     // if all good place the order
     CustomerOrderEntity saved = orderRepo.save(CustomerOrderEntity.fromCart(cart));
     // update stock for all items in cart
-    sItemService.updateStockCount(map);
+    sItemService.updateStockCount(cart);
+    //finally empty the cart
+    cartService.clear(cRequest.getUserId());
     return saved.toCustomerOrder();
   }
 }

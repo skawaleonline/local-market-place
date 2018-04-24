@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
+import com.lmp.app.service.AutoCompleteService;
 import com.lmp.app.utils.FileIOUtil;
 import com.lmp.config.ConfigProperties;
 import com.lmp.db.pojo.ItemEntity;
@@ -44,6 +45,9 @@ public class AppBootUp {
   private StoreInventoryRepository siRepo;
   @Autowired
   private SolrIndexer indexer;
+  @Autowired
+  private AutoCompleteService autoCService;
+
   private DecimalFormat df = new DecimalFormat("###.##");
 
   private void seedOneCategory(File file, List<StoreEntity> stores) throws IOException, SolrServerException {
@@ -77,6 +81,7 @@ public class AppBootUp {
         long time = System.currentTimeMillis();
         sItem.setStoreId(store.getId());
         sItem.getItem().setId(item.getId());
+        sItem.setStock(100);
         sItem.setAdded(time);
         sItem.setUpdated(time);
         sItem.setListPrice(item.getList_price() * (0.6f + random.nextFloat())); // min 0.6 factor for price
@@ -129,5 +134,6 @@ public class AppBootUp {
       }
       seedOneCategory(file, stores);
     }
+    autoCService.buildAutoCompleteCollection();
   }
 }

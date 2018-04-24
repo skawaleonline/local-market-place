@@ -35,6 +35,7 @@ public class Item {
   public static Item fromStoreInventoryEntity(StoreItemEntity itemEnyity) {
     Item item = new Item();
     BeanUtils.copyProperties(itemEnyity.getItem(), item);
+    item.stock = itemEnyity.getStock();
     item.id = itemEnyity.getId();
     item.onSale = itemEnyity.isOnSale();
     item.inStock = itemEnyity.getStock() > 0;

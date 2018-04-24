@@ -45,12 +45,23 @@ public class ShoppingCartService {
     return ShoppingCart.fromEntity(cart.get());
   }
 
-  public ShoppingCart add(ShoppingCartRequest cartRequest) throws CartNotFoundException {
-    ShoppingCart cart = getCart(cartRequest);
-    if(cart == null) {
-      // create new cart for user
+  public boolean clear(String id) throws CartNotFoundException {
+    if(Strings.isNullOrEmpty(id)) {
+      return false;
+    }
+    repo.deleteById(id);
+    return true;
+  }
+
+  public ShoppingCart add(ShoppingCartRequest cartRequest) {
+    ShoppingCart cart = null;
+    try {
+     cart = getCart(cartRequest);
+    } catch(CartNotFoundException e) {
+      //create new cart for user
       cart = ShoppingCart.forUser(cartRequest.getUserId());
     }
+
     CartItem item = cart.get(cartRequest.getItemId());
     if(item == null) {
       item = storeItemService.findById(cartRequest.getItemId());
