@@ -7,9 +7,6 @@ public class BaseResponse {
 
   protected int statusCode;
   protected String message;
-  protected long found;
-  protected int page;
-  protected int rows;
 
   public static BaseResponse invalidSearchRequest(String message) {
     BaseResponse response = new BaseResponse();
@@ -41,23 +38,5 @@ public class BaseResponse {
   }
   public void setErrorMessage(String message) {
     this.message = message;
-  }
-  public long getFound() {
-    return found;
-  }
-  public void setFound(long found) {
-    this.found = found;
-  }
-  public int getPage() {
-    return page;
-  }
-  public void setPage(int page) {
-    this.page = page;
-  }
-  public int getRows() {
-    return rows;
-  }
-  public void setRows(int rows) {
-    this.rows = rows;
   }
 }

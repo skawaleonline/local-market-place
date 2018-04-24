@@ -17,6 +17,9 @@ import com.lmp.solr.entity.ItemDoc;
 public class SearchResponse<T> extends BaseResponse {
 
   private Collection<T> results;
+  private long found;
+  private int page;
+  private int rows;
 
   private SearchResponse<T> blank() {
     this.statusCode = HttpStatus.OK.value();
@@ -78,5 +81,24 @@ public class SearchResponse<T> extends BaseResponse {
 
   public void setResults(List<T> results) {
     this.results = results;
+  }
+
+  public long getFound() {
+    return found;
+  }
+  public void setFound(long found) {
+    this.found = found;
+  }
+  public int getPage() {
+    return page;
+  }
+  public void setPage(int page) {
+    this.page = page;
+  }
+  public int getRows() {
+    return rows;
+  }
+  public void setRows(int rows) {
+    this.rows = rows;
   }
 }

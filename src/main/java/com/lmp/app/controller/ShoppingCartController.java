@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lmp.app.entity.BaseResponse;
+import com.google.common.base.Strings;
+import com.lmp.app.entity.CartResponse;
+import com.lmp.app.entity.CheckoutRequest;
+import com.lmp.app.entity.CustomerOrder;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCartRequest;
 import com.lmp.app.entity.validator.CartRequestValidator;
+import com.lmp.app.service.CustomerOrderService;
 import com.lmp.app.service.ShoppingCartService;
 import com.lmp.app.utils.ValidationErrorBuilder;
 
@@ -34,6 +38,8 @@ public class ShoppingCartController extends BaseController {
 
   @Autowired
   private ShoppingCartService service;
+  @Autowired
+  private CustomerOrderService orderService;
 
   @Autowired
   public ShoppingCartController(CartRequestValidator cartRequestValidator) {
@@ -49,13 +55,7 @@ public class ShoppingCartController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> getCart(@Valid @PathVariable("id") String id) {
     logger.info("getting cart with id {} " + id);
-    ShoppingCart cart = service.getCart(new ShoppingCartRequest(id));
-
-    if (cart == null) {
-      logger.info("no cart found or add failed {}", id);
-      return new ResponseEntity(HttpStatus.NOT_FOUND);
-    }
-    return new ResponseEntity<ShoppingCart>(cart, HttpStatus.OK);
+    return new ResponseEntity<ShoppingCart>(service.getCart(id), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -67,7 +67,6 @@ public class ShoppingCartController extends BaseController {
     }
     logger.info("shopping cart request " + shoppingCartRequest.toString());
     ShoppingCart cart = service.add(shoppingCartRequest);
-
     if (cart == null) {
       logger.info("no cart found or add failed {}", shoppingCartRequest.toString());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -83,7 +82,6 @@ public class ShoppingCartController extends BaseController {
     }
     logger.info("shopping cart request " + shoppingCartRequest.toString());
     ShoppingCart cart = service.remove(shoppingCartRequest);
-
     if (cart == null) {
       logger.info("no cart found or add failed {}", shoppingCartRequest.toString());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -100,7 +98,6 @@ public class ShoppingCartController extends BaseController {
     }
     logger.info("shopping cart request " + shoppingCartRequest.toString());
     ShoppingCart cart = service.update(shoppingCartRequest);
-    // logger.info("getting store details for store id {}", storeId);
 
     if (cart == null) {
       logger.info("no cart found or add failed {}", shoppingCartRequest.toString());
@@ -108,4 +105,20 @@ public class ShoppingCartController extends BaseController {
     }
     return new ResponseEntity<ShoppingCart>(cart, HttpStatus.OK);
   }
+
+  @RequestMapping(value = "/checkout", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> checkout(@Valid @RequestBody CheckoutRequest checkoutRequest, Errors errors) {
+    if(Strings.isNullOrEmpty(checkoutRequest.getUserId())) {
+      errors.reject("userId.required", "userId is required");
+    }
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
+    }
+    logger.info("Checkout request" + checkoutRequest.toString());
+    CustomerOrder order=  orderService.placeOrder(checkoutRequest);
+    logger.info("order placed. order number {} ", order.getId());
+    return new ResponseEntity<CartResponse>(CartResponse.orderPlaced(order), HttpStatus.OK);
+  }
+
 }

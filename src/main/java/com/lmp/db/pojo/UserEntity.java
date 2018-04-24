@@ -18,8 +18,9 @@ public class UserEntity {
   public String getId() {
     return id;
   }
-  public void setId(String id) {
+  public UserEntity setId(String id) {
     this.id = id;
+    return this;
   }
   public String getFirstName() {
     return firstName;

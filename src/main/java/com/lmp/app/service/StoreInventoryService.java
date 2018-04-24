@@ -1,7 +1,10 @@
   package com.lmp.app.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -16,6 +19,7 @@ import com.google.common.base.Strings;
 import com.lmp.app.entity.BaseResponse;
 import com.lmp.app.entity.SearchRequest;
 import com.lmp.app.entity.SearchResponse;
+import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
 import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.db.repository.StoreInventoryRepository;
@@ -96,5 +100,32 @@ public class StoreInventoryService {
   public CartItem findById(String id) {
     Optional<StoreItemEntity> sItem = repo.findById(id);
     return sItem.isPresent() ? sItem.get().toCartItem() : null;
+  }
+
+  public Map<String, Integer> getInStockCount(List<String> ids) {
+    Iterable<StoreItemEntity> items = repo.findAllById(ids);
+    Map<String, Integer> map = new HashMap<>();
+    if(items == null) {
+      return null;
+    }
+    items.iterator().forEachRemaining(item -> {
+      map.put(item.getId(), item.getStock());
+    });
+    return map;
+  }
+
+  public boolean updateStockCount(Map<String, Integer> map) {
+    if(map == null || map.size() == 0) {
+      return false;
+    }
+    Iterable<StoreItemEntity> items = repo.findAllById(map.keySet());
+    if(items == null) {
+      return false;
+    }
+    items.forEach(item -> {
+      item.setStock(item.getStock() - map.get(item.getId()));
+    });
+    repo.saveAll(items);
+    return true;
   }
 }

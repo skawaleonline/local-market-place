@@ -1,6 +1,6 @@
 package com.lmp.app.entity;
 
-public class User {
+public class Customer {
 
   private String id;
   private String firstName;

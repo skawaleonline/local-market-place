@@ -1,7 +1,5 @@
 package com.lmp.app.service;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -9,10 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lmp.app.entity.Item;
+import com.google.common.base.Strings;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
 import com.lmp.app.entity.ShoppingCartRequest;
+import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.db.pojo.ShoppingCartEntity;
 import com.lmp.db.repository.ShoppingCartRepository;
 
@@ -26,16 +25,27 @@ public class ShoppingCartService {
   @Autowired
   private StoreInventoryService storeItemService;
 
-  public ShoppingCart getCart(ShoppingCartRequest cartRequest) {
-    // user id is cart's id
-    Optional<ShoppingCartEntity> cart = repo.findById(cartRequest.getUserId());
-    if(!cart.isPresent()) {
+  public ShoppingCart getCart(ShoppingCartRequest cartRequest) throws CartNotFoundException {
+    if(cartRequest == null) {
       return null;
+    }
+    // user id is cart's id
+    return getCart(cartRequest.getUserId());
+  }
+
+  public ShoppingCart getCart(String id) throws CartNotFoundException{
+    if(Strings.isNullOrEmpty(id)) {
+      return null;
+    }
+    // user id is cart's id
+    Optional<ShoppingCartEntity> cart = repo.findById(id);
+    if(!cart.isPresent()) {
+      throw new CartNotFoundException();
     }
     return ShoppingCart.fromEntity(cart.get());
   }
 
-  public ShoppingCart add(ShoppingCartRequest cartRequest) {
+  public ShoppingCart add(ShoppingCartRequest cartRequest) throws CartNotFoundException {
     ShoppingCart cart = getCart(cartRequest);
     if(cart == null) {
       // create new cart for user
@@ -58,7 +68,7 @@ public class ShoppingCartService {
     return getCart(cartRequest);
   }
 
-  public ShoppingCart remove(ShoppingCartRequest cartRequest) {
+  public ShoppingCart remove(ShoppingCartRequest cartRequest) throws CartNotFoundException {
     ShoppingCart cart = getCart(cartRequest);
     if(cart == null) {
       return ShoppingCart.forUser(cartRequest.getUserId());
@@ -68,7 +78,7 @@ public class ShoppingCartService {
     return getCart(cartRequest);
   }
 
-  public ShoppingCart update(ShoppingCartRequest cartRequest) {
+  public ShoppingCart update(ShoppingCartRequest cartRequest) throws CartNotFoundException {
     ShoppingCart cart = getCart(cartRequest);
     if(cart == null) {
       return ShoppingCart.forUser(cartRequest.getUserId());
