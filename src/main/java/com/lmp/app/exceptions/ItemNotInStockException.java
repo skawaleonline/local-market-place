@@ -3,7 +3,7 @@ package com.lmp.app.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductNotInStockException extends RuntimeException {
+public class ItemNotInStockException extends RuntimeException {
 
   private List<String> outOfStockItems = new ArrayList<>();
 

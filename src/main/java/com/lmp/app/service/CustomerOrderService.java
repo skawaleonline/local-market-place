@@ -17,7 +17,7 @@ import com.lmp.app.entity.ShoppingCart.CartItem;
 import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
 import com.lmp.app.exceptions.OrderNotFoundException;
-import com.lmp.app.exceptions.ProductNotInStockException;
+import com.lmp.app.exceptions.ItemNotInStockException;
 import com.lmp.app.model.CheckoutRequest;
 import com.lmp.app.model.ShoppingCartRequest;
 import com.lmp.db.pojo.CustomerOrderEntity;
@@ -35,7 +35,7 @@ public class CustomerOrderService {
 
   @Autowired
   @Transactional
-  public CustomerOrder placeOrder(CheckoutRequest cRequest) throws CartNotFoundException, ProductNotInStockException {
+  public CustomerOrder placeOrder(CheckoutRequest cRequest) throws CartNotFoundException, ItemNotInStockException {
     if (cRequest == null || Strings.isNullOrEmpty(cRequest.getUserId())) {
       return null;
     }
@@ -50,7 +50,7 @@ public class CustomerOrderService {
       ids.add(item.getId());
     });
     Map<String, Integer> map = sItemService.getInStockCount(ids);
-    ProductNotInStockException outOfStockException = new ProductNotInStockException();
+    ItemNotInStockException outOfStockException = new ItemNotInStockException();
     for (CartItem item : cart.getItems()) {
       if (item.getQuantity() > map.getOrDefault(item.getId(), 0)) {
         outOfStockException.getOutOfStockItems().add(item.getId());

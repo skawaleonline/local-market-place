@@ -12,8 +12,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.lmp.app.entity.ResponseStatus;
 import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
+import com.lmp.app.exceptions.ItemNotFoundException;
 import com.lmp.app.exceptions.OrderNotFoundException;
-import com.lmp.app.exceptions.ProductNotInStockException;
+import com.lmp.app.exceptions.ItemNotInStockException;
 import com.lmp.app.model.BaseResponse;
 import com.lmp.app.model.CartResponse;
 import com.lmp.app.model.validator.ValidationError;
@@ -34,9 +35,9 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
     return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.CART_NOT_FOUND), HttpStatus.OK);
   }
 
-  @ExceptionHandler({ ProductNotInStockException.class })
+  @ExceptionHandler({ ItemNotInStockException.class })
   public ResponseEntity<CartResponse> handleProductNotInStockException(Exception ex, WebRequest request) {
-    ProductNotInStockException e = (ProductNotInStockException) ex;
+    ItemNotInStockException e = (ItemNotInStockException) ex;
     return new ResponseEntity<CartResponse>(CartResponse.productOutOfStock(e.getOutOfStockItems()), HttpStatus.OK);
   }
 
@@ -47,9 +48,14 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler({ InvalidOrderStatusException.class })
-  public ResponseEntity<BaseResponse> InvalidOrderStatusException(Exception ex, WebRequest request) {
+  public ResponseEntity<BaseResponse> handleInvalidOrderStatusException(Exception ex, WebRequest request) {
     return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.INVALID_ORDER_STATUS),
         HttpStatus.OK);
   }
 
+  @ExceptionHandler({ ItemNotFoundException.class })
+  public ResponseEntity<BaseResponse> handleItemNotFoundException(Exception ex, WebRequest request) {
+    return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.ITEM_NOT_FOUND),
+        HttpStatus.OK);
+  }
 }

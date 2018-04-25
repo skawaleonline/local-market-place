@@ -12,6 +12,7 @@ import com.google.common.base.Strings;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
 import com.lmp.app.exceptions.CartNotFoundException;
+import com.lmp.app.exceptions.ItemNotFoundException;
 import com.lmp.app.model.ShoppingCartRequest;
 import com.lmp.db.pojo.ShoppingCartEntity;
 import com.lmp.db.repository.ShoppingCartRepository;
@@ -61,7 +62,7 @@ public class ShoppingCartService {
     return true;
   }
 
-  public ShoppingCart add(ShoppingCartRequest cartRequest) {
+  public ShoppingCart add(ShoppingCartRequest cartRequest) throws ItemNotFoundException {
     ShoppingCart cart = null;
     try {
      cart = getCart(cartRequest);
@@ -74,8 +75,8 @@ public class ShoppingCartService {
     if(item == null) {
       item = storeItemService.findById(cartRequest.getItemId());
       if(item == null) {
-        logger.info("no store item");
-        return cart;
+        logger.info("no store item id: {}", cartRequest.getItemId());
+        throw new ItemNotFoundException();
       }
     }
     if(cart.getStoreId() != null && !cart.getStoreId().equals(item.getStoreId())) {
