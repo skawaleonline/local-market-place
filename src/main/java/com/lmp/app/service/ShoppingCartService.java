@@ -13,6 +13,7 @@ import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
 import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.app.exceptions.ItemNotFoundException;
+import com.lmp.app.exceptions.MuliplteStoreInCartException;
 import com.lmp.app.model.ShoppingCartRequest;
 import com.lmp.db.pojo.ShoppingCartEntity;
 import com.lmp.db.repository.ShoppingCartRepository;
@@ -27,7 +28,7 @@ public class ShoppingCartService {
   @Autowired
   private StoreInventoryService storeItemService;
 
-  public ShoppingCart getCart(ShoppingCartRequest cartRequest) throws CartNotFoundException {
+  public ShoppingCart getCart(ShoppingCartRequest cartRequest) {
     if(cartRequest == null) {
       return null;
     }
@@ -35,7 +36,7 @@ public class ShoppingCartService {
     return getCart(cartRequest.getUserId());
   }
 
-  public ShoppingCart getCart(String id) throws CartNotFoundException{
+  public ShoppingCart getCart(String id) {
     if(Strings.isNullOrEmpty(id)) {
       return null;
     }
@@ -48,11 +49,7 @@ public class ShoppingCartService {
   }
 
   /* clear items in cart not the items marked as saved for later*/
-  public boolean clear(String id) throws CartNotFoundException {
-    if(Strings.isNullOrEmpty(id)) {
-      return false;
-    }
-    ShoppingCart cart = getCart(id);
+  public boolean clear(ShoppingCart cart) {
     ListIterator<CartItem> lit = cart.getItems().listIterator();
     while(lit.hasNext()) {
       if(!lit.next().isSaveForLater()) {
@@ -62,7 +59,17 @@ public class ShoppingCartService {
     return true;
   }
 
-  public ShoppingCart add(ShoppingCartRequest cartRequest) throws ItemNotFoundException {
+  public boolean clear(String cartId) {
+    if(Strings.isNullOrEmpty(cartId)) {
+      return false;
+    }
+    ShoppingCart cart = getCart(cartId);
+    clear(cart);
+    repo.save(ShoppingCartEntity.toEntity(cart));
+    return true;
+  }
+
+  public ShoppingCart add(ShoppingCartRequest cartRequest) {
     ShoppingCart cart = null;
     try {
      cart = getCart(cartRequest);
@@ -79,8 +86,14 @@ public class ShoppingCartService {
         throw new ItemNotFoundException();
       }
     }
+    // requested item from different store
     if(cart.getStoreId() != null && !cart.getStoreId().equals(item.getStoreId())) {
-      throw new RuntimeException("cart can not have items from different stores");
+      // if force flag is true then clear the current cart and add incoming item
+      if(cartRequest.isClearFirst()) {
+        clear(cart);
+      } else {
+        throw new MuliplteStoreInCartException();
+      }
     }
     cart.setStoreId(item.getStoreId());
     cart.addToCart(item, cartRequest.getQuantity());
@@ -88,7 +101,7 @@ public class ShoppingCartService {
     return getCart(cartRequest);
   }
 
-  public ShoppingCart remove(ShoppingCartRequest cartRequest) throws CartNotFoundException {
+  public ShoppingCart remove(ShoppingCartRequest cartRequest) {
     ShoppingCart cart = getCart(cartRequest);
     if(cart == null) {
       return ShoppingCart.forUser(cartRequest.getUserId());
@@ -98,7 +111,7 @@ public class ShoppingCartService {
     return getCart(cartRequest);
   }
 
-  public ShoppingCart update(ShoppingCartRequest cartRequest) throws CartNotFoundException {
+  public ShoppingCart update(ShoppingCartRequest cartRequest) {
     ShoppingCart cart = getCart(cartRequest);
     if(cart == null) {
       return ShoppingCart.forUser(cartRequest.getUserId());
@@ -108,7 +121,7 @@ public class ShoppingCartService {
     return getCart(cartRequest);
   }
 
-  public ShoppingCart moveToList(ShoppingCartRequest cartRequest) throws CartNotFoundException {
+  public ShoppingCart moveToList(ShoppingCartRequest cartRequest) {
     ShoppingCart cart = getCart(cartRequest);
     if(cart == null) {
       return ShoppingCart.forUser(cartRequest.getUserId());

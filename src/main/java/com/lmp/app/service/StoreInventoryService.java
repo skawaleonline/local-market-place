@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.base.Strings;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
+import com.lmp.app.exceptions.ItemNotInStockException;
 import com.lmp.app.model.BaseResponse;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.app.model.SearchResponse;
@@ -113,6 +114,26 @@ public class StoreInventoryService {
       map.put(item.getId(), item.getStock());
     });
     return map;
+  }
+  
+  public void verifyItemStock(List<CartItem> items) {
+    if(items == null) {
+      return;
+    }
+    List<String> ids = new ArrayList<>();
+    items.forEach(item -> {
+      ids.add(item.getId());
+    });
+    Map<String, Integer> map = getInStockCount(ids);
+    ItemNotInStockException outOfStockException = new ItemNotInStockException();
+    for (CartItem item : items) {
+      if (item.getQuantity() > map.getOrDefault(item.getId(), 0)) {
+        outOfStockException.getOutOfStockItems().add(item.getId());
+      }
+    }
+    if (outOfStockException.getOutOfStockItems().size() > 0) {
+      throw outOfStockException;
+    }
   }
 
   @Transactional

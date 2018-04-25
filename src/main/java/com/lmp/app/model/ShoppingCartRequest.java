@@ -5,6 +5,7 @@ public class ShoppingCartRequest {
   private String userId;
   private String itemId;
   private int quantity;
+  private boolean clearFirst;
 
   public ShoppingCartRequest() {
   }
@@ -34,5 +35,13 @@ public class ShoppingCartRequest {
 
   public void setQuantity(int quantity) {
     this.quantity = quantity;
+  }
+
+  public boolean isClearFirst() {
+    return clearFirst;
+  }
+
+  public void setClearFirst(boolean clearFirst) {
+    this.clearFirst = clearFirst;
   }
 }

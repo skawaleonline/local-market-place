@@ -13,8 +13,9 @@ import com.lmp.app.entity.ResponseStatus;
 import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
 import com.lmp.app.exceptions.ItemNotFoundException;
-import com.lmp.app.exceptions.OrderNotFoundException;
 import com.lmp.app.exceptions.ItemNotInStockException;
+import com.lmp.app.exceptions.MuliplteStoreInCartException;
+import com.lmp.app.exceptions.OrderNotFoundException;
 import com.lmp.app.model.BaseResponse;
 import com.lmp.app.model.CartResponse;
 import com.lmp.app.model.validator.ValidationError;
@@ -56,6 +57,12 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
   @ExceptionHandler({ ItemNotFoundException.class })
   public ResponseEntity<BaseResponse> handleItemNotFoundException(Exception ex, WebRequest request) {
     return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.ITEM_NOT_FOUND),
+        HttpStatus.OK);
+  }
+
+  @ExceptionHandler({ MuliplteStoreInCartException.class })
+  public ResponseEntity<BaseResponse> handleMuliplteStoreInCartException(Exception ex, WebRequest request) {
+    return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.DIFFERENT_STORE_ITEMS_IN_CART),
         HttpStatus.OK);
   }
 }

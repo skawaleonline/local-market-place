@@ -26,6 +26,7 @@ import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.pojo.StoreEntity;
 import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.db.repository.ItemRepository;
+import com.lmp.db.repository.ShoppingCartRepository;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.db.repository.StoreRepository;
 import com.lmp.solr.indexer.SolrIndexer;
@@ -38,7 +39,9 @@ public class AppBootUp {
   @Autowired
   ConfigProperties prop;
   @Autowired
-  private ItemRepository itemRepo;
+  private ShoppingCartRepository cartRepo;
+  @Autowired
+  private ItemRepository itemRepo;  
   @Autowired
   private StoreRepository storeRepo;
   @Autowired
@@ -118,6 +121,7 @@ public class AppBootUp {
       return ;
     }
     if(prop.isCleanupAndSeedData()) {
+      cartRepo.deleteAll();
       itemRepo.deleteAll();
       indexer.deleteAll();
       siRepo.deleteAll();

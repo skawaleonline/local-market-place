@@ -35,7 +35,7 @@ public class CustomerOrderService {
 
   @Autowired
   @Transactional
-  public CustomerOrder placeOrder(CheckoutRequest cRequest) throws CartNotFoundException, ItemNotInStockException {
+  public CustomerOrder placeOrder(CheckoutRequest cRequest) {
     if (cRequest == null || Strings.isNullOrEmpty(cRequest.getUserId())) {
       return null;
     }
@@ -45,20 +45,7 @@ public class CustomerOrderService {
       throw new CartNotFoundException();
     }
     // check the if cart items are in stock
-    List<String> ids = new ArrayList<>();
-    cart.getItems().forEach(item -> {
-      ids.add(item.getId());
-    });
-    Map<String, Integer> map = sItemService.getInStockCount(ids);
-    ItemNotInStockException outOfStockException = new ItemNotInStockException();
-    for (CartItem item : cart.getItems()) {
-      if (item.getQuantity() > map.getOrDefault(item.getId(), 0)) {
-        outOfStockException.getOutOfStockItems().add(item.getId());
-      }
-    }
-    if (outOfStockException.getOutOfStockItems().size() > 0) {
-      throw outOfStockException;
-    }
+    sItemService.verifyItemStock(cart.getItems());
 
     // if all good place the order
     CustomerOrderEntity saved = orderRepo.save(CustomerOrderEntity.fromCart(cart));
@@ -68,7 +55,7 @@ public class CustomerOrderService {
   }
 
   @Transactional
-  public CustomerOrder confirmOrder(CheckoutRequest cRequest) throws OrderNotFoundException, InvalidOrderStatusException {
+  public CustomerOrder confirmOrder(CheckoutRequest cRequest) {
     if (cRequest == null || Strings.isNullOrEmpty(cRequest.getUserId()) 
         || Strings.isNullOrEmpty(cRequest.getOrderId())) {
       return null;
@@ -97,7 +84,7 @@ public class CustomerOrderService {
   }
 
   @Transactional
-  public CustomerOrder cancelCheckout(CheckoutRequest cRequest) throws OrderNotFoundException, InvalidOrderStatusException {
+  public CustomerOrder cancelCheckout(CheckoutRequest cRequest) {
     if (cRequest == null || Strings.isNullOrEmpty(cRequest.getUserId()) 
         || Strings.isNullOrEmpty(cRequest.getOrderId())) {
       return null;
