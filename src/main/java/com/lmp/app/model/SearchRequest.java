@@ -18,6 +18,8 @@ public class SearchRequest extends PageableRequest {
   private double lng;
   private int radius = 5;
 
+  public SearchRequest() {
+  }
   public SearchRequest(int page, int count) {
     super(page, count);
   }
