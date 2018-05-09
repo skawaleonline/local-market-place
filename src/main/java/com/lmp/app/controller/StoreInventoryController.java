@@ -1,5 +1,8 @@
 package com.lmp.app.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -72,13 +75,15 @@ public class StoreInventoryController extends BaseController {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
     logger.info("searching for the request {}", searchRequest);
-    ResponseFilter response = filterService.getFiltersFor(searchRequest, ItemField.BRAND);
+    List<ItemField> facetFields = new ArrayList<>();
+    facetFields.add(ItemField.BRAND);
+    List<ResponseFilter> response = filterService.getFiltersFor(searchRequest, facetFields);
     // logger.info("getting store details for store id {}", storeId);
 
     if (response == null) {
       logger.info("no results for request {}", searchRequest.toString());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<ResponseFilter>(response, HttpStatus.OK);
+    return new ResponseEntity<List<ResponseFilter>>(response, HttpStatus.OK);
   }
 }

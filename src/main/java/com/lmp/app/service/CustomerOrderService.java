@@ -1,11 +1,10 @@
 package com.lmp.app.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +12,12 @@ import com.google.common.base.Strings;
 import com.lmp.app.entity.CustomerOrder;
 import com.lmp.app.entity.OrderStatus;
 import com.lmp.app.entity.ShoppingCart;
-import com.lmp.app.entity.ShoppingCart.CartItem;
 import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
 import com.lmp.app.exceptions.OrderNotFoundException;
-import com.lmp.app.exceptions.ItemNotInStockException;
 import com.lmp.app.model.CheckoutRequest;
+import com.lmp.app.model.CustomerOrderRequest;
+import com.lmp.app.model.SearchResponse;
 import com.lmp.app.model.ShoppingCartRequest;
 import com.lmp.db.pojo.CustomerOrderEntity;
 import com.lmp.db.repository.CustomerOrderRepository;
@@ -33,7 +32,26 @@ public class CustomerOrderService {
   @Autowired
   private CustomerOrderRepository orderRepo;
 
-  @Autowired
+  public SearchResponse<CustomerOrder> getOrdersByUserId(CustomerOrderRequest request) {
+    Page<CustomerOrderEntity> orders = null;
+    if(request.isGetAllStatusRequest()) {
+      orders = orderRepo.findAllByCustomerId(request.getUserId(), request.pageRequesst());
+    } else {
+      orders = orderRepo.findAllByCustomerIdAndStatus(request.getUserId(), request.getOrderStatus(), request.pageRequesst());
+    }
+    return SearchResponse.buildOrderResponse(orders);
+  }
+
+  public SearchResponse<CustomerOrder> getOrdersByStoreId(CustomerOrderRequest request) {
+    Page<CustomerOrderEntity> orders = null;
+    if(request.isGetAllStatusRequest()) {
+      orders = orderRepo.findAllByStoreId(request.getStoreId(), request.pageRequesst());
+    } else {
+      orders = orderRepo.findAllByStoreIdAndStatus(request.getStoreId(), request.getOrderStatus(), request.pageRequesst());
+    }
+    return SearchResponse.buildOrderResponse(orders);
+  }
+
   @Transactional
   public CustomerOrder placeOrder(CheckoutRequest cRequest) {
     if (cRequest == null || Strings.isNullOrEmpty(cRequest.getUserId())) {

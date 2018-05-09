@@ -156,6 +156,9 @@ public class ShoppingCart {
       return ;
     }
     items.remove(get(itemOrderId));
+    if(items.isEmpty()) {
+      storeId = null;
+    }
   }
 
   public void update(String itemId, int quantity) {

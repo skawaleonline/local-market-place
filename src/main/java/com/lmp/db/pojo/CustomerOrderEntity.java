@@ -1,9 +1,11 @@
 package com.lmp.db.pojo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.lmp.app.entity.CustomerOrder;
@@ -16,7 +18,9 @@ public class CustomerOrderEntity {
 
   @Id
   private String id;
+  @Indexed
   private UserEntity customer;
+  @Indexed
   private StoreEntity store;
   private List<CartItem> items;
   private OrderStatus status;
@@ -33,6 +37,18 @@ public class CustomerOrderEntity {
     order.setStoreId(this.store.getId());
     return order;
   }
+
+  public static List<CustomerOrder> toCustomerOrderList(List<CustomerOrderEntity> entities) {
+    List<CustomerOrder> orders = new ArrayList<>();
+    if(entities == null || entities.isEmpty()) {
+      return orders;
+    }
+    for (CustomerOrderEntity entity : entities) {
+      orders.add(entity.toCustomerOrder());
+    }
+    return orders;
+  }
+
   public static CustomerOrderEntity fromCart(ShoppingCart cart) {
     CustomerOrderEntity entity = new CustomerOrderEntity().setStore(new StoreEntity().setId(cart.getStoreId()))
         .setCustomer(new UserEntity().setId(cart.getUserId()))

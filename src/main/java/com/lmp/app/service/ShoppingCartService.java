@@ -29,7 +29,7 @@ public class ShoppingCartService {
   private StoreInventoryService storeItemService;
 
   public ShoppingCart getCart(ShoppingCartRequest cartRequest) {
-    if(cartRequest == null) {
+    if(cartRequest == null || cartRequest.getUserId() == null) {
       return null;
     }
     // user id is cart's id

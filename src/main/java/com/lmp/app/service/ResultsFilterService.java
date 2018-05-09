@@ -22,17 +22,17 @@ public class ResultsFilterService {
   @Autowired
   private StoreService storeService;
 
-  public ResponseFilter getFiltersFor(SearchRequest sRequest, ItemField facetField) {
+  public List<ResponseFilter> getFiltersFor(SearchRequest sRequest, List<ItemField> facetFields) {
     FacetPage<ItemDoc> docs = null;
     // Search for query across all the stores
     if (Strings.isNullOrEmpty(sRequest.getStoreId())) {
       List<String> storeIds = storeService.getStoresIdsAround(sRequest);
-      docs = solrService.facetSearch(sRequest, storeIds, facetField);
+      docs = solrService.facetSearch(sRequest, storeIds, facetFields);
     } else {
       // get all items in the store
       // search for query in store
-      docs = solrService.facetSearch(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}), facetField);
+      docs = solrService.facetSearch(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}), facetFields);
     }
-    return ResponseFilter.buildResultFilter(facetField.getValue(), docs);
+    return ResponseFilter.buildResultFilter(facetFields, docs);
   }
 }

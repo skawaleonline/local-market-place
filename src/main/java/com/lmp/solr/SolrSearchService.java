@@ -92,7 +92,7 @@ public class SolrSearchService {
   }
 
   @Cacheable("solr-facet-docs")
-  public FacetPage<ItemDoc> facetSearch(SearchRequest sRequest, List<String> storesIds, ItemField facetField) {
+  public FacetPage<ItemDoc> facetSearch(SearchRequest sRequest, List<String> storesIds, List<ItemField> facetField) {
     if (facetField == null) {
       logger.error("facet field missing");
       return null;
@@ -105,7 +105,10 @@ public class SolrSearchService {
     }
     Criteria conditions = addSearchConditions(sRequest, storesIds);
     logger.info("searching for solr facet query {}", conditions.toString());
-    FacetOptions fo = new FacetOptions().addFacetOnField(facetField.getValue());
+    FacetOptions fo = new FacetOptions();
+    for (ItemField itemField : facetField) {
+      fo.addFacetOnField(itemField.getValue());
+    }
     fo.setPageable(sRequest.pageRequesst());
     SimpleFacetQuery facetQuery = new SimpleFacetQuery(conditions)
         .setFacetOptions(fo);

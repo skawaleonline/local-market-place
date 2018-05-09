@@ -5,53 +5,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
 import com.google.common.base.Strings;
 import com.lmp.app.entity.FilterField;
 
-public class SearchRequest {
+public class SearchRequest extends PageableRequest {
 
   private String query;
   private String storeId;
-  @Min(0)
-  private int page;
-  @Min(0)
-  @Max(50)
-  private int rows;
   private Map<String, List<String>> filters = new HashMap<>();
   private List<String> fields = new ArrayList<>();
   private double lat;
   private double lng;
   private int radius = 5;
 
+  public SearchRequest(int page, int count) {
+    super(page, count);
+  }
+
   public static SearchRequest createFor(String q, int page, int count) {
-    SearchRequest sr = new SearchRequest();
+    SearchRequest sr = new SearchRequest(page, count);
     sr.query = q;
-    sr.page = page;
-    sr.rows = count;
     return sr;
   }
 
   public static SearchRequest createSISearch(String storeId, String q, int page, int count) {
-    SearchRequest sr = new SearchRequest();
+    SearchRequest sr = new SearchRequest(page, count);
     sr.query = q;
     sr.storeId = storeId;
-    sr.page = page;
-    sr.rows = count;
     return sr;
-  }
-
-  public Pageable pageRequesst() {
-    return new PageRequest(getPage(), getRows());
-  }
-
-  public long fetchedCount() {
-    return (this.page) * this.rows;
   }
 
   public boolean isSolrSearchNeeded() {
@@ -99,18 +80,6 @@ public class SearchRequest {
   public void setQuery(String query) {
     this.query = query;
   }
-  public int getPage() {
-    return page;
-  }
-  public void setPage(int page) {
-    this.page = page;
-  }
-  public int getRows() {
-    return rows;
-  }
-  public void setRows(int rows) {
-    this.rows = rows;
-  }
   public Map<String, List<String>> getFilters() {
     return filters;
   }
@@ -157,8 +126,6 @@ public class SearchRequest {
   public String toString() {
     return "query: " + query 
         + "storeId: " + storeId
-        + "page: " + page
-        + "size: " + rows
         + "filters: " + filters == null ? "" : filters.toString()
         + "fields: " + fields == null ? "" : fields.toString();
   }

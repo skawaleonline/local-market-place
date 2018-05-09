@@ -8,12 +8,20 @@ import org.springframework.data.solr.core.query.result.FacetFieldEntry;
 import org.springframework.data.solr.core.query.result.FacetPage;
 
 import com.lmp.solr.entity.ItemDoc;
+import com.lmp.solr.entity.ItemField;
 
 public class ResponseFilter {
 
   private String filterName;
   private List<CountPair> values = new ArrayList<>();
 
+  public static List<ResponseFilter> buildResultFilter(List<ItemField> fieldNames, FacetPage<ItemDoc> docs) {
+    List<ResponseFilter> response = new ArrayList<>();
+    for (ItemField fieldName : fieldNames) {
+      response.add(buildResultFilter(fieldName.getValue(), docs));
+    }
+    return response;
+  }
   public static ResponseFilter buildResultFilter(String fieldName, FacetPage<ItemDoc> docs) {
     ResponseFilter response = new ResponseFilter();
     response.filterName = fieldName;

@@ -10,8 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 
 import com.google.common.collect.Lists;
+import com.lmp.app.entity.CustomerOrder;
 import com.lmp.app.entity.Item;
 import com.lmp.app.entity.StoreInventory;
+import com.lmp.db.pojo.CustomerOrderEntity;
 import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.solr.entity.ItemDoc;
@@ -26,6 +28,16 @@ public class SearchResponse<T> extends BaseResponse {
   private SearchResponse<T> blank() {
     this.statusCode = HttpStatus.OK.value();
     return this;
+  }
+
+  public static SearchResponse<CustomerOrder> buildOrderResponse(Page<CustomerOrderEntity> page) {
+    SearchResponse<CustomerOrder> response = new SearchResponse<>();
+    response.statusCode = HttpStatus.OK.value();
+    response.found = page.getTotalElements();
+    response.page = page.getPageable().getPageNumber();
+    response.rows = page.getPageable().getPageSize();
+    response.results = CustomerOrderEntity.toCustomerOrderList(page.getContent());
+    return response;
   }
   private static Map<String, StoreInventory> buildStoreItemMap(List<StoreItemEntity> items) {
     Map<String, StoreInventory> map = new HashMap<>();
