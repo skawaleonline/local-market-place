@@ -144,7 +144,12 @@ public class ShoppingCart {
   public void addToCart(CartItem item, int quantity) {
     CartItem existing = get(item.getId());
     if(existing != null) {
-      existing.changeQuantities(quantity);
+      if(existing.saveForLater) { // move from list to cart
+        existing.setQuantity(quantity);
+        existing.saveForLater = false;
+      } else {
+        existing.changeQuantities(quantity);
+      }
     } else {
       item.setQuantity(quantity);
       items.add(item);
