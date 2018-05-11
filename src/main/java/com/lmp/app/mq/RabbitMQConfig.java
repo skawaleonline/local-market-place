@@ -21,29 +21,24 @@ public class RabbitMQConfig {
 
   static final String queueName = "checkout-queue";
 
-  @Bean
+  //@Bean
   Queue queue() {
     return new Queue(queueName, false);
   }
 
-//  @Bean
-//  TopicExchange exchange() {
-//    return new TopicExchange(topicExchangeName);
-//  }
-
-  @Bean
+  //@Bean
   CustomExchange delayExchange() {
       Map<String, Object> args = new HashMap<String, Object>();
       args.put("x-delayed-type", "direct");
       return new CustomExchange("topicExchangeName", "x-delayed-message", true, false, args);
   }
 
-  @Bean
+  //@Bean
   Binding binding(Queue queue, CustomExchange exchange) {
     return BindingBuilder.bind(queue).to(exchange).with("cart-checkout").noargs();
   }
 
-  @Bean
+  //@Bean
   SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
       MessageListenerAdapter listenerAdapter) {
     SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
@@ -53,7 +48,7 @@ public class RabbitMQConfig {
     return container;
   }
 
-  @Bean
+  //@Bean
   MessageListenerAdapter listenerAdapter(CartCheckoutReceiver receiver) {
     return new MessageListenerAdapter(receiver, "receiveMessage");
   }
