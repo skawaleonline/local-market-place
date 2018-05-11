@@ -31,10 +31,10 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
     return super.handleExceptionInternal(exception, error, headers, status, request);
   }
 
-  @ExceptionHandler({ CartNotFoundException.class })
-  public ResponseEntity<BaseResponse> handleCartNotFoundException(Exception ex, WebRequest request) {
-    return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.CART_NOT_FOUND), HttpStatus.OK);
-  }
+//  @ExceptionHandler({ CartNotFoundException.class })
+//  public ResponseEntity<BaseResponse> handleCartNotFoundException(Exception ex, WebRequest request) {
+//    return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.CART_NOT_FOUND), HttpStatus.OK);
+//  }
 
   @ExceptionHandler({ ItemNotInStockException.class })
   public ResponseEntity<CartResponse> handleProductNotInStockException(Exception ex, WebRequest request) {

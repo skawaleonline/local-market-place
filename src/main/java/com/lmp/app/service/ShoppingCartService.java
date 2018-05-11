@@ -42,8 +42,8 @@ public class ShoppingCartService {
     }
     // user id is cart's id
     Optional<ShoppingCartEntity> cart = repo.findById(id);
-    if(!cart.isPresent()) {
-      throw new CartNotFoundException();
+    if(!cart.isPresent()) { // return an empty cart
+      return ShoppingCart.forUser(id);
     }
     return ShoppingCart.fromEntity(cart.get());
   }

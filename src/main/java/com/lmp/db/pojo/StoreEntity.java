@@ -20,6 +20,8 @@ public class StoreEntity {
   @Nullable
   private Location location;
   private String address;
+  @Nullable
+  private UserEntity storeOwner;
   private StoreCapabilities capabilities;
 
   public String getId() {
@@ -34,6 +36,12 @@ public class StoreEntity {
   }
   public void setName(String name) {
     this.name = name;
+  }
+  public UserEntity getStoreOwner() {
+    return storeOwner;
+  }
+  public void setStoreOwner(UserEntity storeOwner) {
+    this.storeOwner = storeOwner;
   }
   public String getFranchise() {
     return franchise;

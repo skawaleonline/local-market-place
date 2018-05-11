@@ -2,7 +2,6 @@ package com.lmp.app.bootup;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,10 +24,13 @@ import com.lmp.config.ConfigProperties;
 import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.pojo.StoreEntity;
 import com.lmp.db.pojo.StoreItemEntity;
+import com.lmp.db.pojo.UserEntity;
+import com.lmp.db.repository.CustomerOrderRepository;
 import com.lmp.db.repository.ItemRepository;
 import com.lmp.db.repository.ShoppingCartRepository;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.db.repository.StoreRepository;
+import com.lmp.db.repository.UserRepository;
 import com.lmp.solr.indexer.SolrIndexer;
 
 @Component
@@ -50,8 +52,10 @@ public class AppBootUp {
   private SolrIndexer indexer;
   @Autowired
   private AutoCompleteService autoCService;
-
-  private DecimalFormat df = new DecimalFormat("###.##");
+  @Autowired
+  private UserRepository userRepo;
+  @Autowired
+  private CustomerOrderRepository orderRepo;
 
   private void seedOneCategory(File file, List<StoreEntity> stores) throws IOException, SolrServerException {
     ObjectMapper objectMapper = new ObjectMapper();
@@ -102,6 +106,23 @@ public class AppBootUp {
     return Joiner.on(" ").join(storeIdsToIndex);
   }
 
+  private void seedTestUsers() {
+    List<String> emailIds = new ArrayList<>();
+    emailIds.add("123");
+    emailIds.add("skawaleonline@gmail.com");
+    emailIds.add("sumit@plmlogix.com");
+    emailIds.add("store1-owner@plmlogix.com");
+    emailIds.add("store2-owner@plmlogix.com");
+    emailIds.add("store3-owner@plmlogix.com");
+    for (String string : emailIds) {
+      UserEntity entity = new UserEntity();
+      entity.setId(string);
+      entity.setEmail(string);
+      entity.setFirstName("testuser");
+      entity.setFirstName(string.split("@")[0]);
+      userRepo.save(entity);
+    }
+  }
   private void seedStores() throws IOException{
     logger.info("Seeding stores : " + prop.getStoreSeedFile());
     ObjectMapper objectMapper = new ObjectMapper();
@@ -125,7 +146,10 @@ public class AppBootUp {
       itemRepo.deleteAll();
       indexer.deleteAll();
       siRepo.deleteAll();
+      orderRepo.deleteAll();
       storeRepo.deleteAll();
+      userRepo.deleteAll();
+      seedTestUsers();
       seedStores();
       FileIOUtil.deleteFile(prop.getSeededFiles());
     }

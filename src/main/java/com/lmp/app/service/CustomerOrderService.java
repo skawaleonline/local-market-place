@@ -3,6 +3,8 @@ package com.lmp.app.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,14 @@ import com.lmp.app.model.CheckoutRequest;
 import com.lmp.app.model.CustomerOrderRequest;
 import com.lmp.app.model.SearchResponse;
 import com.lmp.app.model.ShoppingCartRequest;
+import com.lmp.app.mq.Publisher;
 import com.lmp.db.pojo.CustomerOrderEntity;
 import com.lmp.db.repository.CustomerOrderRepository;
 
 @Service
 public class CustomerOrderService {
+
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
   private ShoppingCartService cartService;
@@ -31,6 +36,19 @@ public class CustomerOrderService {
   private StoreInventoryService sItemService;
   @Autowired
   private CustomerOrderRepository orderRepo;
+  @Autowired
+  private Publisher publish;
+
+  public CustomerOrder getOrderByOrderId(String id) {
+    if(Strings.isNullOrEmpty(id)) {
+      return null;
+    }
+    Optional<CustomerOrderEntity> entity = orderRepo.findById(id);
+    if(!entity.isPresent()) {
+      return null;
+    }
+    return entity.get().toCustomerOrder();
+  }
 
   public SearchResponse<CustomerOrder> getOrdersByUserId(CustomerOrderRequest request) {
     Page<CustomerOrderEntity> orders = null;
@@ -69,6 +87,13 @@ public class CustomerOrderService {
     CustomerOrderEntity saved = orderRepo.save(CustomerOrderEntity.fromCart(cart));
     // update stock for all items in cart
     sItemService.updateStockCount(cart.getItems(), false);
+    cRequest.setOrderId(saved.getId());
+    //queue the order
+    /*try {
+      publish.publish(cRequest);
+    } catch (Exception e){
+      logger.error("error queuing the checkout order in queue", e);
+    }*/
     return saved.toCustomerOrder();
   }
 
