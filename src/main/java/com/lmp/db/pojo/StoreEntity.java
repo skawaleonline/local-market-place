@@ -67,45 +67,45 @@ public class StoreEntity {
   public void setCapabilities(StoreCapabilities capabilities) {
     this.capabilities = capabilities;
   }
-}
 
-/**
- * currency type
- * inventory categories
- * store times
- * liquor sold?
- * cooked food served?
- * @author skawale
- *
- */
-class StoreCapabilities {
-  private boolean liquorSold;
-  private boolean foodServed;
-  private Set<String> listedCategories;
-  private Currency currency;
-  public boolean isLiquorSold() {
-    return liquorSold;
-  }
-  public void setLiquorSold(boolean liquorSold) {
-    this.liquorSold = liquorSold;
-  }
-  public boolean isFoodServed() {
-    return foodServed;
-  }
-  public void setFoodServed(boolean foodServed) {
-    this.foodServed = foodServed;
-  }
-  public Set<String> getListedCategories() {
-    return listedCategories;
-  }
-  public void setListedCategories(Set<String> listedCategories) {
-    this.listedCategories = listedCategories;
-  }
-  public Currency getCurrency() {
-    return currency;
-  }
-  public void setCurrency(Currency currency) {
-    this.currency = currency;
+  /**
+   * currency type
+   * inventory categories
+   * store times
+   * liquor sold?
+   * cooked food served?
+   * @author skawale
+   *
+   */
+  public static class StoreCapabilities {
+    private boolean liquorSold;
+    private boolean foodServed;
+    private Set<String> listedCategories;
+    private Currency currency;
+    public boolean isLiquorSold() {
+      return liquorSold;
+    }
+    public void setLiquorSold(boolean liquorSold) {
+      this.liquorSold = liquorSold;
+    }
+    public boolean isFoodServed() {
+      return foodServed;
+    }
+    public void setFoodServed(boolean foodServed) {
+      this.foodServed = foodServed;
+    }
+    public Set<String> getListedCategories() {
+      return listedCategories;
+    }
+    public void setListedCategories(Set<String> listedCategories) {
+      this.listedCategories = listedCategories;
+    }
+    public Currency getCurrency() {
+      return currency;
+    }
+    public void setCurrency(Currency currency) {
+      this.currency = currency;
+    }
   }
 }
 

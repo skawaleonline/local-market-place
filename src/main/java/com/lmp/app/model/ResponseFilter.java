@@ -3,6 +3,7 @@ package com.lmp.app.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.solr.core.query.result.FacetFieldEntry;
@@ -44,6 +45,13 @@ public class ResponseFilter {
     return response;
   }
 
+  public static ResponseFilter fromList(String fieldName, List<String> categories) {
+    ResponseFilter response = new ResponseFilter(fieldName);
+    for (String category : categories) {
+      response.values.add(new CountPair(category, 1L));
+    }
+    return response;
+  }
   public static ResponseFilter fromMap(String fieldName, Map<PriceGroup, Integer> map) {
     ResponseFilter response = new ResponseFilter(fieldName);
     
