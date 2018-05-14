@@ -75,9 +75,7 @@ public class StoreInventoryController extends BaseController {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
     logger.info("searching for the request {}", searchRequest);
-    List<ItemField> facetFields = new ArrayList<>();
-    facetFields.add(ItemField.BRAND);
-    List<ResponseFilter> response = filterService.getFiltersFor(searchRequest, facetFields);
+    List<ResponseFilter> response = filterService.getFiltersFor(searchRequest);
     // logger.info("getting store details for store id {}", storeId);
 
     if (response == null) {

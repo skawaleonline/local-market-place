@@ -24,6 +24,8 @@ public class ItemDoc {
   private String upc;
   @Field("stores")
   private String stores;
+  @Field("price")
+  private float salePrice;
 
 
   public static ItemDoc fromItem(ItemEntity item, String storeids) {
@@ -35,6 +37,7 @@ public class ItemDoc {
     itemDoc.id = item.getId();
     itemDoc.upc = Strings.nullToEmpty(Long.toString(item.getUpc()));
     itemDoc.brand = Strings.nullToEmpty(item.getBrand());
+    itemDoc.salePrice = item.getOffer_price();
     itemDoc.setStores(storeids);
     if(item.getCategories() != null) {
       itemDoc.categories = joiner.join(item.getCategories());
@@ -70,6 +73,14 @@ public class ItemDoc {
   }
   public void setContent(String content) {
     this.content = content;
+  }
+
+  public float getSalePrice() {
+    return salePrice;
+  }
+
+  public void setSalePrice(float salePrice) {
+    this.salePrice = salePrice;
   }
 
   public String getUpc() {

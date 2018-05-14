@@ -40,7 +40,7 @@ public class StoreInventoryService {
   @Autowired
   StoreService storeService;
 
-  private Page<ItemDoc> searchSolr(SearchRequest sRequest, List<String> storeIds) {
+   public Page<ItemDoc> searchSolr(SearchRequest sRequest, List<String> storeIds) {
     // check if we need solr search for the request
     Page<ItemDoc> results = solrService.search(sRequest, storeIds);
     if (results == null || results.getTotalElements() <= 0 || results.getTotalElements() <= sRequest.fetchedCount()) {

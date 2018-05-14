@@ -1,17 +1,17 @@
 package com.lmp.app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.lmp.app.model.ResponseFilter;
 import com.lmp.app.model.SearchRequest;
+import com.lmp.db.pojo.StoreEntity;
 import com.lmp.solr.SolrSearchService;
-import com.lmp.solr.entity.ItemDoc;
 import com.lmp.solr.entity.ItemField;
 
 @Service
@@ -22,17 +22,29 @@ public class ResultsFilterService {
   @Autowired
   private StoreService storeService;
 
-  public List<ResponseFilter> getFiltersFor(SearchRequest sRequest, List<ItemField> facetFields) {
-    FacetPage<ItemDoc> docs = null;
+  public List<ResponseFilter> getFiltersFor(SearchRequest sRequest) {
+    List<ResponseFilter> facets = new ArrayList<>();
+    List<StoreEntity> stores = null;
     // Search for query across all the stores
     if (Strings.isNullOrEmpty(sRequest.getStoreId())) {
-      List<String> storeIds = storeService.getStoresIdsAround(sRequest);
-      docs = solrService.facetSearch(sRequest, storeIds, facetFields);
+      stores = storeService.getStoresAround(sRequest);
     } else {
       // get all items in the store
+      stores = Lists.asList(storeService.getStoreById(sRequest.getStoreId()), new StoreEntity[] {});
       // search for query in store
-      docs = solrService.facetSearch(sRequest, Lists.asList(sRequest.getStoreId(), new String[] {}), facetFields);
     }
-    return ResponseFilter.buildResultFilter(facetFields, docs);
+    List<String> storeIds = new ArrayList<>();
+    stores.forEach(store -> {
+      storeIds.add(store.getId());
+    });
+    List<ItemField> facetFields = new ArrayList<>();
+    facetFields.add(ItemField.BRAND);
+    //facetFields.add(ItemField.PRICE);
+    // brand facet
+    facets = ResponseFilter.buildResultFilter(facetFields, solrService.facetSearch(sRequest, storeIds, facetFields));
+    // store facet
+    facets.add(ResponseFilter.buildStoreFilter("store", stores));
+    // price facet
+    return facets;
   }
 }
