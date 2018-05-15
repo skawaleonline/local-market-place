@@ -69,6 +69,13 @@ public class SearchRequest extends PageableRequest {
     return filters.get(FilterField.CATEGORY.getValue());
   }
 
+  public String priceFilter() {
+    if(filters == null || !filters.containsKey(FilterField.PRICE_RANGE.getValue())) {
+      return null;
+    }
+    return filters.get(FilterField.PRICE_RANGE.getValue()).get(0).trim();
+  }
+
   public List<String> upcFilter() {
     if(filters == null || !filters.containsKey(FilterField.UPC.getValue())) {
       return null;

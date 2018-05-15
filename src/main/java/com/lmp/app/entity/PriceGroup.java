@@ -5,28 +5,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.assertj.core.util.Strings;
+import com.google.common.base.Strings;
 
 public enum PriceGroup {
 
-  ZERO_TO_25("Under $25",0, 0, 25),
-  _25_TO_50("$25 to $50", 1, 25, 50),
-  _50_TO_100("$50 to $100", 2, 50, 100),
-  _100_AND_ABOVE("$100 & Above",3, 100, 0);
+  PRICE_GROUP_ONE("Under $15",0, 0, 15),
+  PRICE_GROUP_TWO("$15 to $50", 1, 15, 50),
+  PRICE_GROUP_THREE("$50 to $100", 2, 50, 100),
+  PRICE_GROUP_FOUR("$100 & Above",3, 100, 0);
 
   public static final Map<Integer, PriceGroup> orderMap;
   public static final Map<String, PriceGroup> nameMap;
   static {
     orderMap = new HashMap<>();
-    orderMap.put(0, ZERO_TO_25);
-    orderMap.put(1, _25_TO_50);
-    orderMap.put(2, _50_TO_100);
-    orderMap.put(3, _100_AND_ABOVE);
+    orderMap.put(0, PRICE_GROUP_ONE);
+    orderMap.put(1, PRICE_GROUP_TWO);
+    orderMap.put(2, PRICE_GROUP_THREE);
+    orderMap.put(3, PRICE_GROUP_FOUR);
     nameMap = new HashMap<>();
-    nameMap.put("Under $25", ZERO_TO_25);
-    nameMap.put("$25 to $50", _25_TO_50);
-    nameMap.put("$50 to $100", _50_TO_100);
-    nameMap.put("$100 & Above", _100_AND_ABOVE);
+    nameMap.put("under $15", PRICE_GROUP_ONE);
+    nameMap.put("$15 to $50", PRICE_GROUP_TWO);
+    nameMap.put("$50 to $100", PRICE_GROUP_THREE);
+    nameMap.put("$100 & above", PRICE_GROUP_FOUR);
   }
   private String name;
   private int order;

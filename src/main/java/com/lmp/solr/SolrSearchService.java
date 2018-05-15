@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.query.Criteria;
 import org.springframework.data.solr.core.query.FacetOptions;
 import org.springframework.data.solr.core.query.SimpleFacetQuery;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.lmp.app.entity.PriceGroup;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.solr.entity.ItemDoc;
 import com.lmp.solr.entity.ItemField;
@@ -54,6 +56,10 @@ public class SolrSearchService {
     }
     if(storeIds != null) {
       conditions = conditions.connect().and(QueryUtils.orQuery(ItemField.STORES, storeIds));
+    }
+    if(sRequest.priceFilter() != null) {
+      PriceGroup pg = PriceGroup.from(sRequest.priceFilter());
+      conditions = conditions.connect().and(new Criteria(ItemField.MAX_PRICE.getValue()).between(pg.getMin(), pg.getMax()));
     }
     return conditions;
   }
@@ -114,5 +120,31 @@ public class SolrSearchService {
         .setFacetOptions(fo);
     facetQuery.setRows(1);
     return solrRepo.facetSearch(facetQuery, null);
+  }
+
+  @Cacheable("min-max-price")
+  public float sortAndMinOrMax(SearchRequest sRequest, List<String> storesIds, ItemField facetField, boolean min) {
+    if (facetField == null) {
+      logger.error("facet field missing");
+      return 0;
+    }
+ // if no query or no brand/category/upc name filter present
+    if (Strings.isNullOrEmpty(sRequest.getQuery()) && !sRequest.isSolrSearchNeeded()) {
+      logger.error("invalid request. blank query and brand/category/upc filter. Returning empty page");
+      return 0;
+    }
+    Criteria conditions = addSearchConditions(sRequest, storesIds);
+    SimpleQuery query = new SimpleQuery(conditions,new PageRequest(0, 1));
+    // add mandetory field
+    sRequest.getFields().add(facetField.getValue());
+    query.addProjectionOnFields(sRequest.getFields().toArray(new String[] {}));
+    query.addSort(new Sort(
+        new Sort.Order(min ? Sort.Direction.ASC : Sort.Direction.DESC, facetField.getValue())));
+    logger.info("searching for solr query {}", conditions.toString());
+    Page<ItemDoc> docPage = solrRepo.search(query);
+    if(docPage != null && docPage.getContent() != null && !docPage.getContent().isEmpty()) {
+      return min ? docPage.getContent().get(0).getMinPrice() : docPage.getContent().get(0).getMaxPrice();
+    }
+    return 0;
   }
 }

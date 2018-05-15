@@ -66,7 +66,8 @@ public class AppBootUp {
       ItemEntity item = it.next();
       try {
         itemRepo.save(item);
-        indexer.addToIndex(item, fillStoreInventory(item, stores));
+        Object[] values = fillStoreInventory(item, stores);
+        indexer.addToIndex(item, (String)values[0], (Double)values[1], (Double)values[2]);
       } catch (DuplicateKeyException e) {
         logger.info("found duplicate item upc {}", item.getUpc());
         logger.error(e.getMessage(), e);
@@ -79,9 +80,11 @@ public class AppBootUp {
     FileIOUtil.writeProgress(prop.getSeededFiles(), file.getName());
   }
 
-  private String fillStoreInventory(ItemEntity item, List<StoreEntity> stores) {
+  private Object[] fillStoreInventory(ItemEntity item, List<StoreEntity> stores) {
     List<String> storeIdsToIndex = new ArrayList<>();
     Random random = new Random();
+    Double min = 0d;
+    Double max = 0d;
     for(StoreEntity store : stores) {
       if(item.canGoOnStoreInventory(store)) {
         StoreItemEntity sItem = new StoreItemEntity();
@@ -100,10 +103,12 @@ public class AppBootUp {
         } else {
           sItem.setSalePrice(sItem.getListPrice());
         }
+        min = Math.min(min, sItem.getSalePrice());
+        max = Math.max(max, sItem.getSalePrice());
         siRepo.save(sItem);
       }
     }
-    return Joiner.on(" ").join(storeIdsToIndex);
+    return new Object[]{Joiner.on(" ").join(storeIdsToIndex), min, max};
   }
 
   private void seedTestUsers() {

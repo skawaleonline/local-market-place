@@ -3,7 +3,7 @@ package com.lmp.solr.entity;
 public enum ItemField {
 
   ID("id"), CONTENT("content"), TITLE("title"), BRAND("brand"), CATEGORIES("categories"), UPC("upc"),
-  PRICE("price"), STORES("stores");
+  MIN_PRICE("minPrice"), MAX_PRICE("maxPrice"), STORES("stores");
 
   private String value;
 

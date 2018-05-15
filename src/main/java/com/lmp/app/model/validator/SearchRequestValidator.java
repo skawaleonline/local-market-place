@@ -10,6 +10,7 @@ import org.springframework.validation.Validator;
 
 import com.google.common.base.Strings;
 import com.lmp.app.entity.FilterField;
+import com.lmp.app.entity.PriceGroup;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.solr.entity.ItemField;
 
@@ -64,10 +65,10 @@ public class SearchRequestValidator implements Validator {
           } else if (filter.getKey().equals(FilterField.BRAND.getValue())) {
           } else if (filter.getKey().equals(FilterField.CATEGORY.getValue())) {
           } else if (filter.getKey().equals(FilterField.UPC.getValue())) {
-          } else if (filter.getKey().equals(FilterField.MAX_PRICE.getValue()) ||
-              filter.getKey().equals(FilterField.MIN_PRICE.getValue())) {
-            if(!isNumber(filter.getValue().get(0))) {
-              e.reject("field.invalid", "invalid value for filter " + filter.getKey());
+          } else if (filter.getKey().equals(FilterField.PRICE_RANGE.getValue())) {
+            if(filter.getValue() != null && filter.getValue().size() > 0) {
+              if(PriceGroup.from(filter.getValue().get(0)) == null)
+              e.reject("field.invalid", "invalid value \""+ filter.getValue().get(0) +"\" for filter " + filter.getKey());
             }
           } else {
             e.reject("field.invalid", "invalid filter: " + filter.getKey());
