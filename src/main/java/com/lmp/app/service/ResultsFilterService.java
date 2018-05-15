@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.lmp.app.entity.PriceGroup;
 import com.lmp.app.model.ResponseFilter;
 import com.lmp.app.model.SearchRequest;
+import com.lmp.db.pojo.PriceGroupCount;
 import com.lmp.db.pojo.StoreEntity;
 import com.lmp.solr.SolrSearchService;
 import com.lmp.solr.entity.ItemField;
@@ -50,6 +52,8 @@ public class ResultsFilterService {
     facets.add(ResponseFilter.buildStoreFilter("store", stores));
     // category facet
     facets.add(ResponseFilter.fromList("category", categoryService.getCategories(sRequest.categoryFilter(), stores)));
+    // price facet
+    facets.add(ResponseFilter.fromList("price", PriceGroup.getAllPriceGroups()));
     return facets;
   }
 }
