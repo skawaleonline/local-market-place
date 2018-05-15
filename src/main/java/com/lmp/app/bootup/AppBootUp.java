@@ -83,7 +83,7 @@ public class AppBootUp {
   private Object[] fillStoreInventory(ItemEntity item, List<StoreEntity> stores) {
     List<String> storeIdsToIndex = new ArrayList<>();
     Random random = new Random();
-    Double min = 0d;
+    Double min = Double.MAX_VALUE;
     Double max = 0d;
     for(StoreEntity store : stores) {
       if(item.canGoOnStoreInventory(store)) {
