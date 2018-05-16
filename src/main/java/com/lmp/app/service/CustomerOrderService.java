@@ -15,6 +15,7 @@ import com.lmp.app.entity.CustomerOrder;
 import com.lmp.app.entity.OrderStatus;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.exceptions.CartNotFoundException;
+import com.lmp.app.exceptions.EmptyCartException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
 import com.lmp.app.exceptions.OrderNotFoundException;
 import com.lmp.app.model.CheckoutRequest;
@@ -77,8 +78,8 @@ public class CustomerOrderService {
     }
     // Get the cart for this order
     ShoppingCart cart = cartService.getCart(new ShoppingCartRequest(cRequest.getUserId()));
-    if (cart == null) {
-      throw new CartNotFoundException();
+    if (cart == null || cart.getItems().isEmpty()) {
+      throw new EmptyCartException();
     }
     // check the if cart items are in stock
     sItemService.verifyItemStock(cart.getItems());

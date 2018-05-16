@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.lmp.app.entity.PriceGroup;
+import com.lmp.app.entity.PriceRange;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.solr.entity.ItemDoc;
 import com.lmp.solr.entity.ItemField;
@@ -58,8 +58,8 @@ public class SolrSearchService {
       conditions = conditions.connect().and(QueryUtils.orQuery(ItemField.STORES, storeIds));
     }
     if(sRequest.priceFilter() != null) {
-      PriceGroup pg = PriceGroup.from(sRequest.priceFilter());
-      conditions = conditions.connect().and(new Criteria(ItemField.MAX_PRICE.getValue()).between(pg.getMin(), pg.getMax()));
+      PriceRange pr = PriceRange.from(sRequest.priceFilter());
+      conditions = conditions.connect().and(QueryUtils.between(ItemField.MIN_PRICE, pr.getMin(), pr.getMax()));
     }
     return conditions;
   }

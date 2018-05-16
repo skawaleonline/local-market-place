@@ -10,7 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.lmp.app.entity.ResponseStatus;
-import com.lmp.app.exceptions.CartNotFoundException;
+import com.lmp.app.exceptions.EmptyCartException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
 import com.lmp.app.exceptions.ItemNotFoundException;
 import com.lmp.app.exceptions.ItemNotInStockException;
@@ -31,10 +31,10 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
     return super.handleExceptionInternal(exception, error, headers, status, request);
   }
 
-//  @ExceptionHandler({ CartNotFoundException.class })
-//  public ResponseEntity<BaseResponse> handleCartNotFoundException(Exception ex, WebRequest request) {
-//    return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.CART_NOT_FOUND), HttpStatus.OK);
-//  }
+  @ExceptionHandler({ EmptyCartException.class })
+  public ResponseEntity<BaseResponse> handleEmptyCartException(Exception ex, WebRequest request) {
+    return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.EMPTY_CART), HttpStatus.OK);
+  }
 
   @ExceptionHandler({ ItemNotInStockException.class })
   public ResponseEntity<CartResponse> handleProductNotInStockException(Exception ex, WebRequest request) {

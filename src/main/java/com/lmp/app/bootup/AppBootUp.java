@@ -67,7 +67,7 @@ public class AppBootUp {
       try {
         itemRepo.save(item);
         Object[] values = fillStoreInventory(item, stores);
-        indexer.addToIndex(item, (String)values[0], (Double)values[1], (Double)values[2]);
+        indexer.addToIndex(item, (String)values[0], (Float)values[1], (Float)values[2]);
       } catch (DuplicateKeyException e) {
         logger.info("found duplicate item upc {}", item.getUpc());
         logger.error(e.getMessage(), e);
@@ -83,8 +83,8 @@ public class AppBootUp {
   private Object[] fillStoreInventory(ItemEntity item, List<StoreEntity> stores) {
     List<String> storeIdsToIndex = new ArrayList<>();
     Random random = new Random();
-    Double min = Double.MAX_VALUE;
-    Double max = 0d;
+    Float min = Float.MAX_VALUE;
+    Float max = 0f;
     for(StoreEntity store : stores) {
       if(item.canGoOnStoreInventory(store)) {
         StoreItemEntity sItem = new StoreItemEntity();

@@ -92,4 +92,15 @@ public class QueryUtils {
     }
     return condition;
   }
+
+  public static Criteria between(ItemField field, int from, int to) {
+    if(field == null) {
+      return null;
+    }
+    if(to == 0) {
+      return new Criteria(field.getValue()).greaterThanEqual(from);
+    } else {
+      return new Criteria(field.getValue()).between(from, to);
+    }
+  }
 }

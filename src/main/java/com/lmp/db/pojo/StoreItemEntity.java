@@ -25,10 +25,10 @@ public class StoreItemEntity implements Comparable<StoreItemEntity>{
   private String storeId;
   @DBRef
   private ItemEntity item = new ItemEntity();
-  private double listPrice;
+  private float listPrice;
   @Indexed
   private boolean onSale;
-  private double salePrice;
+  private float salePrice;
   private int popularity = 1;
   private int stock;
   private long added;
@@ -80,10 +80,10 @@ public class StoreItemEntity implements Comparable<StoreItemEntity>{
   public void setUpdated(long updated) {
     this.updated = updated;
   }
-  public double getListPrice() {
+  public float getListPrice() {
     return listPrice;
   }
-  public void setListPrice(double listPrice) {
+  public void setListPrice(float listPrice) {
     this.listPrice = listPrice;
   }
   public boolean isOnSale() {
@@ -92,10 +92,10 @@ public class StoreItemEntity implements Comparable<StoreItemEntity>{
   public void setOnSale(boolean onSale) {
     this.onSale = onSale;
   }
-  public double getSalePrice() {
+  public float getSalePrice() {
     return salePrice;
   }
-  public void setSalePrice(double salePrice) {
+  public void setSalePrice(float salePrice) {
     this.salePrice = salePrice;
   }
   public int getPopularity() {

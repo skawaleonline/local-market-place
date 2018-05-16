@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.lmp.app.entity.PriceGroup;
+import com.lmp.app.entity.PriceRange;
 import com.lmp.app.model.ResponseFilter;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.db.pojo.PriceGroupCount;
@@ -28,6 +29,14 @@ public class ResultsFilterService {
   @Autowired
   private CategoryService categoryService;
 
+  private ResponseFilter buildPriceRangeFilter(SearchRequest sRequest, List<String> storeIds) {
+    // get the max price of the product in the search
+    return ResponseFilter.fromList("price", 
+        PriceRange.getDisplayNames(
+            PriceRange.buildPriceRangeList(
+                (int)Math.ceil(
+                    solrService.sortAndMinOrMax(sRequest, storeIds, ItemField.MAX_PRICE, false)))));
+  }
   public List<ResponseFilter> getFiltersFor(SearchRequest sRequest) {
     List<ResponseFilter> facets = new ArrayList<>();
     List<StoreEntity> stores = null;
@@ -53,7 +62,7 @@ public class ResultsFilterService {
     // category facet
     facets.add(ResponseFilter.fromList("category", categoryService.getCategories(sRequest.categoryFilter(), stores)));
     // price facet
-    facets.add(ResponseFilter.fromList("price", PriceGroup.getAllPriceGroups()));
+    facets.add(buildPriceRangeFilter(sRequest, storeIds));
     return facets;
   }
 }
