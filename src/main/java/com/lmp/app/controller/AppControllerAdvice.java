@@ -16,6 +16,7 @@ import com.lmp.app.exceptions.ItemNotFoundException;
 import com.lmp.app.exceptions.ItemNotInStockException;
 import com.lmp.app.exceptions.MuliplteStoreInCartException;
 import com.lmp.app.exceptions.OrderNotFoundException;
+import com.lmp.app.exceptions.UnauthorizedException;
 import com.lmp.app.model.BaseResponse;
 import com.lmp.app.model.CartResponse;
 import com.lmp.app.model.validator.ValidationError;
@@ -34,6 +35,11 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
   @ExceptionHandler({ EmptyCartException.class })
   public ResponseEntity<BaseResponse> handleEmptyCartException(Exception ex, WebRequest request) {
     return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.EMPTY_CART), HttpStatus.OK);
+  }
+
+  @ExceptionHandler({ UnauthorizedException.class })
+  public ResponseEntity<BaseResponse> handleUnauthorizedException(Exception ex, WebRequest request) {
+    return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.Unauthorized), HttpStatus.OK);
   }
 
   @ExceptionHandler({ ItemNotInStockException.class })

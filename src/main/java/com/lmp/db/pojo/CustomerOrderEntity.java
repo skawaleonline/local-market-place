@@ -20,8 +20,7 @@ public class CustomerOrderEntity {
   private String id;
   @Indexed
   private UserEntity customer;
-  @Indexed
-  private StoreEntity store;
+  private String storeId;
   private List<CartItem> items;
   private OrderStatus status;
   private long orderedOn;
@@ -34,7 +33,6 @@ public class CustomerOrderEntity {
     CustomerOrder order = new CustomerOrder();
     BeanUtils.copyProperties(this, order);
     order.setCustomerId(this.customer.getId());
-    order.setStoreId(this.store.getId());
     return order;
   }
 
@@ -50,7 +48,7 @@ public class CustomerOrderEntity {
   }
 
   public static CustomerOrderEntity fromCart(ShoppingCart cart) {
-    CustomerOrderEntity entity = new CustomerOrderEntity().setStore(new StoreEntity().setId(cart.getStoreId()))
+    CustomerOrderEntity entity = new CustomerOrderEntity().setStoreId(cart.getStoreId())
         .setCustomer(new UserEntity().setId(cart.getUserId()))
         .setItems(cart.getItems())
         .setOrderedOn(System.currentTimeMillis())
@@ -73,13 +71,15 @@ public class CustomerOrderEntity {
     this.customer = customer;
     return this;
   }
-  public StoreEntity getStore() {
-    return store;
+  public String getStoreId() {
+    return storeId;
   }
-  public CustomerOrderEntity setStore(StoreEntity store) {
-    this.store = store;
+
+  public CustomerOrderEntity setStoreId(String storeId) {
+    this.storeId = storeId;
     return this;
   }
+
   public List<CartItem> getItems() {
     return items;
   }

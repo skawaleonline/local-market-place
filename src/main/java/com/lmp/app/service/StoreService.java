@@ -62,4 +62,8 @@ public class StoreService {
     return repo.findAllById(ids);
   }
 
+  public StoreEntity getStoreByOwner(String email) {
+    return repo.findByStoreOwnerId(email);
+  }
+  
 }
