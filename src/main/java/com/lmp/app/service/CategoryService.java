@@ -82,7 +82,7 @@ public class CategoryService {
    * @param stores
    * @return
    */
-  public List<String> getCategories(List<String> category, List<StoreEntity> stores) {
+  public List<String> getCategories(List<String> category, Iterable<StoreEntity> stores) {
     Set<String> set = new HashSet<>();
     if(category != null && category.size() == 1) {
       CategoryNode root = buildProductCategorization().get(category.get(0).toLowerCase().trim());

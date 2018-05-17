@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
@@ -85,7 +86,10 @@ public class StoreInventoryService {
       storeIdsToSearch = storeService.getStoresIdsAround(sRequest);
     } else {
       // just search in store id selected
-      storeIdsToSearch.add(sRequest.getStoreId());
+      List<String> ids = Splitter.on(",").splitToList(sRequest.getStoreId().trim());
+      for (String id : ids) {
+        storeIdsToSearch.add(id.trim());
+      }
     }
     Page<ItemDoc> docs = null;
     if (sRequest.isSolrSearchNeeded()) {

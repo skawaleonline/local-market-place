@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.lmp.app.entity.PriceGroup;
@@ -31,21 +32,29 @@ public class ResultsFilterService {
 
   private ResponseFilter buildPriceRangeFilter(SearchRequest sRequest, List<String> storeIds) {
     // get the max price of the product in the search
+    int max = (int)Math.ceil(
+        solrService.sortAndMinOrMax(sRequest, storeIds, ItemField.MAX_PRICE, false));
+    if(max == 0) {
+      return null;
+    }
     return ResponseFilter.fromList("price", 
         PriceRange.getDisplayNames(
-            PriceRange.buildPriceRangeList(
-                (int)Math.ceil(
-                    solrService.sortAndMinOrMax(sRequest, storeIds, ItemField.MAX_PRICE, false)))));
+            PriceRange.buildPriceRangeList(max)));
   }
   public List<ResponseFilter> getFiltersFor(SearchRequest sRequest) {
     List<ResponseFilter> facets = new ArrayList<>();
-    List<StoreEntity> stores = null;
+    Iterable<StoreEntity> stores = null;
     // Search for query across all the stores
     if (Strings.isNullOrEmpty(sRequest.getStoreId())) {
       stores = storeService.getStoresAround(sRequest);
     } else {
       // get all items in the store
-      stores = Lists.asList(storeService.getStoreById(sRequest.getStoreId()), new StoreEntity[] {});
+      List<String> storeIdsToSearch = new ArrayList<>();
+      List<String> ids = Splitter.on(",").splitToList(sRequest.getStoreId().trim());
+      for (String id : ids) {
+        storeIdsToSearch.add(id.trim());
+      }
+      stores = storeService.getStoreByIds(storeIdsToSearch);
       // search for query in store
     }
     List<String> storeIds = new ArrayList<>();
@@ -62,7 +71,12 @@ public class ResultsFilterService {
     // category facet
     facets.add(ResponseFilter.fromList("category", categoryService.getCategories(sRequest.categoryFilter(), stores)));
     // price facet
-    facets.add(buildPriceRangeFilter(sRequest, storeIds));
+    ResponseFilter priceFilter = buildPriceRangeFilter(sRequest, storeIds);
+    if(priceFilter != null) {
+      facets.add(priceFilter);
+    }
+    // onsale filter
+    facets.add(ResponseFilter.booleanFilter("onsale"));
     return facets;
   }
 }

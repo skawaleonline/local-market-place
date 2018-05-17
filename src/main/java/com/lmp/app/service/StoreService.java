@@ -57,4 +57,9 @@ public class StoreService {
     Optional<StoreEntity> store = repo.findById(id);
     return store.isPresent() ? store.get() : null;
   }
+
+  public Iterable<StoreEntity> getStoreByIds(List<String> ids) {
+    return repo.findAllById(ids);
+  }
+
 }

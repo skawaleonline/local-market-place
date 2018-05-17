@@ -37,11 +37,18 @@ public class ResponseFilter {
       return this;
     }
   }
-  public static ResponseFilter buildStoreFilter(String fieldName, List<StoreEntity> stores) {
+  public static ResponseFilter buildStoreFilter(String fieldName, Iterable<StoreEntity> stores) {
     ResponseFilter response = new ResponseFilter(fieldName);
     for (StoreEntity store : stores) {
       response.values.add(new CountPair(new Store().fromStoreEntity(store), 1L));
     }
+    return response;
+  }
+
+  public static ResponseFilter booleanFilter(String fieldName) {
+    ResponseFilter response = new ResponseFilter(fieldName);
+    response.values.add(new CountPair("true", 1L));
+    response.values.add(new CountPair("false", 1L));
     return response;
   }
 
