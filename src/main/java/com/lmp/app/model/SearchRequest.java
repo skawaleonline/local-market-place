@@ -39,12 +39,12 @@ public class SearchRequest extends PageableRequest {
 
   public boolean isSolrSearchNeeded() {
     return !Strings.isNullOrEmpty(query) || brandFilter() != null || categoryFilter() != null
-        || upcFilter() != null;
+        || upcFilter() != null || priceFilter() != null;
   }
 
   public boolean isFilterOn() {
     return isOnSaleRequest() || brandFilter() != null || categoryFilter() != null
-        || upcFilter() != null;
+        || upcFilter() != null || priceFilter() != null;
   }
 
   public boolean isOnSaleRequest() {

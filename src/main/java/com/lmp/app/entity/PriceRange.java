@@ -64,8 +64,8 @@ public class PriceRange {
       return range;
     }
     String[] tokens = name.split("to");
-    range.min = Integer.parseInt(tokens[0].trim().startsWith("$") ? tokens[0].substring(1) : tokens[0]);
-    range.max = Integer.parseInt(tokens[1].trim().startsWith("$") ? tokens[1].substring(1) : tokens[1]);
+    range.min = Integer.parseInt(tokens[0].trim().startsWith("$") ? tokens[0].trim().substring(1) : tokens[0].trim());
+    range.max = Integer.parseInt(tokens[1].trim().startsWith("$") ? tokens[1].trim().substring(1) : tokens[1].trim());
     return range;
   }
 
