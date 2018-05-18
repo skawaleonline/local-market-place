@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Splitter;
@@ -41,6 +42,8 @@ public class ResultsFilterService {
         PriceRange.getDisplayNames(
             PriceRange.buildPriceRangeList(max)));
   }
+
+  @Cacheable("response-filters")
   public List<ResponseFilter> getFiltersFor(SearchRequest sRequest) {
     List<ResponseFilter> facets = new ArrayList<>();
     Iterable<StoreEntity> stores = null;
