@@ -1,9 +1,7 @@
 package com.lmp.app.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -11,12 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.lmp.app.entity.PriceGroup;
 import com.lmp.app.entity.PriceRange;
 import com.lmp.app.model.ResponseFilter;
 import com.lmp.app.model.SearchRequest;
-import com.lmp.db.pojo.PriceGroupCount;
 import com.lmp.db.pojo.StoreEntity;
 import com.lmp.solr.SolrSearchService;
 import com.lmp.solr.entity.ItemField;

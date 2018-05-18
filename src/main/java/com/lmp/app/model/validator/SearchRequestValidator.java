@@ -10,7 +10,6 @@ import org.springframework.validation.Validator;
 
 import com.google.common.base.Strings;
 import com.lmp.app.entity.FilterField;
-import com.lmp.app.entity.PriceGroup;
 import com.lmp.app.entity.PriceRange;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.solr.entity.ItemField;

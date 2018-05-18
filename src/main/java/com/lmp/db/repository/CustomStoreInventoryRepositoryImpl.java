@@ -1,27 +1,13 @@
 package com.lmp.db.repository;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-import com.lmp.app.entity.PriceGroup;
 import com.lmp.app.model.ResponseFilter;
-import com.lmp.db.pojo.PriceGroupCount;
-import com.lmp.db.pojo.StoreItemEntity;
 
 public class CustomStoreInventoryRepositoryImpl {
 
@@ -50,33 +36,33 @@ public class CustomStoreInventoryRepositoryImpl {
     return criteria;
   }
 
-  private ResponseFilter facetOnPriceGroup(Criteria criteria) {
-    Aggregation agg = newAggregation(
-        match(criteria),
-        group("salePrice").count().as("count"),
-        project("count").and("salePrice").previousOperation(),
-        sort(Sort.Direction.ASC, "salePrice")
-      );
-    AggregationResults<PriceGroupCount> groupResults 
-    = mongoTemplate.aggregate(agg, StoreItemEntity.class, PriceGroupCount.class);
-    List<PriceGroupCount> result = groupResults.getMappedResults();
-    Map<PriceGroup, Integer> map = new HashMap<>();
-    int currentGroup = 0;
-    for (PriceGroupCount priceCount : result) {
-      PriceGroup pg = PriceGroup.orderMap.get(currentGroup);
-      while(pg.getMax() != 0 && pg.getMax() < (int)priceCount.getPrice()) {
-        currentGroup++;
-        pg = PriceGroup.orderMap.get(currentGroup);
-      }
-      if(map.containsKey(pg)) {
-        map.put(pg, map.get(pg) + 1);
-      } else {
-        map.put(pg, 1);
-      }
-    }
-    
-    return ResponseFilter.fromMap("price", map);
-  }
+//  private ResponseFilter facetOnPriceGroup(Criteria criteria) {
+//    Aggregation agg = newAggregation(
+//        match(criteria),
+//        group("salePrice").count().as("count"),
+//        project("count").and("salePrice").previousOperation(),
+//        sort(Sort.Direction.ASC, "salePrice")
+//      );
+//    AggregationResults<PriceGroupCount> groupResults 
+//    = mongoTemplate.aggregate(agg, StoreItemEntity.class, PriceGroupCount.class);
+//    List<PriceGroupCount> result = groupResults.getMappedResults();
+//    Map<PriceGroup, Integer> map = new HashMap<>();
+//    int currentGroup = 0;
+//    for (PriceGroupCount priceCount : result) {
+//      PriceGroup pg = PriceGroup.orderMap.get(currentGroup);
+//      while(pg.getMax() != 0 && pg.getMax() < (int)priceCount.getPrice()) {
+//        currentGroup++;
+//        pg = PriceGroup.orderMap.get(currentGroup);
+//      }
+//      if(map.containsKey(pg)) {
+//        map.put(pg, map.get(pg) + 1);
+//      } else {
+//        map.put(pg, 1);
+//      }
+//    }
+//    
+//    return ResponseFilter.fromMap("price", map);
+//  }
 
   public List<ResponseFilter> facetSearch(List<String> storeIds, List<String> itemIds, boolean onSale) {
     Criteria criteria = new Criteria();
