@@ -39,11 +39,11 @@ public class SolrIndexer {
   }
 
   @Transactional
-  public void addToIndex(ItemEntity item, String storeids) throws SolrServerException, IOException {
+  public void addToIndex(ItemEntity item, String storeids, Float minPrice, Float maxPrice) throws SolrServerException, IOException {
     if (item == null) {
       return;
     }
-    repository.save(ItemDoc.fromItem(item, storeids));
+    repository.save(ItemDoc.fromItem(item, storeids).setMinPrice(minPrice).setMaxPrice(maxPrice));
   }
 
   @Transactional

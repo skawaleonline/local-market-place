@@ -20,10 +20,10 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.lmp.app.entity.CategoryNode;
 import com.lmp.app.entity.CategoryTree;
-import com.lmp.app.entity.SearchRequest;
-import com.lmp.app.entity.SearchResponse;
+import com.lmp.app.model.SearchRequest;
+import com.lmp.app.model.SearchResponse;
 import com.lmp.app.service.AutoCompleteService;
-import com.lmp.app.service.CategorizationService;
+import com.lmp.app.service.CategoryService;
 import com.lmp.app.service.ItemService;
 import com.lmp.db.pojo.ItemEntity;
 
@@ -39,7 +39,7 @@ public class UPCInventoryController extends BaseController {
   @Autowired
   private AutoCompleteService acService;
   @Autowired
-  private CategorizationService ctService;
+  private CategoryService ctService;
 
   @GetMapping("/upc/{code}")
   @ResponseStatus(HttpStatus.OK)

@@ -7,11 +7,12 @@ import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.lmp.db.pojo.ItemEntity;
+import com.lmp.db.pojo.StoreItemEntity;
 
 public class Item {
 
   private String id;
+  private int stock;
   private Set<String> categories;
   private String title;
   private String url;
@@ -31,15 +32,22 @@ public class Item {
   private String available_to_purchase_date_time;
   private List<Image> images;
 
-  public static Item fromItemEntity(ItemEntity itemEnyity, boolean onSale, boolean inStock, double list_price,
-      double salePrice) {
+  public static Item fromStoreInventoryEntity(StoreItemEntity itemEnyity) {
     Item item = new Item();
-    BeanUtils.copyProperties(itemEnyity, item);
-    item.onSale = onSale;
-    item.inStock = inStock;
-    item.listPrice = Math.round(list_price * 100.0) / 100.0;
-    item.offerPrice = Math.round(salePrice * 100.0) / 100.0;
+    BeanUtils.copyProperties(itemEnyity.getItem(), item);
+    item.stock = itemEnyity.getStock();
+    item.id = itemEnyity.getId();
+    item.onSale = itemEnyity.isOnSale();
+    item.inStock = itemEnyity.getStock() > 0;
+    item.listPrice = Math.round(itemEnyity.getListPrice() * 100.0) / 100.0;
+    item.offerPrice = Math.round(itemEnyity.getSalePrice() * 100.0) / 100.0;
     return item;
+  }
+  public int getStock() {
+    return stock;
+  }
+  public void setStock(int stock) {
+    this.stock = stock;
   }
   public String getId() {
     return id;

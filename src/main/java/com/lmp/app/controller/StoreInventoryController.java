@@ -1,5 +1,8 @@
 package com.lmp.app.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -16,16 +19,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lmp.app.entity.BaseResponse;
-import com.lmp.app.entity.ResponseFilter;
-import com.lmp.app.entity.SearchRequest;
-import com.lmp.app.entity.validator.SearchRequestValidator;
+import com.lmp.app.model.BaseResponse;
+import com.lmp.app.model.ResponseFilter;
+import com.lmp.app.model.SearchRequest;
+import com.lmp.app.model.validator.SearchRequestValidator;
 import com.lmp.app.service.ResultsFilterService;
 import com.lmp.app.service.StoreInventoryService;
 import com.lmp.app.utils.ValidationErrorBuilder;
 import com.lmp.solr.entity.ItemField;
 
 @RestController
+@RequestMapping("/store-inventory")
 public class StoreInventoryController extends BaseController {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -47,7 +51,7 @@ public class StoreInventoryController extends BaseController {
       binder.addValidators(searchRequestValidator);
   }
 
-  @RequestMapping(value = "/store-inventory/search", method = RequestMethod.POST)
+  @RequestMapping(value = "/search", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> lookupStoreInventory(@Valid @RequestBody SearchRequest searchRequest, Errors errors) {
     if (errors.hasErrors()) {
@@ -64,20 +68,20 @@ public class StoreInventoryController extends BaseController {
     return new ResponseEntity<BaseResponse>(response, HttpStatus.OK);
   }
 
-  @RequestMapping(value = "/store-inventory/filters", method = RequestMethod.POST)
+  @RequestMapping(value = "/filters", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> lookupStoreInventoryFilters(@Valid @RequestBody SearchRequest searchRequest, Errors errors) {
     if (errors.hasErrors()) {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
     logger.info("searching for the request {}", searchRequest);
-    ResponseFilter response = filterService.getFiltersFor(searchRequest, ItemField.BRAND);
+    List<ResponseFilter> response = filterService.getFiltersFor(searchRequest);
     // logger.info("getting store details for store id {}", storeId);
 
     if (response == null) {
       logger.info("no results for request {}", searchRequest.toString());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<ResponseFilter>(response, HttpStatus.OK);
+    return new ResponseEntity<List<ResponseFilter>>(response, HttpStatus.OK);
   }
 }

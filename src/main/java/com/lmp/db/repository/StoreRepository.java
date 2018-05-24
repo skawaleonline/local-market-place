@@ -15,6 +15,8 @@ public interface StoreRepository extends MongoRepository<StoreEntity, String> {
 
   public StoreEntity findByName(String name);
 
+  public StoreEntity findByStoreOwnerId(String email);
+
   public List<StoreEntity> findAllByFranchise(String franchise);
 
   public GeoResults<StoreEntity> findByLocationWithin(Circle circle);

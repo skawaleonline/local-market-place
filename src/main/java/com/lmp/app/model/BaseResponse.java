@@ -1,15 +1,22 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.http.HttpStatus;
+
+import com.lmp.app.entity.ResponseStatus;
 
 public class BaseResponse {
 
   protected int statusCode;
   protected String message;
-  protected long found;
-  protected int page;
-  protected int rows;
+
+
+  public static CartResponse responseStatus(ResponseStatus status) {
+    CartResponse cResponse = new CartResponse();
+    cResponse.setStatusCode(status.getCode());
+    cResponse.setErrorMessage(status.toString());
+    return cResponse;
+  }
 
   public static BaseResponse invalidSearchRequest(String message) {
     BaseResponse response = new BaseResponse();
@@ -41,23 +48,5 @@ public class BaseResponse {
   }
   public void setErrorMessage(String message) {
     this.message = message;
-  }
-  public long getFound() {
-    return found;
-  }
-  public void setFound(long found) {
-    this.found = found;
-  }
-  public int getPage() {
-    return page;
-  }
-  public void setPage(int page) {
-    this.page = page;
-  }
-  public int getRows() {
-    return rows;
-  }
-  public void setRows(int rows) {
-    this.rows = rows;
   }
 }

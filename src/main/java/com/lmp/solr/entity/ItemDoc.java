@@ -24,6 +24,10 @@ public class ItemDoc {
   private String upc;
   @Field("stores")
   private String stores;
+  @Field("minPrice")
+  private float minPrice;
+  @Field("maxPrice")
+  private float maxPrice;
 
 
   public static ItemDoc fromItem(ItemEntity item, String storeids) {
@@ -70,6 +74,23 @@ public class ItemDoc {
   }
   public void setContent(String content) {
     this.content = content;
+  }
+  public float getMinPrice() {
+    return minPrice;
+  }
+
+  public ItemDoc setMinPrice(float minPrice) {
+    this.minPrice = minPrice;
+    return this;
+  }
+
+  public float getMaxPrice() {
+    return maxPrice;
+  }
+
+  public ItemDoc setMaxPrice(float maxPrice) {
+    this.maxPrice = maxPrice;
+    return this;
   }
 
   public String getUpc() {

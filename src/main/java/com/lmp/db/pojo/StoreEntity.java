@@ -20,19 +20,28 @@ public class StoreEntity {
   @Nullable
   private Location location;
   private String address;
+  @Nullable
+  private UserEntity storeOwner;
   private StoreCapabilities capabilities;
 
   public String getId() {
     return id;
   }
-  public void setId(String id) {
+  public StoreEntity setId(String id) {
     this.id = id;
+    return this;
   }
   public String getName() {
     return name;
   }
   public void setName(String name) {
     this.name = name;
+  }
+  public UserEntity getStoreOwner() {
+    return storeOwner;
+  }
+  public void setStoreOwner(UserEntity storeOwner) {
+    this.storeOwner = storeOwner;
   }
   public String getFranchise() {
     return franchise;
@@ -58,45 +67,45 @@ public class StoreEntity {
   public void setCapabilities(StoreCapabilities capabilities) {
     this.capabilities = capabilities;
   }
-}
 
-/**
- * currency type
- * inventory categories
- * store times
- * liquor sold?
- * cooked food served?
- * @author skawale
- *
- */
-class StoreCapabilities {
-  private boolean liquorSold;
-  private boolean foodServed;
-  private Set<String> listedCategories;
-  private Currency currency;
-  public boolean isLiquorSold() {
-    return liquorSold;
-  }
-  public void setLiquorSold(boolean liquorSold) {
-    this.liquorSold = liquorSold;
-  }
-  public boolean isFoodServed() {
-    return foodServed;
-  }
-  public void setFoodServed(boolean foodServed) {
-    this.foodServed = foodServed;
-  }
-  public Set<String> getListedCategories() {
-    return listedCategories;
-  }
-  public void setListedCategories(Set<String> listedCategories) {
-    this.listedCategories = listedCategories;
-  }
-  public Currency getCurrency() {
-    return currency;
-  }
-  public void setCurrency(Currency currency) {
-    this.currency = currency;
+  /**
+   * currency type
+   * inventory categories
+   * store times
+   * liquor sold?
+   * cooked food served?
+   * @author skawale
+   *
+   */
+  public static class StoreCapabilities {
+    private boolean liquorSold;
+    private boolean foodServed;
+    private Set<String> listedCategories;
+    private Currency currency;
+    public boolean isLiquorSold() {
+      return liquorSold;
+    }
+    public void setLiquorSold(boolean liquorSold) {
+      this.liquorSold = liquorSold;
+    }
+    public boolean isFoodServed() {
+      return foodServed;
+    }
+    public void setFoodServed(boolean foodServed) {
+      this.foodServed = foodServed;
+    }
+    public Set<String> getListedCategories() {
+      return listedCategories;
+    }
+    public void setListedCategories(Set<String> listedCategories) {
+      this.listedCategories = listedCategories;
+    }
+    public Currency getCurrency() {
+      return currency;
+    }
+    public void setCurrency(Currency currency) {
+      this.currency = currency;
+    }
   }
 }
 

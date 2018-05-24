@@ -5,7 +5,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.lmp.app.entity.validator.ValidationError;
+import com.lmp.app.model.validator.ValidationError;
 import com.lmp.app.utils.ValidationErrorBuilder;
 
 public class BaseController {

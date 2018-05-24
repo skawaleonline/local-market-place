@@ -1,4 +1,4 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,23 +10,39 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 
 import com.google.common.collect.Lists;
+import com.lmp.app.entity.CustomerOrder;
+import com.lmp.app.entity.Item;
+import com.lmp.app.entity.StoreInventory;
+import com.lmp.db.pojo.CustomerOrderEntity;
 import com.lmp.db.pojo.ItemEntity;
-import com.lmp.db.pojo.StoreInventoryEntity;
+import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.solr.entity.ItemDoc;
 
 public class SearchResponse<T> extends BaseResponse {
 
   private Collection<T> results;
+  private long found;
+  private int page;
+  private int rows;
 
   private SearchResponse<T> blank() {
     this.statusCode = HttpStatus.OK.value();
     return this;
   }
-  private static Map<String, StoreInventory> buildStoreItemMap(List<StoreInventoryEntity> items) {
+
+  public static SearchResponse<CustomerOrder> buildOrderResponse(Page<CustomerOrderEntity> page) {
+    SearchResponse<CustomerOrder> response = new SearchResponse<>();
+    response.statusCode = HttpStatus.OK.value();
+    response.found = page.getTotalElements();
+    response.page = page.getPageable().getPageNumber();
+    response.rows = page.getPageable().getPageSize();
+    response.results = CustomerOrderEntity.toCustomerOrderList(page.getContent());
+    return response;
+  }
+  private static Map<String, StoreInventory> buildStoreItemMap(List<StoreItemEntity> items) {
     Map<String, StoreInventory> map = new HashMap<>();
-    for(StoreInventoryEntity ie : items) {
-      Item item = Item.fromItemEntity(ie.getItem()
-          , ie.isOnSale(), ie.getStock() > 0, ie.getListPrice(), ie.getSalePrice());
+    for(StoreItemEntity ie : items) {
+      Item item = Item.fromStoreInventoryEntity(ie);
       if(map.containsKey(ie.getStoreId())) {
         map.get(ie.getStoreId()).getItems().add(item);
       } else {
@@ -48,7 +64,7 @@ public class SearchResponse<T> extends BaseResponse {
     return response;
   }
 
-  public static SearchResponse<StoreInventory> buildStoreInventoryResponse(Page<StoreInventoryEntity> page) {
+  public static SearchResponse<StoreInventory> buildStoreInventoryResponse(Page<StoreItemEntity> page) {
     if(page == null || !page.hasContent()) {
       SearchResponse<StoreInventory> blank = new SearchResponse<>();
       return blank.blank();
@@ -62,12 +78,12 @@ public class SearchResponse<T> extends BaseResponse {
     return response;
   }
 
-  public static SearchResponse<StoreInventory> buildStoreInventoryResponse(Page<StoreInventoryEntity> page, long count) {
+  public static SearchResponse<StoreInventory> buildStoreInventoryResponse(Page<StoreItemEntity> page, long count) {
     SearchResponse<StoreInventory> response = buildStoreInventoryResponse(page);
     response.found = count;
     return response;
   }
-  public static SearchResponse<StoreInventory> buildStoreInventoryResponse(Page<StoreInventoryEntity> page, long count, int pageNo) {
+  public static SearchResponse<StoreInventory> buildStoreInventoryResponse(Page<StoreItemEntity> page, long count, int pageNo) {
     SearchResponse<StoreInventory> response = buildStoreInventoryResponse(page, count);
     response.page = pageNo;
     return response;
@@ -79,5 +95,24 @@ public class SearchResponse<T> extends BaseResponse {
 
   public void setResults(List<T> results) {
     this.results = results;
+  }
+
+  public long getFound() {
+    return found;
+  }
+  public void setFound(long found) {
+    this.found = found;
+  }
+  public int getPage() {
+    return page;
+  }
+  public void setPage(int page) {
+    this.page = page;
+  }
+  public int getRows() {
+    return rows;
+  }
+  public void setRows(int rows) {
+    this.rows = rows;
   }
 }

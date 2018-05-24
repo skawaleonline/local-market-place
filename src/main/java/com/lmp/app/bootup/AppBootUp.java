@@ -2,7 +2,6 @@ package com.lmp.app.bootup;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,14 +18,19 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
+import com.lmp.app.service.AutoCompleteService;
 import com.lmp.app.utils.FileIOUtil;
 import com.lmp.config.ConfigProperties;
 import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.pojo.StoreEntity;
-import com.lmp.db.pojo.StoreInventoryEntity;
+import com.lmp.db.pojo.StoreItemEntity;
+import com.lmp.db.pojo.UserEntity;
+import com.lmp.db.repository.CustomerOrderRepository;
 import com.lmp.db.repository.ItemRepository;
+import com.lmp.db.repository.ShoppingCartRepository;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.db.repository.StoreRepository;
+import com.lmp.db.repository.UserRepository;
 import com.lmp.solr.indexer.SolrIndexer;
 
 @Component
@@ -37,14 +41,21 @@ public class AppBootUp {
   @Autowired
   ConfigProperties prop;
   @Autowired
-  private ItemRepository itemRepo;
+  private ShoppingCartRepository cartRepo;
+  @Autowired
+  private ItemRepository itemRepo;  
   @Autowired
   private StoreRepository storeRepo;
   @Autowired
   private StoreInventoryRepository siRepo;
   @Autowired
   private SolrIndexer indexer;
-  private DecimalFormat df = new DecimalFormat("###.##");
+  @Autowired
+  private AutoCompleteService autoCService;
+  @Autowired
+  private UserRepository userRepo;
+  @Autowired
+  private CustomerOrderRepository orderRepo;
 
   private void seedOneCategory(File file, List<StoreEntity> stores) throws IOException, SolrServerException {
     ObjectMapper objectMapper = new ObjectMapper();
@@ -55,7 +66,8 @@ public class AppBootUp {
       ItemEntity item = it.next();
       try {
         itemRepo.save(item);
-        indexer.addToIndex(item, fillStoreInventory(item, stores));
+        Object[] values = fillStoreInventory(item, stores);
+        indexer.addToIndex(item, (String)values[0], (Float)values[1], (Float)values[2]);
       } catch (DuplicateKeyException e) {
         logger.info("found duplicate item upc {}", item.getUpc());
         logger.error(e.getMessage(), e);
@@ -68,15 +80,18 @@ public class AppBootUp {
     FileIOUtil.writeProgress(prop.getSeededFiles(), file.getName());
   }
 
-  private String fillStoreInventory(ItemEntity item, List<StoreEntity> stores) {
+  private Object[] fillStoreInventory(ItemEntity item, List<StoreEntity> stores) {
     List<String> storeIdsToIndex = new ArrayList<>();
     Random random = new Random();
+    Float min = Float.MAX_VALUE;
+    Float max = 0f;
     for(StoreEntity store : stores) {
       if(item.canGoOnStoreInventory(store)) {
-        StoreInventoryEntity sItem = new StoreInventoryEntity();
+        StoreItemEntity sItem = new StoreItemEntity();
         long time = System.currentTimeMillis();
         sItem.setStoreId(store.getId());
         sItem.getItem().setId(item.getId());
+        sItem.setStock(100);
         sItem.setAdded(time);
         sItem.setUpdated(time);
         sItem.setListPrice(item.getList_price() * (0.6f + random.nextFloat())); // min 0.6 factor for price
@@ -88,12 +103,31 @@ public class AppBootUp {
         } else {
           sItem.setSalePrice(sItem.getListPrice());
         }
+        min = Math.min(min, sItem.getSalePrice());
+        max = Math.max(max, sItem.getSalePrice());
         siRepo.save(sItem);
       }
     }
-    return Joiner.on(" ").join(storeIdsToIndex);
+    return new Object[]{Joiner.on(" ").join(storeIdsToIndex), min, max};
   }
 
+  private void seedTestUsers() {
+    List<String> emailIds = new ArrayList<>();
+    emailIds.add("123");
+    emailIds.add("skawaleonline@gmail.com");
+    emailIds.add("sumit@plmlogix.com");
+    emailIds.add("store1-owner@plmlogix.com");
+    emailIds.add("store2-owner@plmlogix.com");
+    emailIds.add("store3-owner@plmlogix.com");
+    for (String string : emailIds) {
+      UserEntity entity = new UserEntity();
+      entity.setId(string);
+      entity.setEmail(string);
+      entity.setFirstName("testuser");
+      entity.setFirstName(string.split("@")[0]);
+      userRepo.save(entity);
+    }
+  }
   private void seedStores() throws IOException{
     logger.info("Seeding stores : " + prop.getStoreSeedFile());
     ObjectMapper objectMapper = new ObjectMapper();
@@ -113,10 +147,14 @@ public class AppBootUp {
       return ;
     }
     if(prop.isCleanupAndSeedData()) {
+      cartRepo.deleteAll();
       itemRepo.deleteAll();
       indexer.deleteAll();
       siRepo.deleteAll();
+      orderRepo.deleteAll();
       storeRepo.deleteAll();
+      userRepo.deleteAll();
+      seedTestUsers();
       seedStores();
       FileIOUtil.deleteFile(prop.getSeededFiles());
     }
@@ -129,5 +167,6 @@ public class AppBootUp {
       }
       seedOneCategory(file, stores);
     }
+    autoCService.buildAutoCompleteCollection();
   }
 }

@@ -1,10 +1,6 @@
 package com.lmp.db.pojo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -13,8 +9,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.lmp.app.entity.Item;
-import com.lmp.app.entity.StoreInventory;
+import com.lmp.app.entity.ShoppingCart.CartItem;
 
 @Document(collection="storeInventory")
 @TypeAlias("storeInventory")
@@ -23,22 +18,32 @@ import com.lmp.app.entity.StoreInventory;
       unique = true,
       def = "{'storeId' : 1, 'item.$id' : 1, 'popularity' : -1 }")
 })
-public class StoreInventoryEntity implements Comparable<StoreInventoryEntity>{
+public class StoreItemEntity implements Comparable<StoreItemEntity>{
 
   @Id
   private String id;
   private String storeId;
   @DBRef
   private ItemEntity item = new ItemEntity();
-  private double listPrice;
+  private float listPrice;
   @Indexed
   private boolean onSale;
-  private double salePrice;
+  private float salePrice;
   private int popularity = 1;
   private int stock;
   private long added;
   private long updated;
 
+  public CartItem toCartItem() {
+    CartItem ci = new CartItem();
+    BeanUtils.copyProperties(this.getItem(), ci);
+    BeanUtils.copyProperties(this, ci);
+    ci.setListPrice(Math.round(this.getListPrice() * 100.0) / 100.0);
+    ci.setOfferPrice(Math.round(this.getSalePrice() * 100.0) / 100.0);
+    ci.setStoreId(this.storeId);
+    return ci;
+  }
+  
   public String getId() {
     return id;
   }
@@ -75,10 +80,10 @@ public class StoreInventoryEntity implements Comparable<StoreInventoryEntity>{
   public void setUpdated(long updated) {
     this.updated = updated;
   }
-  public double getListPrice() {
+  public float getListPrice() {
     return listPrice;
   }
-  public void setListPrice(double listPrice) {
+  public void setListPrice(float listPrice) {
     this.listPrice = listPrice;
   }
   public boolean isOnSale() {
@@ -87,10 +92,10 @@ public class StoreInventoryEntity implements Comparable<StoreInventoryEntity>{
   public void setOnSale(boolean onSale) {
     this.onSale = onSale;
   }
-  public double getSalePrice() {
+  public float getSalePrice() {
     return salePrice;
   }
-  public void setSalePrice(double salePrice) {
+  public void setSalePrice(float salePrice) {
     this.salePrice = salePrice;
   }
   public int getPopularity() {
@@ -101,7 +106,7 @@ public class StoreInventoryEntity implements Comparable<StoreInventoryEntity>{
   }
 
   @Override
-  public int compareTo(StoreInventoryEntity o) {
+  public int compareTo(StoreItemEntity o) {
     int res = this.storeId.compareTo(o.storeId) ;
     if(res == 0) {
       return Integer.compare(this.popularity, o.popularity);

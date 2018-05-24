@@ -1,67 +1,50 @@
-package com.lmp.app.entity;
+package com.lmp.app.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import com.lmp.app.entity.FilterField;
 
-public class SearchRequest {
+public class SearchRequest extends PageableRequest {
 
   private String query;
   private String storeId;
-  @Min(0)
-  private int page;
-  @Min(0)
-  @Max(50)
-  private int rows;
   private Map<String, List<String>> filters = new HashMap<>();
   private List<String> fields = new ArrayList<>();
   private double lat;
   private double lng;
   private int radius = 5;
 
+  public SearchRequest() {
+  }
+  public SearchRequest(int page, int count) {
+    super(page, count);
+  }
+
   public static SearchRequest createFor(String q, int page, int count) {
-    SearchRequest sr = new SearchRequest();
+    SearchRequest sr = new SearchRequest(page, count);
     sr.query = q;
-    sr.page = page;
-    sr.rows = count;
     return sr;
   }
 
   public static SearchRequest createSISearch(String storeId, String q, int page, int count) {
-    SearchRequest sr = new SearchRequest();
+    SearchRequest sr = new SearchRequest(page, count);
     sr.query = q;
     sr.storeId = storeId;
-    sr.page = page;
-    sr.rows = count;
     return sr;
-  }
-
-  public Pageable pageRequesst() {
-    return new PageRequest(getPage(), getRows());
-  }
-
-  public long fetchedCount() {
-    return (this.page) * this.rows;
   }
 
   public boolean isSolrSearchNeeded() {
     return !Strings.isNullOrEmpty(query) || brandFilter() != null || categoryFilter() != null
-        || upcFilter() != null;
+        || upcFilter() != null || priceFilter() != null;
   }
 
   public boolean isFilterOn() {
     return isOnSaleRequest() || brandFilter() != null || categoryFilter() != null
-        || upcFilter() != null;
+        || upcFilter() != null || priceFilter() != null;
   }
 
   public boolean isOnSaleRequest() {
@@ -86,6 +69,13 @@ public class SearchRequest {
     return filters.get(FilterField.CATEGORY.getValue());
   }
 
+  public String priceFilter() {
+    if(filters == null || !filters.containsKey(FilterField.PRICE_RANGE.getValue())) {
+      return null;
+    }
+    return filters.get(FilterField.PRICE_RANGE.getValue()).get(0).trim();
+  }
+
   public List<String> upcFilter() {
     if(filters == null || !filters.containsKey(FilterField.UPC.getValue())) {
       return null;
@@ -98,18 +88,6 @@ public class SearchRequest {
   }
   public void setQuery(String query) {
     this.query = query;
-  }
-  public int getPage() {
-    return page;
-  }
-  public void setPage(int page) {
-    this.page = page;
-  }
-  public int getRows() {
-    return rows;
-  }
-  public void setRows(int rows) {
-    this.rows = rows;
   }
   public Map<String, List<String>> getFilters() {
     return filters;
@@ -157,8 +135,6 @@ public class SearchRequest {
   public String toString() {
     return "query: " + query 
         + "storeId: " + storeId
-        + "page: " + page
-        + "size: " + rows
         + "filters: " + filters == null ? "" : filters.toString()
         + "fields: " + fields == null ? "" : fields.toString();
   }

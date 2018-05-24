@@ -13,7 +13,7 @@ import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
-import com.lmp.app.entity.SearchRequest;
+import com.lmp.app.model.SearchRequest;
 import com.lmp.db.pojo.StoreEntity;
 import com.lmp.db.repository.StoreRepository;
 
@@ -57,4 +57,13 @@ public class StoreService {
     Optional<StoreEntity> store = repo.findById(id);
     return store.isPresent() ? store.get() : null;
   }
+
+  public Iterable<StoreEntity> getStoreByIds(List<String> ids) {
+    return repo.findAllById(ids);
+  }
+
+  public StoreEntity getStoreByOwner(String email) {
+    return repo.findByStoreOwnerId(email);
+  }
+  
 }

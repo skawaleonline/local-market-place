@@ -3,7 +3,7 @@ package com.lmp.app.utils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 
-import com.lmp.app.entity.validator.ValidationError;
+import com.lmp.app.model.validator.ValidationError;
 
 public class ValidationErrorBuilder {
 
