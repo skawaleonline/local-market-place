@@ -1,6 +1,5 @@
 package com.lmp.app.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -14,7 +13,6 @@ import com.google.common.base.Strings;
 import com.lmp.app.entity.CustomerOrder;
 import com.lmp.app.entity.OrderStatus;
 import com.lmp.app.entity.ShoppingCart;
-import com.lmp.app.exceptions.CartNotFoundException;
 import com.lmp.app.exceptions.EmptyCartException;
 import com.lmp.app.exceptions.InvalidOrderStatusException;
 import com.lmp.app.exceptions.OrderNotFoundException;
@@ -22,7 +20,6 @@ import com.lmp.app.model.CheckoutRequest;
 import com.lmp.app.model.CustomerOrderRequest;
 import com.lmp.app.model.SearchResponse;
 import com.lmp.app.model.ShoppingCartRequest;
-import com.lmp.app.mq.Publisher;
 import com.lmp.db.pojo.CustomerOrderEntity;
 import com.lmp.db.repository.CustomerOrderRepository;
 
@@ -37,8 +34,6 @@ public class CustomerOrderService {
   private StoreInventoryService sItemService;
   @Autowired
   private CustomerOrderRepository orderRepo;
-  @Autowired
-  private Publisher publish;
 
   public CustomerOrder getOrderByOrderId(String id) {
     if(Strings.isNullOrEmpty(id)) {
@@ -51,6 +46,12 @@ public class CustomerOrderService {
     return entity.get().toCustomerOrder();
   }
 
+  public CustomerOrder getOrdersById(String orderId) {    
+    Optional<CustomerOrderEntity> entity = orderRepo.findById(orderId);
+    
+    return entity.isPresent() ? entity.get().toCustomerOrder() : null;
+  }
+  
   public SearchResponse<CustomerOrder> getOrdersByUserId(CustomerOrderRequest request) {
     Page<CustomerOrderEntity> orders = null;
     if(request.isGetAllStatusRequest()) {

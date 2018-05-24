@@ -18,12 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.lmp.app.entity.Item;
 import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
 import com.lmp.app.exceptions.ItemNotInStockException;
 import com.lmp.app.model.BaseResponse;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.app.model.SearchResponse;
+import com.lmp.db.pojo.ItemEntity;
 import com.lmp.db.pojo.StoreItemEntity;
 import com.lmp.db.repository.StoreInventoryRepository;
 import com.lmp.solr.SolrSearchService;
@@ -40,6 +42,17 @@ public class StoreInventoryService {
   SolrSearchService solrService;
   @Autowired
   StoreService storeService;
+  @Autowired
+  ItemService itemService;
+
+  public Item findStoreItemByUpc(long upc, String storeId) {
+	  ItemEntity entity = itemService.findByUpc(upc);
+	  if(entity == null) {
+		return null;
+	  }
+	  StoreItemEntity storeItem = repo.findByStoreIdAndItemId(storeId, entity.getId());
+	  return storeItem == null ? null : Item.fromStoreInventoryEntity(storeItem);
+  }
 
    public Page<ItemDoc> searchSolr(SearchRequest sRequest, List<String> storeIds) {
     // check if we need solr search for the request

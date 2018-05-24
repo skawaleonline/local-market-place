@@ -3,6 +3,8 @@ package com.lmp.app.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.lmp.app.entity.CategoryNode;
-import com.lmp.app.entity.CategoryTree;
+import com.lmp.app.entity.Item;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.app.model.SearchResponse;
 import com.lmp.app.service.AutoCompleteService;
 import com.lmp.app.service.CategoryService;
 import com.lmp.app.service.ItemService;
+import com.lmp.app.service.StoreInventoryService;
 import com.lmp.db.pojo.ItemEntity;
 
 @RestController
@@ -35,22 +38,23 @@ public class UPCInventoryController extends BaseController {
 
   @Autowired
   private ItemService itemService;
-
+  @Autowired
+  private StoreInventoryService siService;
   @Autowired
   private AutoCompleteService acService;
   @Autowired
   private CategoryService ctService;
 
-  @GetMapping("/upc/{code}")
+  @GetMapping("/upc")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<?> lookupByUpc(@PathVariable("code") long code) {
-    logger.debug("searching for upc code {}", code);
-    ItemEntity item = itemService.findByUpc(code);
+  public ResponseEntity<?> lookupByUpc(@Valid @RequestParam("code") long code, @Valid @RequestParam("storeId") String storeId) {
+    logger.debug("searching for upc code {} & storeId {}", code, storeId);
+    Item item = siService.findStoreItemByUpc(code, storeId);
     if (item == null) {
       logger.debug("no item found for upc {}", code);
-      return new ResponseEntity(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<Item>(HttpStatus.OK);
     }
-    return new ResponseEntity<ItemEntity>(item, HttpStatus.OK);
+    return new ResponseEntity<Item>(item, HttpStatus.OK);
   }
 
   @GetMapping("/search")
