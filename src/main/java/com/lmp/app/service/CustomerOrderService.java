@@ -52,6 +52,17 @@ public class CustomerOrderService {
     return entity.isPresent() ? entity.get().toCustomerOrder() : null;
   }
   
+  public boolean updateOrder(CustomerOrderRequest cRequest) {
+    Optional<CustomerOrderEntity> optional = orderRepo.findById(cRequest.getOrderId());
+    if(!optional.isPresent()) {
+      throw new OrderNotFoundException();
+    }
+    CustomerOrderEntity entity = optional.get();
+    entity.setStatus(OrderStatus.valueOf(cRequest.getOrderStatus()));
+    entity.setOrderedOn(System.currentTimeMillis());
+    entity = orderRepo.save(entity);
+    return true;
+  }
   public SearchResponse<CustomerOrder> getOrdersByUserId(CustomerOrderRequest request) {
     Page<CustomerOrderEntity> orders = null;
     if(request.isGetAllStatusRequest()) {

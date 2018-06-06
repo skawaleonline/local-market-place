@@ -67,6 +67,17 @@ public class CustomerOrderController extends BaseController {
     return new ResponseEntity<CustomerOrder>(service.getOrdersById(id), HttpStatus.OK);
   }
 
+  @RequestMapping(value = "/order/update", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> updateOrder(@Valid @RequestBody CustomerOrderRequest cRequest, Errors errors) {
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
+    }
+    logger.info("customer order for the request " + cRequest.toString());
+    service.updateOrder(cRequest);
+   return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(com.lmp.app.entity.ResponseStatus.ORDER_UPDATED), HttpStatus.OK);
+  }
+  
   @RequestMapping(value = "/store-order", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> findByStoreOwner(@Valid @RequestBody CustomerOrderRequest cRequest, Errors errors) {

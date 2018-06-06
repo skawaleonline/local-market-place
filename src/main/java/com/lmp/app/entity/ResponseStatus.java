@@ -9,6 +9,7 @@ public enum ResponseStatus {
   ADDED_TO_CART(2005),
   REMOVED_FROM_CART(2006),
   UPDATED_CART(2007),
+  ORDER_UPDATED(2008),
   Unauthorized(3004),
   CART_NOT_FOUND(4001),
   ITEM_OUT_OF_STOCK(4002),

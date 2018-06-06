@@ -5,6 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.google.common.base.Strings;
+import com.lmp.app.entity.OrderStatus;
 import com.lmp.app.model.CustomerOrderRequest;
 
 @Component
@@ -18,6 +19,13 @@ public class CustomerOrderRequestValidator implements Validator {
     CustomerOrderRequest cRequest = (CustomerOrderRequest) obj;
     if(Strings.isNullOrEmpty(cRequest.getUserId())) {
       e.reject("userId.required", "userId is required");
+    }
+    if(!Strings.isNullOrEmpty(cRequest.getOrderStatus())) {
+      try {
+        OrderStatus.valueOf(cRequest.getOrderStatus());
+      } catch ( Exception ex) {
+        e.reject("orderStatus.invalid", "invalid order status");
+      }
     }
   }
 }
