@@ -9,11 +9,22 @@ import com.lmp.db.pojo.Currency;
 @Component
 public class StoreRequest {
 
+  private String userId;
   private String name;
   private String franchise;
   private String address;
   private StoreCapabilities capabilities;
+
+  
   public StoreRequest() {
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
 
   public String getName() {

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.lmp.app.model.SearchRequest;
 import com.lmp.app.model.StoreRequest;
 import com.lmp.db.pojo.StoreEntity;
+import com.lmp.db.pojo.UserEntity;
 import com.lmp.db.repository.StoreRepository;
 
 @Service
@@ -69,6 +70,7 @@ public class StoreService {
   
   public StoreEntity registerStore(StoreRequest request) {
     StoreEntity entity = StoreEntity.toEntity(request);
+    entity.setStoreOwner(new UserEntity().setId(request.getUserId()));
     entity = repo.save(entity);
     return entity;
   }
