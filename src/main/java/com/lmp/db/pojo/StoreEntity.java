@@ -2,12 +2,16 @@ package com.lmp.db.pojo;
 
 import java.util.Set;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import com.lmp.app.entity.ShoppingCart;
+import com.lmp.app.model.StoreRequest;
 
 @Document(collection="store")
 public class StoreEntity {
@@ -24,6 +28,15 @@ public class StoreEntity {
   private UserEntity storeOwner;
   private StoreCapabilities capabilities;
 
+  public static StoreEntity toEntity(StoreRequest request) {
+    StoreEntity entity = new StoreEntity();
+    BeanUtils.copyProperties(request, entity);
+    StoreCapabilities scEntity = new StoreCapabilities();
+    BeanUtils.copyProperties(request.getCapabilities(), scEntity);
+    entity.setCapabilities(scEntity);
+    return entity;
+  }
+  
   public String getId() {
     return id;
   }

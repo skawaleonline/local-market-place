@@ -14,6 +14,7 @@ import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import com.lmp.app.model.SearchRequest;
+import com.lmp.app.model.StoreRequest;
 import com.lmp.db.pojo.StoreEntity;
 import com.lmp.db.repository.StoreRepository;
 
@@ -66,4 +67,9 @@ public class StoreService {
     return repo.findByStoreOwnerId(email);
   }
   
+  public StoreEntity registerStore(StoreRequest request) {
+    StoreEntity entity = StoreEntity.toEntity(request);
+    entity = repo.save(entity);
+    return entity;
+  }
 }
