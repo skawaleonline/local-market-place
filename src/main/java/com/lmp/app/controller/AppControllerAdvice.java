@@ -17,6 +17,7 @@ import com.lmp.app.exceptions.ItemNotInStockException;
 import com.lmp.app.exceptions.MuliplteStoreInCartException;
 import com.lmp.app.exceptions.OrderNotFoundException;
 import com.lmp.app.exceptions.UnauthorizedException;
+import com.lmp.app.exceptions.UserIdAlreadyExistException;
 import com.lmp.app.model.BaseResponse;
 import com.lmp.app.model.CartResponse;
 import com.lmp.app.model.validator.ValidationError;
@@ -52,6 +53,12 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
   public ResponseEntity<BaseResponse> handleOrderNotFoundException(Exception ex, WebRequest request) {
     OrderNotFoundException e = (OrderNotFoundException) ex;
     return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.ORDER_NOT_FOUND), HttpStatus.OK);
+  }
+
+  @ExceptionHandler({ UserIdAlreadyExistException.class })
+  public ResponseEntity<BaseResponse> handleUserIdAlreadyExistException(Exception ex, WebRequest request) {
+    UserIdAlreadyExistException e = (UserIdAlreadyExistException) ex;
+    return new ResponseEntity<BaseResponse>(BaseResponse.responseStatus(ResponseStatus.USER_ID_ALREADY_EXIST), HttpStatus.OK);
   }
 
   @ExceptionHandler({ InvalidOrderStatusException.class })

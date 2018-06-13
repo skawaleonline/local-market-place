@@ -1,7 +1,10 @@
 package com.lmp.db.pojo;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.lmp.app.entity.Customer;
 
 @Document(collection="user")
 public class UserEntity {
@@ -15,6 +18,12 @@ public class UserEntity {
   private String phoneNumber;
   private Address address;
 
+  public static UserEntity fromPojo(Customer customer) {
+    UserEntity entity = new UserEntity();
+    BeanUtils.copyProperties(customer, entity);
+    entity.setUserName(customer.getId());
+    return entity;
+  }
   public String getId() {
     return id;
   }
