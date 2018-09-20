@@ -2,7 +2,6 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.lmp.app.entity.Item;
-import com.lmp.app.entity.ShoppingCart;
 import com.lmp.app.entity.ShoppingCart.CartItem;
 import com.lmp.app.exceptions.ItemNotInStockException;
 import com.lmp.app.model.BaseResponse;
@@ -64,7 +62,7 @@ public class StoreInventoryService {
     return results;
   }
 
-  private BaseResponse searchDBForDocs(SearchRequest sRequest, List<String> storeIds, Page<ItemDoc> docs) {
+  private BaseResponse searchDBForDocs(SearchRequest sRequest, List<String> storeIds, Page<ItemDoc> docs, boolean v2) {
     Page<StoreItemEntity> items = null;
     if (docs != null) {
       List<String> ids = new ArrayList<>();
@@ -79,7 +77,7 @@ public class StoreInventoryService {
       } else {
         items = repo.findAllByStoreIdInAndItemIdIn(storeIds, ids, new PageRequest(0, sRequest.getRows()));
       }
-      return SearchResponse.buildStoreInventoryResponse(items, docs.getTotalElements(), sRequest.getPage());
+      return SearchResponse.buildStoreInventoryResponse(items, docs.getTotalElements(), sRequest.getPage(), v2);
     } else {
       // search for all within store
       if (sRequest.isOnSaleRequest()) {
@@ -88,11 +86,11 @@ public class StoreInventoryService {
         items = repo.findAllByStoreIdIn(storeIds, sRequest.pageRequesst());
       }
     }
-    return SearchResponse.buildStoreInventoryResponse(items);
+    return SearchResponse.buildStoreInventoryResponse(items, v2);
   }
 
   @Cacheable("store-items")
-  public BaseResponse search(SearchRequest sRequest) {
+  public BaseResponse search(SearchRequest sRequest, boolean v2) {
     List<String> storeIdsToSearch = new ArrayList<>();
     if (Strings.isNullOrEmpty(sRequest.getStoreId())) {
       // get all store around the user location
@@ -113,7 +111,7 @@ public class StoreInventoryService {
       }
     }
     // dont search solr, directly search in mongo
-    return searchDBForDocs(sRequest, storeIdsToSearch, docs);
+    return searchDBForDocs(sRequest, storeIdsToSearch, docs, v2);
   }
 
   public CartItem findById(String id) {

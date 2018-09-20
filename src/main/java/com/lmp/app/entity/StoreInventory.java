@@ -2,7 +2,7 @@ package com.lmp.app.entity;
 
 import java.util.List;
 
-public class StoreInventory {
+public class StoreInventory implements Inventory{
 
   private String storeId;
   private List<Item> items;

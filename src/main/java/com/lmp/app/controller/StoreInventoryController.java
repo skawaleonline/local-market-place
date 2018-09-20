@@ -1,6 +1,5 @@
 package com.lmp.app.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -26,7 +25,6 @@ import com.lmp.app.model.validator.SearchRequestValidator;
 import com.lmp.app.service.ResultsFilterService;
 import com.lmp.app.service.StoreInventoryService;
 import com.lmp.app.utils.ValidationErrorBuilder;
-import com.lmp.solr.entity.ItemField;
 
 @RestController
 @RequestMapping("/store-inventory")
@@ -58,7 +56,7 @@ public class StoreInventoryController extends BaseController {
       return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
     }
     logger.info("searching for the request " + searchRequest.toString());
-    BaseResponse response = service.search(searchRequest);
+    BaseResponse response = service.search(searchRequest, false);
     // logger.info("getting store details for store id {}", storeId);
 
     if (response == null) {
@@ -68,6 +66,24 @@ public class StoreInventoryController extends BaseController {
     return new ResponseEntity<BaseResponse>(response, HttpStatus.OK);
   }
 
+  
+  @RequestMapping(value = "v2/search", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<?> lookupStoreInventoryV2(@Valid @RequestBody SearchRequest searchRequest, Errors errors) {
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(ValidationErrorBuilder.fromBindingErrors(errors));
+    }
+    logger.info("searching for the request " + searchRequest.toString());
+    BaseResponse response = service.search(searchRequest, true);
+    // logger.info("getting store details for store id {}", storeId);
+
+    if (response == null) {
+      logger.info("no results for request {}", searchRequest.toString());
+      return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<BaseResponse>(response, HttpStatus.OK);
+  }
+  
   @RequestMapping(value = "/filters", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<?> lookupStoreInventoryFilters(@Valid @RequestBody SearchRequest searchRequest, Errors errors) {
