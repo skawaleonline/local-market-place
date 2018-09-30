@@ -59,11 +59,11 @@ public class SearchResponse<T> extends BaseResponse {
   private static Map<String, Inventory> buildStoreItemMapV2(List<StoreItemEntity> items) {
     Map<String, Inventory> map = new HashMap<>();
     for(StoreItemEntity ie : items) {
-      Item item = Item.fromStoreInventoryEntity(ie);
+      Item item = Item.fromStoreInventoryV2Entity(ie);
       if(map.containsKey(item.getId())) {
-        ((StoreInventoryV2)map.get(ie.getStoreId())).addStore(ie.getStoreId());
+        ((StoreInventoryV2)map.get(item.getId())).add(ie.toStoreItem());
       } else {
-        map.put(item.getId(), new StoreInventoryV2(item, ie.getStoreId()));
+        map.put(item.getId(), new StoreInventoryV2(item, ie.toStoreItem()));
       }
     }
     return map;

@@ -6,18 +6,18 @@ import java.util.List;
 public class StoreInventoryV2 implements Inventory{
 
   private Item item;
-  private List<String> stores = new ArrayList<>();
+  private List<StoreItem> storeItems = new ArrayList<>();
   
-  public StoreInventoryV2(Item item, List<String> stores) {
+  public StoreInventoryV2(Item item, List<StoreItem> stores) {
     super();
     this.item = item;
-    this.stores = stores;
+    this.storeItems = stores;
   }
   
-  public StoreInventoryV2(Item item, String store) {
+  public StoreInventoryV2(Item item, StoreItem storeItem) {
     super();
     this.item = item;
-    this.stores.add(store);
+    this.storeItems.add(storeItem);
   }
   public Item getItem() {
     return item;
@@ -25,14 +25,16 @@ public class StoreInventoryV2 implements Inventory{
   public void setItem(Item item) {
     this.item = item;
   }
-  public List<String> getStores() {
-    return stores;
+
+  public List<StoreItem> getStoreItems() {
+    return storeItems;
   }
-  public void addStore(String store) {
-    this.stores.add(store);
-  }
-  public void setStores(List<String> stores) {
-    this.stores = stores;
+
+  public void setStoreItems(List<StoreItem> storeItems) {
+    this.storeItems = storeItems;
   }
   
+  public void add(StoreItem item) {
+    this.storeItems.add(item);
+  }
 }
