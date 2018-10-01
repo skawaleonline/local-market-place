@@ -26,12 +26,12 @@ public class StoreInventoryV2 implements Inventory{
     this.item = item;
   }
 
-  public List<StoreItem> getStoreItems() {
+  public List<StoreItem> getStores() {
     return stores;
   }
 
-  public void setStoreItems(List<StoreItem> storeItems) {
-    this.stores = storeItems;
+  public void setStores(List<StoreItem> stores) {
+    this.stores = stores;
   }
   
   public void add(StoreItem item) {
